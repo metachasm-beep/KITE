@@ -1,0 +1,43 @@
+import type { Metadata } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
+import "./globals.css";
+
+import { Providers } from "@/components/Providers";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["700"],
+});
+
+export const metadata: Metadata = {
+  title: "VOIDLAB // Artifacts from Tomorrow",
+  description: "A futuristic collectible brand powered by 3D manufacturing.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark scroll-smooth">
+      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-black text-white selection:bg-accent selection:text-white`}>
+        <Providers>
+          <SiteHeader />
+          <div className="pt-20">
+            {children}
+          </div>
+          <SiteFooter />
+        </Providers>
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,35 @@
+import type { NextAuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        // Evaluate if the user's email matches the configured admin email
+        if (user.email === process.env.ADMIN_EMAIL) {
+          token.role = "admin";
+        } else {
+          token.role = "user";
+        }
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Pass the role from the token to the session object
+      if (session?.user) {
+        (session.user as any).role = token.role;
+      }
+      return session;
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET || "voidlab-secret-dev",
+};
