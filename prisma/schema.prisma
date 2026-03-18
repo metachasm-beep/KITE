@@ -149,3 +149,29 @@ model OrderTimeline {
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
+
+// ─────────────────────────────────────────
+// CATALOG MODELS
+// ─────────────────────────────────────────
+
+model Artifact {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  series      String
+  description String
+  price       String
+  status      String   @default("AVAILABLE")
+  createdAt   DateTime @default(now())
+
+  specs ArtifactSpec[]
+}
+
+model ArtifactSpec {
+  id         String @id @default(cuid())
+  artifactId String
+  label      String
+  value      String
+
+  artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+}

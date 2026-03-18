@@ -47,10 +47,10 @@
 
 ### Phase 5: Deployment & Launch (🚀 Infrastructure)
 **Status**: ⬜ Not Started
-**Objective**: Finalize configuration, migrate DB, push to GitHub, and deploy to Render.
+**Objective**: Finalize configuration, migrate DB, push to GitHub, and deploy to Vercel.
 **Deliverables**:
 - [ ] Comprehensive `.gitignore` and Secret management.
 - [ ] Push source code to the private `KITE` repository on GitHub.
-- [ ] Provision and Migrate PostgreSQL on Render.
-- [ ] Deploy Next.js Web Service to Render and activate Google OAuth redirect.
+- [ ] Provision and Migrate PostgreSQL on Supabase (completed/awaiting local run).
+- [ ] Deploy Next.js to Vercel and activate Google OAuth redirect.
 - [ ] Final End-to-End Audit.
