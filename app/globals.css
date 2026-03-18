@@ -3,35 +3,58 @@
 @tailwind utilities;
 
 :root {
-  --background: 0, 0%, 0%;
-  --foreground: 0, 0%, 100%;
-  --accent: 260, 94.2%, 66.1%; /* #8B5CF6 */
+  --background: #000000;
+  --foreground: #ffffff;
+  --accent: #ffffff; /* Shift from Purple to Pure White for Apple UI */
 }
 
-body {
-  color: hsl(var(--foreground));
-  background: hsl(var(--background));
-  font-family: var(--font-inter), sans-serif;
-  overflow-x: hidden;
+@layer base {
+  body {
+    @apply bg-black text-white antialiased selection:bg-white selection:text-black;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    @apply font-[var(--font-space-grotesk)] font-bold;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-space-grotesk), sans-serif;
-  text-transform: uppercase;
-  letter-spacing: -0.05em;
-  font-weight: 700;
+/* Apple-style Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Minimal Scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
+/* Custom Selection for that premium feel */
+::selection {
+  background: white;
+  color: black;
 }
-::-webkit-scrollbar-track {
-  background: #000;
+
+/* Hide scrollbar but keep functionality (for that clean look) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-::-webkit-scrollbar-thumb {
-  background: #222;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #333;
+
+/* Apple Pro-inspired Backdrop blur */
+.glass {
+  @apply bg-[#000000cc] backdrop-blur-2xl border-b border-[#ffffff10];
+}
+
+/* Custom Gradients - Subtle bone/graphite */
+.bg-graphite {
+  background: radial-gradient(circle at center, #111111 0%, #000000 100%);
+}
+
+/* Button & Link Hover States */
+.btn-apple {
+  @apply px-10 py-4 bg-white text-black font-semibold rounded-full transition-all duration-500 hover:scale-[1.02] active:scale-[0.98];
+}
+
+.link-subtle {
+  @apply text-zinc-500 hover:text-white transition-all duration-300;
 }

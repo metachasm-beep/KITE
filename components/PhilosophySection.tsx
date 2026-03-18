@@ -1,42 +1,69 @@
 "use client";
 
-const SPECS = [
-  { label: "MATERIAL", value: "PLA COMPOSITE / TOUGH MATTE" },
-  { label: "FINISH", value: "MATTE BLACK #000" },
-  { label: "FABRICATION", value: "LAYERED DEPOSITION" },
-  { label: "EDITION", value: "OPEN SYSTEM" },
-];
+import { motion } from "framer-motion";
 
 export function PhilosophySection() {
   return (
-    <section className="py-24 px-6 bg-[#030303] border-y border-white/5">
-      <div className="container mx-auto max-w-6xl">
-        <div className="grid md:grid-cols-2 gap-20 items-center">
-          <div>
-            <span className="text-accent text-[10px] font-bold tracking-[0.5em] mb-8 block uppercase">
-              OUR_MANIFESTO
-            </span>
-            <h2 className="text-4xl md:text-6xl font-heading tracking-tighter mb-8 max-w-lg">
-              DESIGNED AS OBJECTS, <span className="text-zinc-400">NOT TOYS.</span>
-            </h2>
-            <p className="text-zinc-600 text-sm md:text-lg font-body leading-relaxed max-w-xl mb-12 uppercase tracking-widest">
-              Manufactured through layered fabrication systems and built specifically for display. Each series 
-              is a progression of forms captured from speculative futures and realized today.
-            </p>
+    <section className="py-48 px-6 bg-[#000] border-t border-white/5">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          
+          {/* Visual Piece - Clean and Huge */}
+          <div className="relative aspect-square bg-[#050505] rounded-3xl overflow-hidden shadow-2xl shadow-black group">
+             <div className="absolute inset-x-0 bottom-12 text-center text-[11px] font-mono tracking-widest text-zinc-800">
+               VISUAL_SPEC // 01 // 356_PTS
+             </div>
+             
+             {/* Center Glow Piece - Apple Silicon feel */}
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center p-3 animate-pulse duration-[3000ms]">
+                  <div className="w-full h-full bg-white/20 rounded-full blur-md" />
+                </div>
+             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-8">
-            {SPECS.map((spec) => (
-              <div key={spec.label} className="p-6 border border-white/5 bg-black/40 hover:border-accent/40 transition-colors">
-                <span className="text-[9px] font-mono text-zinc-700 tracking-[0.2em] block mb-4 uppercase">
-                  {spec.label}
-                </span>
-                <span className="text-xs font-bold font-mono tracking-widest text-zinc-300 uppercase">
-                  {spec.value}
-                </span>
+          {/* Narrative Piece - Pure Apple UI style */}
+          <div className="max-w-xl">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-[14px] font-semibold text-zinc-500 tracking-[0.1em] mb-8 block uppercase"
+            >
+              PHILOSOPHY // 01
+            </motion.span>
+            
+            <motion.h3 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-[44px] md:text-[68px] font-heading leading-[1.1] tracking-tighter text-white mb-10 uppercase"
+            >
+              The Science of <br />
+              <span className="text-zinc-600">Speculative Forms</span>
+            </motion.h3>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-[17px] md:text-[20px] font-medium text-zinc-400 mb-12 leading-relaxed"
+            >
+              VOIDLAB operates at the intersection of precision engineering and transcendental sculpture. Every artifact is a testament to the belief that the tools of the future should be as beautiful as the ideas they inspire.
+            </motion.p>
+
+            <div className="grid grid-cols-2 gap-10">
+              <div className="space-y-2">
+                <span className="text-[12px] font-bold text-white tracking-widest block uppercase">PRECISION</span>
+                <p className="text-[13px] text-zinc-500 leading-relaxed">Engineered to a tolerance of 0.01mm using proprietary composites.</p>
               </div>
-            ))}
+              <div className="space-y-2">
+                <span className="text-[12px] font-bold text-white tracking-widest block uppercase">ETHOS</span>
+                <p className="text-[13px] text-zinc-500 leading-relaxed">Sustainably sourced resins and circular manufacturing loops.</p>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </section>

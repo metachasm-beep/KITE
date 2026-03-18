@@ -1,95 +1,86 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-
-const NAV_LINKS = [
-  { label: "COLLECTIONS", href: "/collections" },
-  { label: "COMMUNITY", href: "/community" },
-  { label: "SYSTEM", href: "/archive" },
-];
+import { useSession, signOut } from "next-auth/react";
+import { User, ShoppingCart, Shield } from "lucide-react";
 
 export function SiteHeader() {
-  const pathname = usePathname();
-  const { data: session, status } = useSession();
-  const isAdmin = (session?.user as any)?.role === "admin";
+  const { data: session } = useSession();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-md">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-        <Link href="/" className="group flex items-center space-x-2">
-          <span className="text-2xl font-heading tracking-tighter transition-colors group-hover:text-accent">
-            VOID<span className="text-accent group-hover:text-white">LAB</span>
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[#ffffff10] bg-[#000000cc] backdrop-blur-xl">
+      <div className="container mx-auto h-16 px-6 flex items-center justify-between">
+        
+        {/* LOGO - Apple-style Minimal */}
+        <Link href="/" className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
+            <div className="w-2 h-2 bg-black rounded-full" />
+          </div>
+          <span className="text-[13px] font-semibold tracking-tighter text-white uppercase">
+            VOIDLAB
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center space-x-12">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "text-[10px] font-bold tracking-[0.3em] transition-all hover:text-accent",
-                pathname === link.href ? "text-accent" : "text-zinc-600"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+        {/* NAVIGATION - Centered and Subtle */}
+        <nav className="hidden md:flex items-center gap-10">
+          <Link href="/collections" className="text-[12px] font-medium text-zinc-400 hover:text-white transition-colors">
+            COLLECTIONS
+          </Link>
+          <Link href="/about" className="text-[12px] font-medium text-zinc-400 hover:text-white transition-colors">
+            ABOUT
+          </Link>
+          <Link href="/archive" className="text-[12px] font-medium text-zinc-400 hover:text-white transition-colors">
+            ARCHIVE
+          </Link>
         </nav>
 
-        {/* Auth Zone */}
-        <div className="flex items-center space-x-4">
-          <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(139,92,246,0.5)]" />
-
-          {status === "loading" ? (
-            <span className="text-[9px] font-mono text-zinc-700 tracking-[0.2em] uppercase animate-pulse">
-              VERIFYING...
-            </span>
-          ) : session ? (
-            <div className="flex items-center gap-4">
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  className="text-[9px] font-bold font-mono tracking-[0.2em] uppercase text-accent border border-accent/30 px-2 py-1 hover:bg-accent hover:text-white transition-all"
+        {/* ACTIONS - Utility icons */}
+        <div className="flex items-center gap-5">
+          {session ? (
+            <div className="flex items-center gap-5">
+              {(session.user as any)?.role === "admin" && (
+                <Link 
+                  href="/admin" 
+                  className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-white"
+                  title="Admin Dashboard"
                 >
-                  [ADMIN]
+                  <Shield size={16} />
                 </Link>
               )}
-              <Link href="/account" className="flex items-center gap-2 group">
-                {session.user?.image ? (
-                  <Image
-                    src={session.user.image}
-                    alt="User"
-                    width={28}
-                    height={28}
-                    className="rounded-full border border-white/10 group-hover:border-accent/40 transition-colors"
-                  />
-                ) : null}
-                <span className="text-[9px] font-mono tracking-[0.2em] uppercase text-zinc-400 group-hover:text-white transition-colors hidden sm:inline">
-                  {session.user?.name?.split(" ")[0] || "USER"}
-                </span>
-              </Link>
-              <button
-                onClick={() => signOut()}
-                className="text-[9px] font-mono tracking-[0.2em] uppercase text-zinc-600 hover:text-white transition-colors"
+              <Link 
+                href="/account" 
+                className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-white"
+                title="Account"
               >
-                [LOG_OUT]
+                <User size={16} />
+              </Link>
+              <button 
+                onClick={() => signOut()}
+                className="text-[11px] font-medium text-zinc-500 hover:text-white transition-colors"
+              >
+                SIGN OUT
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => signIn("google")}
-              className="text-[9px] font-mono tracking-[0.2em] uppercase text-zinc-500 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 transition-all"
+            <Link 
+              href="/api/auth/signin" 
+              className="text-[11px] font-medium text-zinc-400 hover:text-white transition-colors"
             >
-              [SIGN_IN]
-            </button>
+              SIGN IN
+            </Link>
           )}
+          
+          <Link 
+            href="/cart" 
+            className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-white relative"
+          >
+            <ShoppingCart size={16} />
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-white text-[8px] font-bold text-black rounded-full flex items-center justify-center">
+              0
+            </span>
+          </Link>
         </div>
+
       </div>
     </header>
   );
