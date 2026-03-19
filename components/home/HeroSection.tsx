@@ -7,12 +7,16 @@ import { ChevronRight, Cpu, Network, Activity, Database, Crosshair } from "lucid
 export function HeroSection() {
   return (
     <section className="relative min-h-[100vh] bg-[#050505] flex flex-col justify-center overflow-hidden py-32 xl:py-0">
-      {/* HUD Layer 0: Deep Space Grid */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.15]">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250%] h-[250%] border-[0.5px] border-accent/20" 
-             style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        <div className="absolute inset-0 bg-radial-gradient from-transparent to-black" />
-        <div className="scanline-overlay" />
+      {/* HUD Layer 0: Landing Hero Background */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <img 
+          src="/images/hero.png" 
+          alt="Landing Hero" 
+          className="w-full h-full object-cover opacity-[0.25] mix-blend-screen grayscale"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+        <div className="absolute inset-0 bg-radial-gradient from-transparent to-black opacity-80" />
+        <div className="scanline-overlay opacity-20" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
