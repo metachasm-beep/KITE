@@ -3,58 +3,52 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seeding artifacts...");
+  console.log("CLEANING_DATABASE_STATE...");
+  
+  // Clear all transaction and cart data
+  await prisma.orderTimeline.deleteMany();
+  await prisma.orderItem.deleteMany();
+  await prisma.order.deleteMany();
+  await prisma.cartItem.deleteMany();
+  await prisma.cart.deleteMany();
+  
+  // Clear catalog data
+  await prisma.artifactSpec.deleteMany();
+  await prisma.artifact.deleteMany();
 
-  const artifacts = [
-    {
-      slug: "void-figure-01",
-      title: "VOID FIGURE 01",
-      series: "SERIES 01 // ORIGIN",
-      description: "The foundational piece of the VOIDLAB speculative design catalog. Engineered with precise tolerances and coated in light-absorbing matte black finishing.",
-      price: "₹1,999",
-      status: "AVAILABLE",
-      specs: [
-        { label: "MATERIAL", value: "PLA COMPOSITE" },
-        { label: "FINISH", value: "MATTE BLACK #000" },
-        { label: "DIMENSIONS", value: "120 x 40 x 40 mm" },
-        { label: "EDITION", value: "OPEN" },
-      ],
-    },
-    {
-      slug: "neuroform-cube",
-      title: "NEUROFORM CUBE",
-      series: "SERIES 02 // LOGIC",
-      description: "A solid-state geometric artifact representing data pathways. Features intersecting structural nodes and a hefty synthetic weight.",
-      price: "₹2,499",
-      status: "SOLD_OUT",
-      specs: [
-        { label: "MATERIAL", value: "HEAVY-DENSITY RESIN" },
-        { label: "FINISH", value: "SATIN BLACK" },
-        { label: "DIMENSIONS", value: "80 x 80 x 80 mm" },
-        { label: "EDITION", value: "LIMITED [500]" },
-      ],
-    },
-  ];
+  console.log("INITIALIZING_SETTLEMENT_TEST_UNIT...");
 
-  for (const a of artifacts) {
-    await prisma.artifact.upsert({
-      where: { slug: a.slug },
-      update: {},
-      create: {
-        slug: a.slug,
-        title: a.title,
-        series: a.series,
-        description: a.description,
-        price: a.price,
-        status: a.status,
-        specs: {
-          create: a.specs,
-        },
+  const testArtifact = {
+    slug: "proto-unit-11-test",
+    title: "PROTO_UNIT_11_TEST",
+    series: "TEST_DROP // SETTLEMENT",
+    description: "SPECULATIVE_SETTLEMENT_TEST_UNIT. HIGH_DENSITY MATERIAL FRICTION. PRE-ALIGNED FOR ACQUISITION PROTOCOL VERIFICATION.",
+    price: "₹11",
+    status: "AVAILABLE",
+    imageUrl: "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1000",
+    specs: [
+      { label: "PROTOCOL_PRICE", value: "INR_11.00" },
+      { label: "SYNC_STATUS", value: "CALIBRATED" },
+      { label: "ACQUISITION_TAG", value: "BETA_SETTLEMENT" },
+    ],
+  };
+
+  await prisma.artifact.create({
+    data: {
+      slug: testArtifact.slug,
+      title: testArtifact.title,
+      series: testArtifact.series,
+      description: testArtifact.description,
+      price: testArtifact.price,
+      status: testArtifact.status,
+      imageUrl: testArtifact.imageUrl,
+      specs: {
+        create: testArtifact.specs,
       },
-    });
-  }
+    },
+  });
 
-  console.log("Seeding complete.");
+  console.log("SETTLEMENT_UNIT_LOCK_CONFIRMED.");
 }
 
 main()
