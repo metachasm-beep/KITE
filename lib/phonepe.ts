@@ -18,11 +18,12 @@ export const phonePeClient = (clientId && clientSecret)
 
 /**
  * Initiates a secure settlement protocol via PhonePe Standard Checkout.
+ * In SDK v2, merchantTransactionId is mapped to merchantOrderId.
  */
 export async function initiatePhonePePayment({
   amount,
-  transactionId,
-  merchantOrderId,
+  transactionId, // This is our merchantTransactionId
+  merchantOrderId, // This is our internal order ID
   callbackUrl,
 }: {
   amount: number;
@@ -37,13 +38,9 @@ export async function initiatePhonePePayment({
   try {
     const response = await phonePeClient.pay(
       StandardCheckoutPayRequest.builder()
-        .merchantTransactionId(transactionId)
-        .merchantOrderId(merchantOrderId)
+        .merchantOrderId(transactionId) // Mapping our transaction identifier to merchantOrderId
         .amount(amount * 100) // Paise
         .redirectUrl(callbackUrl)
-        .redirectMode("POST")
-        .callbackUrl(callbackUrl)
-        .paymentInstrument({ type: "PAY_PAGE" })
         .build()
     );
 

@@ -5,24 +5,26 @@ import { phonePeClient } from "@/lib/phonepe";
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const merchantTransactionId = formData.get("merchantTransactionId") as string;
+    // In v2, the identifier is usually merchantOrderId or merchantTransactionId in the POST body
+    // We'll check both for resilience
+    const identifier = (formData.get("merchantOrderId") || formData.get("merchantTransactionId")) as string;
 
-    if (!merchantTransactionId || !phonePeClient) {
+    if (!identifier || !phonePeClient) {
       return NextResponse.json({ error: "INVALID_CALLBACK_HANDSHAKE" }, { status: 400 });
     }
 
-    // Verify status with PhonePe V2 method
-    const statusRes = await phonePeClient.getOrderStatus(merchantTransactionId);
+    // Verify status using the identifier
+    const statusRes = await phonePeClient.getOrderStatus(identifier);
     
+    // In our DB, it's stored under merchantTransactionId
     const order = await prisma.order.findUnique({
-      where: { merchantTransactionId },
+      where: { merchantTransactionId: identifier },
     });
 
     if (!order) {
       return NextResponse.json({ error: "ORDER_NOT_FOUND" }, { status: 404 });
     }
 
-    // In V2, success is usually indicated by state === 'COMPLETED' or responseCode === 'SUCCESS'
     if (statusRes && (statusRes as any).data?.state === "COMPLETED") {
       await prisma.$transaction(async (tx) => {
         await tx.order.update({
@@ -69,14 +71,14 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const merchantTransactionId = searchParams.get("id");
+  const identifier = searchParams.get("id") || searchParams.get("merchantOrderId");
 
-  if (!merchantTransactionId) {
+  if (!identifier) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
   const order = await prisma.order.findUnique({
-    where: { merchantTransactionId },
+    where: { merchantTransactionId: identifier },
   });
 
   if (!order) {
