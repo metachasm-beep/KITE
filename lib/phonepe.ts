@@ -1,4 +1,8 @@
-import { PhonePePaymentClient, Env } from "@phonepe-pg/pg-sdk-node";
+import { 
+  StandardCheckoutClient, 
+  Env, 
+  StandardCheckoutPayRequest 
+} from "@phonepe-pg/pg-sdk-node";
 
 const clientId = process.env.PHONEPE_CLIENT_ID;
 const clientSecret = process.env.PHONEPE_CLIENT_SECRET;
@@ -9,14 +13,11 @@ if (!clientId || !clientSecret) {
 }
 
 export const phonePeClient = (clientId && clientSecret) 
-  ? new PhonePePaymentClient(clientId, clientSecret, 1, environment)
+  ? StandardCheckoutClient.getInstance(clientId, clientSecret, 1, environment)
   : null;
 
 /**
- * Initiates a secure settlement protocol via PhonePe.
- * @param amount - The total yield to be settled (in INR).
- * @param transactionId - Unique identification for this acquisition.
- * @param merchantOrderId - Reference matching the internal order ID.
+ * Initiates a secure settlement protocol via PhonePe Standard Checkout.
  */
 export async function initiatePhonePePayment({
   amount,
@@ -34,28 +35,28 @@ export async function initiatePhonePePayment({
   }
 
   try {
-    const response = await phonePeClient.standardCheckout().initiate({
-      merchantTransactionId: transactionId,
-      merchantOrderId: merchantOrderId,
-      amount: amount * 100, // PhonePe expects amount in paise (Rupee * 100)
-      redirectUrl: callbackUrl,
-      redirectMode: "POST",
-      callbackUrl: callbackUrl,
-      paymentInstrument: {
-        type: "PAY_PAGE",
-      },
-    });
+    const response = await phonePeClient.pay(
+      StandardCheckoutPayRequest.builder()
+        .merchantTransactionId(transactionId)
+        .merchantOrderId(merchantOrderId)
+        .amount(amount * 100) // Paise
+        .redirectUrl(callbackUrl)
+        .redirectMode("POST")
+        .callbackUrl(callbackUrl)
+        .paymentInstrument({ type: "PAY_PAGE" })
+        .build()
+    );
 
-    if (response.status === 200 && response.data?.instrumentResponse?.redirectInfo?.url) {
+    if (response) {
       return {
         success: true,
-        redirectUrl: response.data.instrumentResponse.redirectInfo.url,
+        redirectUrl: (response as any).data?.instrumentResponse?.redirectInfo?.url,
       };
     }
 
     return {
       success: false,
-      error: "SETTLEMENT_HANDSHAKE_FAILURE: " + (response.message || "Unknown error"),
+      error: "SETTLEMENT_HANDSHAKE_FAILURE: Null response from gateway",
     };
   } catch (error: any) {
     console.error("PHONEPE_INIT_ERROR:", error);

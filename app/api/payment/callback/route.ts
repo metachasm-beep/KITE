@@ -5,16 +5,14 @@ import { phonePeClient } from "@/lib/phonepe";
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    // PhonePe usually sends code and merchantTransactionId
-    const code = formData.get("code");
     const merchantTransactionId = formData.get("merchantTransactionId") as string;
 
     if (!merchantTransactionId || !phonePeClient) {
       return NextResponse.json({ error: "INVALID_CALLBACK_HANDSHAKE" }, { status: 400 });
     }
 
-    // Verify status with PhonePe
-    const statusRes = await phonePeClient.standardCheckout().checkStatus(merchantTransactionId);
+    // Verify status with PhonePe V2 method
+    const statusRes = await phonePeClient.getOrderStatus(merchantTransactionId);
     
     const order = await prisma.order.findUnique({
       where: { merchantTransactionId },
@@ -24,8 +22,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ORDER_NOT_FOUND" }, { status: 404 });
     }
 
-    if (statusRes.status === 200 && statusRes.data?.state === "COMPLETED") {
-      // Update order to PROCESSING and payment to COMPLETED
+    // In V2, success is usually indicated by state === 'COMPLETED' or responseCode === 'SUCCESS'
+    if (statusRes && (statusRes as any).data?.state === "COMPLETED") {
       await prisma.$transaction(async (tx) => {
         await tx.order.update({
           where: { id: order.id },
@@ -46,7 +44,6 @@ export async function POST(request: Request) {
       
       return NextResponse.redirect(new URL(`/account/orders/${order.id}`, request.url));
     } else {
-      // Update payment to FAILED
       await prisma.$transaction(async (tx) => {
         await tx.order.update({
           where: { id: order.id },
@@ -70,9 +67,7 @@ export async function POST(request: Request) {
   }
 }
 
-// Fallback for cases where PhonePe might use GET for browser redirect
 export async function GET(request: Request) {
-  // Usually the browser redirect is just a landing, we should re-verify if possible
   const { searchParams } = new URL(request.url);
   const merchantTransactionId = searchParams.get("id");
 
@@ -88,6 +83,5 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "ACQUISITION_NOT_FOUND" }, { status: 404 });
   }
 
-  // Redirect to order page - if payment is still pending, the status checking should happen there too or wait for webhook
   return NextResponse.redirect(new URL(`/account/orders/${order.id}`, request.url));
 }
