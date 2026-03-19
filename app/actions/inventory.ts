@@ -2,6 +2,35 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
+
+export async function uploadArtifactImage(formData: FormData) {
+  try {
+    const file = formData.get("file") as File;
+    if (!file) {
+      return { success: false, error: "MISSING_ASSET" };
+    }
+
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `artifacts/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from("media")
+      .upload(filePath, file);
+
+    if (error) throw error;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from("media")
+      .getPublicUrl(filePath);
+
+    return { success: true, publicUrl };
+  } catch (error: any) {
+    console.error("Upload failure:", error);
+    return { success: false, error: error.message || "UPLOAD_PROTOCOL_ERROR" };
+  }
+}
 
 export async function createArtifact(data: {
   slug: string;

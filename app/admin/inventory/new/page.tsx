@@ -6,6 +6,7 @@ import { Upload, X, ImageIcon, Loader2 } from "lucide-react";
 import { HudContainer } from "@/components/common/HudContainer";
 import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 import { SystemButton } from "@/components/common/SystemButton";
+import { createArtifact, uploadArtifactImage } from "@/app/actions/inventory";
 
 export default function NewArtifactPage() {
   const router = useRouter();
