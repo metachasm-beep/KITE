@@ -3,10 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createArtifact } from "@/app/actions/inventory";
+import { uploadArtifactImage } from "@/app/actions/storage";
+import { Upload, X, ImageIcon, Loader2 } from "lucide-react";
 
 export default function NewArtifactPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
   const [formData, setFormData] = useState({
     slug: "",
     title: "",
@@ -17,10 +22,42 @@ export default function NewArtifactPage() {
     specs: [{ label: "WEIGHT", value: "" }, { label: "MATERIAL", value: "HIGH-DENSITY PLA" }]
   });
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await createArtifact(formData);
+
+    let imageUrl = "";
+    if (imageFile) {
+      const uploadData = new FormData();
+      uploadData.append("file", imageFile);
+      const uploadRes = await uploadArtifactImage(uploadData);
+      if (uploadRes.success) {
+        imageUrl = uploadRes.publicUrl || "";
+      } else {
+        alert("UPLOAD_ERR: " + uploadRes.error);
+        setLoading(false);
+        return;
+      }
+    }
+
+    const res = await createArtifact({ ...formData, imageUrl });
     if (res.success) {
       router.push("/admin/inventory");
     } else {
@@ -45,6 +82,41 @@ export default function NewArtifactPage() {
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-8 font-mono">
+        {/* IMAGE UPLOAD HUD */}
+        <div className="space-y-4">
+          <label className="text-[10px] tracking-widest text-zinc-500 uppercase block">MEDIA_VAULT // ASSET_INITIALIZATION</label>
+          <div className="relative group">
+            {imagePreview ? (
+              <div className="relative aspect-video w-full border border-accent/20 bg-black overflow-hidden">
+                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover opacity-60" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <button 
+                    type="button" 
+                    onClick={removeImage}
+                    className="p-3 bg-black/60 border border-white/10 text-white hover:text-red-500 hover:border-red-500/40 transition-all group/btn"
+                  >
+                    <X size={20} className="group-hover/btn:rotate-90 transition-transform" />
+                  </button>
+                </div>
+                <div className="absolute top-4 left-4 text-[8px] text-accent tracking-[0.3em] font-mono">
+                  PREVIEW_ACTIVE // 0xCC{Math.floor(Math.random() * 999)}
+                </div>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center aspect-video w-full border border-dashed border-white/10 bg-white/[0.01] hover:bg-white/[0.03] hover:border-accent/40 transition-all cursor-pointer group">
+                <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                <Upload size={24} className="text-zinc-600 group-hover:text-accent transition-colors mb-4" />
+                <span className="text-[10px] text-zinc-600 group-hover:text-white transition-colors tracking-[0.2em] uppercase">
+                  UPLOAD_CORE_ASSET
+                </span>
+                <span className="text-[8px] text-zinc-800 mt-2 uppercase tracking-tighter">
+                  (DRAG_OR_CLICK_TO_INITIALIZE)
+                </span>
+              </label>
+            )}
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-[10px] tracking-widest text-zinc-500 uppercase">NOMENCLATURE (TITLE)</label>

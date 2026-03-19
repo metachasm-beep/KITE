@@ -49,17 +49,25 @@ export default async function ArtifactDetail({
            </span>
         </div>
         
-        {/* Placeholder Structural Geometry */}
-        <div className="hud-container w-[280px] md:w-[400px] aspect-square flex items-center justify-center group">
+        {/* Placeholder Structural Geometry / Live Image */}
+        <div className="hud-container w-[280px] md:w-[400px] aspect-square flex items-center justify-center group overflow-hidden">
           <div className="corner" />
           <div className="absolute inset-0 bg-white/[0.01] -z-10 group-hover:bg-accent/[0.02] transition-colors" />
           
-          <div className="w-1/2 h-1/2 border-[0.5px] border-accent/20 rotate-45 flex items-center justify-center group-hover:rotate-0 transition-transform duration-1000">
-            <div className="w-full h-full border-[0.5px] border-white/10 -rotate-90" />
-          </div>
+          {artifact.imageUrl ? (
+            <img 
+              src={artifact.imageUrl} 
+              alt={artifact.title} 
+              className="w-full h-full object-contain p-8 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" 
+            />
+          ) : (
+            <div className="w-1/2 h-1/2 border-[0.5px] border-accent/20 rotate-45 flex items-center justify-center group-hover:rotate-0 transition-transform duration-1000">
+              <div className="w-full h-full border-[0.5px] border-white/10 -rotate-90" />
+            </div>
+          )}
           
           {/* Central Core Glow */}
-          <div className="absolute w-2 h-2 bg-accent rounded-full blur-[4px] animate-ping" />
+          {!artifact.imageUrl && <div className="absolute w-2 h-2 bg-accent rounded-full blur-[4px] animate-ping" />}
         </div>
       </section>
 

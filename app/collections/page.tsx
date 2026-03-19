@@ -67,14 +67,22 @@ export default async function CollectionsPage() {
               </div>
 
               {/* CENTER: Technical Visualization */}
-              <div className="relative flex-1 flex items-center justify-center p-12">
+              <div className="relative flex-1 flex items-center justify-center p-6 bg-[#020202] overflow-hidden">
                  <div className="absolute inset-0 bg-white/[0.01] -z-10" />
-                 <div className="w-full h-full border border-white/5 relative flex items-center justify-center">
-                    <div className="absolute inset-4 border border-white/5 opacity-50" />
-                    <div className="w-12 h-12 border border-accent/20 rounded-full animate-pulse flex items-center justify-center">
-                       <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_#00F2FF]" />
-                    </div>
-                 </div>
+                 {artifact.imageUrl ? (
+                   <img 
+                     src={artifact.imageUrl} 
+                     alt={artifact.title} 
+                     className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-all duration-700 group-hover:scale-105" 
+                   />
+                 ) : (
+                   <div className="w-full h-full border border-white/5 relative flex items-center justify-center">
+                      <div className="absolute inset-4 border border-white/5 opacity-50" />
+                      <div className="w-12 h-12 border border-accent/20 rounded-full animate-pulse flex items-center justify-center">
+                         <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_#00F2FF]" />
+                      </div>
+                   </div>
+                 )}
               </div>
 
               {/* BOTTOM: DATA STATS */}

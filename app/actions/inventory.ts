@@ -10,6 +10,7 @@ export async function createArtifact(data: {
   description: string;
   price: string;
   status: string;
+  imageUrl?: string;
   specs: { label: string; value: string }[];
 }) {
   try {
@@ -21,6 +22,7 @@ export async function createArtifact(data: {
         description: data.description,
         price: data.price,
         status: data.status,
+        imageUrl: data.imageUrl,
         specs: {
           create: data.specs,
         },

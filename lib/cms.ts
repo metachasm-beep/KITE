@@ -14,6 +14,7 @@ export type Artifact = {
   price: string;
   specs: ArtifactSpec[];
   status: string;
+  imageUrl?: string | null;
 };
 
 /**
@@ -34,6 +35,7 @@ export async function getArtifacts(): Promise<Artifact[]> {
     description: a.description,
     price: a.price,
     status: a.status as any,
+    imageUrl: a.imageUrl,
     specs: a.specs.map((s) => ({ label: s.label, value: s.value })),
   }));
 }
@@ -57,6 +59,7 @@ export async function getArtifactBySlug(slug: string): Promise<Artifact | null> 
     description: a.description,
     price: a.price,
     status: a.status as any,
+    imageUrl: a.imageUrl,
     specs: a.specs.map((s) => ({ label: s.label, value: s.value })),
   };
 }
