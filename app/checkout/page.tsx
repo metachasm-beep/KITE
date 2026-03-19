@@ -5,16 +5,18 @@ import { useCart } from "@/lib/contexts/CartContext";
 import { createOrder } from "@/app/actions/orders";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { HudContainer } from "@/components/common/HudContainer";
 import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 import { SystemButton } from "@/components/common/SystemButton";
-import { Package, MapPin, CreditCard, ChevronRight, Loader2, CheckCircle2 } from "lucide-react";
+import { Package, MapPin, CreditCard, ChevronRight, Loader2, CheckCircle2, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Step = "SUMMARY" | "SHIPPING" | "PAYMENT" | "COMPLETE";
 
 function CheckoutPageContent() {
   const { items, totalAmount, clearCart } = useCart();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("SUMMARY");
@@ -64,16 +66,46 @@ function CheckoutPageContent() {
       clearCart();
       setStep("COMPLETE");
     } else {
-      alert("ACQUISITION_PROTOCOL_FAILURE: " + res.error);
+      if (res.error === "AUTH_REQUIRED") {
+        router.push("/api/auth/signin");
+      } else {
+        alert("TRANSACTION_INTERRUPTED: " + res.error);
+      }
       setLoading(false);
     }
   };
+
+  if (status === "loading") {
+    return (
+      <main className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-8">
+         <Loader2 className="animate-spin text-accent" size={32} />
+         <p className="text-zinc-400 font-mono text-[10px] uppercase tracking-widest animate-pulse">Establishing Session...</p>
+      </main>
+    );
+  }
+
+  if (!session) {
+    return (
+      <main className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-12">
+         <div className="w-16 h-16 border border-black/5 flex items-center justify-center bg-muted rounded-full">
+            <Lock size={20} className="text-zinc-300" />
+         </div>
+         <div className="space-y-4">
+            <h2 className="text-3xl font-heading text-foreground uppercase tracking-tight">Access Protocol Required</h2>
+            <p className="text-zinc-400 font-mono text-xs max-w-sm mx-auto uppercase leading-relaxed">
+               You must be authenticated with the Design Studio network to complete this acquisition.
+            </p>
+         </div>
+         <SystemButton href="/api/auth/signin" className="px-12 py-4">Authenticate via Google</SystemButton>
+      </main>
+    );
+  }
 
   if (items.length === 0 && step !== "COMPLETE") {
      return (
        <main className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-8">
           <Package size={48} className="text-zinc-100" />
-          <p className="text-zinc-400 font-mono text-xs uppercase tracking-widest">Your cart is empty</p>
+          <p className="text-zinc-400 font-mono text-xs uppercase tracking-widest font-bold">Your cart is empty</p>
           <SystemButton href="/collections" className="px-12 py-4">Return to Shop</SystemButton>
        </main>
      );
