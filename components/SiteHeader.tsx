@@ -36,8 +36,8 @@ export function SiteHeader() {
         <nav className="hidden md:flex items-center gap-8">
           {[
             { label: "ARCHIVE", href: "/collections" },
-            { label: "LOGIC", href: "/about" },
-            { label: "STATUS", href: "/status" }
+            { label: "LOGIC", href: "/system" },
+            { label: "STATUS", href: "/system" }
           ].map((item) => (
             <Link 
               key={item.label} 
@@ -78,6 +78,12 @@ export function SiteHeader() {
                 <Link href="/account" className="p-2 text-zinc-500 hover:text-white transition-colors border border-white/5 rounded-sm">
                   <User size={16} />
                 </Link>
+                <button 
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="p-1 px-3 text-[10px] tracking-widest uppercase font-mono text-zinc-500 hover:text-red-500 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
+                >
+                  SIGN_OUT
+                </button>
               </div>
             ) : (
               <Link 
