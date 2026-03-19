@@ -1,8 +1,8 @@
-# ARCHITECTURE.md — VOIDLAB System Design
+# ARCHITECTURE.md — UNIT_01 System Design
 
 ## System Architecture: The Bridge Layer
 
-VOIDLAB follows a strictly decoupled architecture intended to keep content (marketing/catalog) and transactional data (users/orders) in their specialized systems, united by a middle "Bridge Layer".
+UNIT_01 follows a strictly decoupled architecture intended to keep content and transactional data in their specialized systems, united by a middle "Bridge Layer".
 
 ```mermaid
 graph TD
@@ -45,7 +45,7 @@ graph TD
 
 ## Visual & Interaction System
 
-1. **The Grid**: Minimalist, high contrast, heavy use of black space (#000000).
-2. **The Accent**: **Cyber Purple (#8B5CF6)** used for subtle highlights, active states, and CTA edges.
-3. **The Object**: Rotating 3D views (using Three.js or high-quality video loops) on key pages.
-4. **The Specs**: Technical layout for product details (Material, Finish, Edition, Dimensions).
+1. **The Core Grid**: Minimalist, high contrast, heavy use of high-density black space (#050505).
+2. **The HUD Accent**: **HUD Cyan (#00F2FF)** used for telemetry edges, active states, and scanlines.
+3. **The Object**: Technical CAD-like line-art animations and solid resin representations.
+4. **The Specs**: Diagnostic layout for unit details (Material, Finish, Geometry, Density).
