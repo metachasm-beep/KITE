@@ -24,7 +24,7 @@ export function HeroSection() {
           <div className="hidden xl:flex col-span-2 flex-col gap-16 opacity-40">
             <div className="space-y-4">
                <span className="text-[9px] font-mono text-white/50 block tracking-widest uppercase">NAV_VECTR // 01</span>
-               <Link href="/system" className="w-24 h-24 border border-white/10 relative flex items-center justify-center group hover:bg-white/[0.02] transition-colors">
+               <Link href="/status" className="w-24 h-24 border border-white/10 relative flex items-center justify-center group hover:bg-white/[0.02] transition-colors">
                   <div className="absolute inset-2 border-t border-r border-accent/40 rounded-full animate-spin-slow group-hover:border-accent transition-colors" />
                   <Crosshair size={20} className="text-accent/60 group-hover:text-accent transition-colors" />
                </Link>
@@ -109,10 +109,17 @@ export function HeroSection() {
               transition={{ delay: 1.2, duration: 1 }}
               className="mt-16 w-full flex flex-col md:flex-row items-center gap-8 justify-between border border-white/5 p-6 bg-white/[0.01]"
             >
-              <Link href="/system" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
-                <Cpu size={14} className="text-accent group-hover:animate-pulse" />
-                <span className="text-[10px] font-mono tracking-widest uppercase">ENG_PROTOCOL_ACTIVE</span>
-              </Link>
+              <div className="flex gap-12">
+                <Link href="/system" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
+                  <Cpu size={14} className="text-accent group-hover:animate-pulse" />
+                  <span className="text-[10px] font-mono tracking-widest uppercase">LOGIC_PROTOCOL</span>
+                </Link>
+
+                <Link href="/status" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
+                  <Activity size={14} className="text-accent group-hover:animate-pulse" />
+                  <span className="text-[10px] font-mono tracking-widest uppercase">STATUS_TELEMETRY</span>
+                </Link>
+              </div>
 
               <Link 
                 href="/collections" 

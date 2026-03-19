@@ -3,8 +3,9 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/Providers";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { CartDrawer } from "@/components/layout/CartDrawer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-black text-white selection:bg-accent selection:text-white`}>
         <Providers>
           <SiteHeader />
+          <CartDrawer />
           <div className="pt-20">
             {children}
           </div>

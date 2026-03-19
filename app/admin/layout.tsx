@@ -7,6 +7,7 @@ const ADMIN_NAV = [
   { label: "OVERVIEW", href: "/admin" },
   { label: "INVENTORY", href: "/admin/inventory" },
   { label: "ORDERS", href: "/admin/orders" },
+  { label: "USERS", href: "/admin/users" },
 ];
 
 export default async function AdminLayout({

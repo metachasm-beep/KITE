@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { prisma } from "@/lib/db";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,15 +11,22 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        // Evaluate if the user's email matches the configured admin email
+      const email = token.email || user?.email;
+      
+      if (email) {
         const adminEmail = process.env.ADMIN_EMAIL || "metachasm@gmail.com";
-        if (user.email === adminEmail) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email }
+        });
+
+        // Ensure metachasm@gmail.com is ALWAYS an admin regardless of DB state
+        if (email === adminEmail || (dbUser?.role as string) === "ADMIN") {
           token.role = "admin";
         } else {
           token.role = "user";
         }
       }
+      
       return token;
     },
     async session({ session, token }) {

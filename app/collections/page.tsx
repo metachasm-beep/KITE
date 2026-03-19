@@ -1,11 +1,27 @@
+"use client";
+
 import Link from "next/link";
 import { getArtifacts } from "@/lib/cms";
-import { Archive, Terminal, Share2 } from "lucide-react";
+import { Archive, Terminal, Share2, Plus } from "lucide-react";
+import { HudContainer } from "@/components/common/HudContainer";
+import { TechnicalLabel } from "@/components/common/TechnicalLabel";
+import { useCart } from "@/lib/contexts/CartContext";
+import { useEffect, useState } from "react";
+import { Artifact } from "@/lib/cms";
 
-export const dynamic = "force-dynamic";
+export default function CollectionsPage() {
+  const [artifacts, setArtifacts] = useState<Artifact[]>([]);
+  const { addItem } = useCart();
+  const [loading, setLoading] = useState(true);
 
-export default async function CollectionsPage() {
-  const artifacts = await getArtifacts();
+  useEffect(() => {
+    getArtifacts().then(res => {
+      setArtifacts(res);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center font-mono text-zinc-800 uppercase tracking-widest">SYNCHRONIZING_ARCHIVE...</div>;
 
   return (
     <main className="min-h-screen bg-[#050505] pt-32 pb-48 relative overflow-hidden">
@@ -19,7 +35,7 @@ export default async function CollectionsPage() {
           <div className="space-y-10">
             <div className="flex items-center gap-4">
               <Archive size={16} className="text-accent" />
-              <span className="text-[10px] font-mono font-bold text-zinc-600 tracking-[0.4em] uppercase">SYSTEM_ARCHIVE // INDEX_01</span>
+              <TechnicalLabel label="SYSTEM_ARCHIVE" value="INDEX_01" className="font-bold" />
             </div>
             
             <h1 className="text-[48px] md:text-[96px] font-heading leading-none tracking-[-0.1em] text-white uppercase">
@@ -33,8 +49,8 @@ export default async function CollectionsPage() {
           </div>
 
           <div className="flex flex-col items-end gap-2 border-t border-white/10 pt-4 hidden md:flex">
-             <span className="text-[8px] font-mono text-zinc-700 uppercase">SYS_TELEMETRY</span>
-             <span className="text-[11px] font-mono text-accent uppercase tracking-widest leading-none">U.01_ACTIVE_SYNC</span>
+             <TechnicalLabel label="SYS_TELEMETRY" className="text-zinc-700" />
+             <TechnicalLabel label="U.01_ACTIVE_SYNC" className="text-accent leading-none" />
              <Terminal size={14} className="text-zinc-800" />
           </div>
         </header>
@@ -45,65 +61,86 @@ export default async function CollectionsPage() {
             <Link 
               key={artifact.slug}
               href={`/collections/${artifact.slug}`}
-              className="hud-container group hover:border-accent/30 transition-all duration-500 aspect-[4/5] flex flex-col justify-between"
+              className="group"
             >
-              <div className="corner" />
-              
-              {/* TOP: Telemetry + Title */}
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[8px] font-mono text-accent uppercase tracking-tighter">[ SYNCING ]</span>
-                    <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-widest">{artifact.series}</span>
+              <HudContainer className="hover:border-accent/30 transition-all duration-500 aspect-[4/5] flex flex-col justify-between">
+                {/* TOP: Telemetry + Title */}
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <TechnicalLabel label="SYNCING" className="text-accent text-[8px] animate-pulse" />
+                      <TechnicalLabel label={artifact.series} className="text-zinc-700 text-[8px]" />
+                    </div>
+                    <h3 className="text-[20px] md:text-[24px] font-bold text-white tracking-widest uppercase group-hover:text-accent transition-colors duration-500">
+                      {artifact.title}
+                    </h3>
                   </div>
-                  <h3 className="text-[20px] md:text-[24px] font-bold text-white tracking-widest uppercase group-hover:text-accent transition-colors duration-500">
-                    {artifact.title}
-                  </h3>
+                  <div className="flex flex-col items-end gap-2">
+                     <span className="text-[11px] font-bold text-white font-mono">{artifact.price}</span>
+                     <button 
+                       onClick={(e) => {
+                         e.preventDefault();
+                         e.stopPropagation();
+                         addItem({
+                           id: artifact.id,
+                           slug: artifact.slug,
+                           title: artifact.title,
+                           price: artifact.price,
+                           quantity: 1,
+                           media: artifact.media
+                         });
+                       }}
+                       className="p-1 px-2 border border-white/5 bg-white/5 hover:bg-accent hover:text-black transition-all text-zinc-500 font-mono text-[8px] tracking-tighter uppercase"
+                     >
+                       ADD+
+                     </button>
+                  </div>
                 </div>
-                <div className="flex flex-col items-end">
-                   <span className="text-[11px] font-bold text-white font-mono">{artifact.price}</span>
-                   <Share2 size={12} className="text-zinc-800 mt-2 hover:text-white transition-colors" />
-                </div>
-              </div>
 
-              {/* CENTER: Technical Visualization */}
-              <div className="relative flex-1 flex items-center justify-center p-6 bg-[#020202] overflow-hidden">
-                 <div className="absolute inset-0 bg-white/[0.01] -z-10" />
-                 {artifact.imageUrl ? (
-                   <img 
-                     src={artifact.imageUrl} 
-                     alt={artifact.title} 
-                     className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-all duration-700 group-hover:scale-105" 
-                   />
-                 ) : (
-                   <div className="w-full h-full border border-white/5 relative flex items-center justify-center">
-                      <div className="absolute inset-4 border border-white/5 opacity-50" />
-                      <div className="w-12 h-12 border border-accent/20 rounded-full animate-pulse flex items-center justify-center">
-                         <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_#00F2FF]" />
-                      </div>
-                   </div>
-                 )}
-              </div>
+                {/* CENTER: Technical Visualization */}
+                <div className="relative flex-1 flex items-center justify-center p-6 bg-[#020202] overflow-hidden my-6">
+                   <div className="absolute inset-0 bg-white/[0.01] -z-10" />
+                   {artifact.media.src ? (
+                     <img 
+                       src={artifact.media.src} 
+                       alt={artifact.title} 
+                       className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-all duration-700 group-hover:scale-105" 
+                     />
+                   ) : (
+                     <div className="w-full h-full border border-white/5 relative flex items-center justify-center">
+                        <div className="absolute inset-4 border border-white/5 opacity-50" />
+                        <div className="w-12 h-12 border border-accent/20 rounded-full animate-pulse flex items-center justify-center">
+                           <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_#00F2FF]" />
+                        </div>
+                        {artifact.media.placeholderLabel && (
+                          <TechnicalLabel 
+                            label={artifact.media.placeholderLabel} 
+                            className="absolute bottom-4 text-[7px] text-zinc-800"
+                          />
+                        )}
+                     </div>
+                   )}
+                </div>
 
-              {/* BOTTOM: DATA STATS */}
-              <div className="flex items-end justify-between border-t border-white/5 pt-6">
-                <div className="space-y-1">
-                  <span className="text-[7px] font-mono text-zinc-700 block uppercase">SYNC_STATUS</span>
-                  <span className={`text-[9px] font-bold font-mono tracking-widest uppercase 
-                    ${artifact.status === 'AVAILABLE' ? 'text-accent' : 'text-red-900/60'}`}>
-                    {artifact.status === 'AVAILABLE' ? 'LOCALIZED' : 'DE-FRAGMENTED'}
-                  </span>
+                {/* BOTTOM: DATA STATS */}
+                <div className="flex items-end justify-between border-t border-white/5 pt-6">
+                  <div className="space-y-1">
+                    <TechnicalLabel label="SYNC_STATUS" className="text-zinc-700 text-[7px]" />
+                    <TechnicalLabel 
+                      label={artifact.status === 'AVAILABLE' ? 'LOCALIZED' : 'DE-FRAGMENTED'} 
+                      className={artifact.status === 'AVAILABLE' ? 'text-accent' : 'text-red-900/60'}
+                    />
+                  </div>
+                  
+                  <div className="flex items-center gap-2 opacity-20 group-hover:opacity-100 transition-opacity">
+                     <TechnicalLabel label="VIEW_SPEC" className="text-zinc-600 text-[9px]" />
+                     <div className="w-4 h-[1px] bg-white" />
+                  </div>
                 </div>
-                
-                <div className="flex items-center gap-2 opacity-20 group-hover:opacity-100 transition-opacity">
-                   <span className="text-[9px] font-mono text-zinc-600 uppercase">VIEW_SPEC</span>
-                   <div className="w-4 h-[1px] bg-white" />
-                </div>
-              </div>
+              </HudContainer>
             </Link>
           ))}
         </div>
-
       </div>
     </main>
   );

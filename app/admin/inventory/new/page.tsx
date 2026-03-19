@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createArtifact } from "@/app/actions/inventory";
-import { uploadArtifactImage } from "@/app/actions/storage";
 import { Upload, X, ImageIcon, Loader2 } from "lucide-react";
+import { HudContainer } from "@/components/common/HudContainer";
+import { TechnicalLabel } from "@/components/common/TechnicalLabel";
+import { SystemButton } from "@/components/common/SystemButton";
 
 export default function NewArtifactPage() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function NewArtifactPage() {
     series: "SERIES 01 // ORIGIN",
     description: "",
     price: "",
-    status: "LOCALIZED",
+    status: "AVAILABLE",
     specs: [{ label: "WEIGHT", value: "" }, { label: "MATERIAL", value: "HIGH-DENSITY PLA" }]
   });
 
@@ -76,16 +77,14 @@ export default function NewArtifactPage() {
     <div className="max-w-2xl">
       <header className="border-b border-white/10 pb-6 mb-12">
         <h1 className="text-4xl font-heading tracking-[-0.05em] text-white">ALLOCATE_NEW_UNIT</h1>
-        <p className="font-mono text-[10px] text-zinc-500 tracking-[0.3em] uppercase mt-2">
-          Initialize a new geometric study into the database
-        </p>
+        <TechnicalLabel label="SYS_PROTOCOL" value="INITIALIZATION" className="mt-2 text-zinc-500" />
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-8 font-mono">
         {/* IMAGE UPLOAD HUD */}
         <div className="space-y-4">
-          <label className="text-[10px] tracking-widest text-zinc-500 uppercase block">MEDIA_VAULT // ASSET_INITIALIZATION</label>
-          <div className="relative group">
+          <TechnicalLabel label="MEDIA_VAULT" value="ASSET_INITIALIZATION" className="text-zinc-500" />
+          <HudContainer className="relative group p-0 border-none">
             {imagePreview ? (
               <div className="relative aspect-video w-full border border-accent/20 bg-black overflow-hidden">
                 <img src={imagePreview} alt="Preview" className="w-full h-full object-cover opacity-60" />
@@ -98,28 +97,28 @@ export default function NewArtifactPage() {
                     <X size={20} className="group-hover/btn:rotate-90 transition-transform" />
                   </button>
                 </div>
-                <div className="absolute top-4 left-4 text-[8px] text-accent tracking-[0.3em] font-mono">
-                  PREVIEW_ACTIVE // 0xCC{Math.floor(Math.random() * 999)}
-                </div>
+                <TechnicalLabel 
+                  label="PREVIEW_ACTIVE" 
+                  value={`0xCC${Math.floor(Math.random() * 999)}`} 
+                  className="absolute top-4 left-4 text-accent text-[8px]" 
+                />
               </div>
             ) : (
               <label className="flex flex-col items-center justify-center aspect-video w-full border border-dashed border-white/10 bg-white/[0.01] hover:bg-white/[0.03] hover:border-accent/40 transition-all cursor-pointer group">
                 <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
                 <Upload size={24} className="text-zinc-600 group-hover:text-accent transition-colors mb-4" />
-                <span className="text-[10px] text-zinc-600 group-hover:text-white transition-colors tracking-[0.2em] uppercase">
-                  UPLOAD_CORE_ASSET
-                </span>
+                <TechnicalLabel label="UPLOAD_CORE_ASSET" className="text-zinc-600 group-hover:text-white" />
                 <span className="text-[8px] text-zinc-800 mt-2 uppercase tracking-tighter">
                   (DRAG_OR_CLICK_TO_INITIALIZE)
                 </span>
               </label>
             )}
-          </div>
+          </HudContainer>
         </div>
 
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-[10px] tracking-widest text-zinc-500 uppercase">NOMENCLATURE (TITLE)</label>
+            <TechnicalLabel label="NOMENCLATURE" value="(TITLE)" className="text-zinc-500 text-[10px]" />
             <input required type="text" className="w-full bg-white/[0.02] border border-white/10 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="e.g. UNIT_01 // OMEGA" />
           </div>
           <div className="space-y-2">
@@ -161,9 +160,9 @@ export default function NewArtifactPage() {
           <button type="button" onClick={() => router.back()} className="text-[10px] tracking-widest text-zinc-500 hover:text-white uppercase transition-colors">
             ABORT
           </button>
-          <button disabled={loading} type="submit" className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-accent hover:border-accent hover:text-black transition-colors">
+          <SystemButton disabled={loading} type="submit" className="px-12 py-4 text-[10px]">
             {loading ? "INITIALIZING..." : "EXECUTE_ALLOCATION"}
-          </button>
+          </SystemButton>
         </div>
       </form>
     </div>

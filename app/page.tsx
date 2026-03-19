@@ -1,10 +1,13 @@
 "use client";
 
-import { HeroSection } from "@/components/HeroSection";
-import { PhilosophySection } from "@/components/PhilosophySection";
+import { HeroSection } from "@/components/home/HeroSection";
+import { PhilosophySection } from "@/components/home/PhilosophySection";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Terminal, MoveUpRight } from "lucide-react";
+import { HudContainer } from "@/components/common/HudContainer";
+import { TechnicalLabel } from "@/components/common/TechnicalLabel";
+import { SystemButton } from "@/components/common/SystemButton";
 
 export default function Home() {
   return (
@@ -20,9 +23,7 @@ export default function Home() {
             <div className="space-y-6">
               <div className="flex items-center gap-3">
                 <Terminal size={14} className="text-accent" />
-                <span className="text-zinc-600 text-[10px] font-mono tracking-[0.4em] uppercase leading-loose">
-                  ALLOCATION_PREVIEW // S.01
-                </span>
+                <TechnicalLabel label="ALLOCATION_PREVIEW" value="S.01" className="leading-loose" />
               </div>
               
               <h2 className="text-[44px] md:text-[84px] font-heading leading-[0.8] tracking-[-0.1em] text-white uppercase max-w-lg">
@@ -31,10 +32,10 @@ export default function Home() {
               </h2>
             </div>
             
-            <Link href="/collections" className="btn-hud group">
+            <SystemButton href="/collections" className="group">
                VIEW_ALL_UNITS
                <MoveUpRight size={14} className="inline ml-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
+            </SystemButton>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -46,26 +47,25 @@ export default function Home() {
               <Link 
                 key={obj.id} 
                 href="/collections"
-                className="hud-container aspect-square flex flex-col items-center justify-center group bg-white/[0.01] hover:bg-accent/[0.02] transition-colors"
+                className="group"
               >
-                <div className="corner" />
-                <div className="absolute top-4 left-4 text-telemetry">MOD_INIT // {obj.id}</div>
-                
-                <div className="w-1/3 aspect-square border border-white/5 group-hover:border-accent/30 flex items-center justify-center transition-all duration-700 group-hover:rotate-[15deg]">
-                  <div className="w-2 h-2 bg-zinc-800 rounded-full group-hover:bg-accent transition-colors" />
-                </div>
-                
-                <span className="mt-8 text-[11px] font-mono tracking-[0.3em] text-zinc-700 group-hover:text-white transition-colors uppercase">
-                  {obj.label}
-                </span>
-                
-                {/* Micro readout */}
-                <div className="absolute bottom-4 right-4 text-[7px] font-mono text-zinc-800 uppercase tracking-tighter">
-                   REF_DATA // 0xAF{obj.id}
-                </div>
+                <HudContainer className="aspect-square flex flex-col items-center justify-center bg-white/[0.01] hover:bg-accent/[0.02] transition-colors">
+                  <TechnicalLabel label="MOD_INIT" value={obj.id} className="absolute top-4 left-4" />
+                  
+                  <div className="w-1/3 aspect-square border border-white/5 group-hover:border-accent/30 flex items-center justify-center transition-all duration-700 group-hover:rotate-[15deg]">
+                    <div className="w-2 h-2 bg-zinc-800 rounded-full group-hover:bg-accent transition-colors" />
+                  </div>
+                  
+                  <span className="mt-8 text-[11px] font-mono tracking-[0.3em] text-zinc-700 group-hover:text-white transition-colors uppercase">
+                    {obj.label}
+                  </span>
+                  
+                  <TechnicalLabel label="REF_DATA" value={`0xAF${obj.id}`} className="absolute bottom-4 right-4 text-[7px]" />
+                </HudContainer>
               </Link>
             ))}
           </div>
+
         </div>
       </section>
 
@@ -79,11 +79,12 @@ export default function Home() {
                ENTER THE <br />
                <span className="text-accent underline underline-offset-8 decoration-accent/20">UNIT_01 PROTOCOL</span>
             </h2>
-            <Link href="/collections" className="btn-hud py-6 px-16">
+            <SystemButton href="/collections" className="py-6 px-16">
                ACQUIRE_UNITS
-            </Link>
+            </SystemButton>
          </div>
       </section>
+
     </main>
   );
 }

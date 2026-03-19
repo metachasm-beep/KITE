@@ -1,4 +1,5 @@
 import { prisma } from "./db";
+import { MediaItem, ObjectStatus } from "./types/core";
 
 export type ArtifactSpec = {
   label: string;
@@ -13,8 +14,8 @@ export type Artifact = {
   description: string;
   price: string;
   specs: ArtifactSpec[];
-  status: string;
-  imageUrl?: string | null;
+  status: ObjectStatus;
+  media: MediaItem;
 };
 
 /**
@@ -27,16 +28,19 @@ export async function getArtifacts(): Promise<Artifact[]> {
   });
 
   // Map Prisma models back to our defined Artifact type
-  return dbArtifacts.map((a) => ({
+  return dbArtifacts.map((a: any) => ({
     id: a.id,
     slug: a.slug,
     title: a.title,
     series: a.series,
     description: a.description,
     price: a.price,
-    status: a.status as any,
-    imageUrl: a.imageUrl,
-    specs: a.specs.map((s) => ({ label: s.label, value: s.value })),
+    status: a.status as ObjectStatus,
+    media: {
+      src: a.imageUrl || undefined,
+      placeholderLabel: `MOD_INIT // ${a.slug.toUpperCase()}`
+    },
+    specs: a.specs.map((s: any) => ({ label: s.label, value: s.value })),
   }));
 }
 
@@ -58,8 +62,12 @@ export async function getArtifactBySlug(slug: string): Promise<Artifact | null> 
     series: a.series,
     description: a.description,
     price: a.price,
-    status: a.status as any,
-    imageUrl: a.imageUrl,
-    specs: a.specs.map((s) => ({ label: s.label, value: s.value })),
+    status: a.status as ObjectStatus,
+    media: {
+      src: a.imageUrl || undefined,
+      placeholderLabel: `MOD_INIT // ${a.slug.toUpperCase()}`
+    },
+    specs: a.specs.map((s: any) => ({ label: s.label, value: s.value })),
   };
 }
+

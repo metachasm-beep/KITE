@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Artifact } from "@/lib/cms";
 import { deleteArtifact, toggleArtifactStatus } from "@/app/actions/inventory";
 import { Loader2 } from "lucide-react";
+import { HudContainer } from "@/components/common/HudContainer";
+import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 
 export function InventoryTable({ initialArtifacts }: { initialArtifacts: Artifact[] }) {
   const [artifacts, setArtifacts] = useState(initialArtifacts);
@@ -26,23 +28,23 @@ export function InventoryTable({ initialArtifacts }: { initialArtifacts: Artifac
     const res = await toggleArtifactStatus(id, currentStatus);
     if (res.success) {
       setArtifacts(artifacts.map(a => 
-        a.id === id ? { ...a, status: currentStatus === "DE-FRAGMENTED" ? "LOCALIZED" : "DE-FRAGMENTED" } : a
+        a.id === id ? { ...a, status: currentStatus === "SOLD_OUT" ? "AVAILABLE" : "SOLD_OUT" } : a
       ));
     }
     setLoadingId(null);
   };
 
   return (
-    <div className="border border-white/10 bg-white/[0.02] overflow-hidden relative">
+    <HudContainer className="p-0 border-white/10 bg-white/[0.02] overflow-hidden">
       <table className="w-full text-left font-mono">
-        <thead className="bg-black text-[9px] tracking-[0.2em] text-zinc-500 uppercase border-b border-white/10">
+        <thead className="bg-black border-b border-white/10">
           <tr>
-            <th className="p-4 font-normal">UNIT_ID</th>
-            <th className="p-4 font-normal">NOMENCLATURE</th>
-            <th className="p-4 font-normal">SERIES</th>
-            <th className="p-4 font-normal">YIELD</th>
-            <th className="p-4 font-normal text-right">STATE</th>
-            <th className="p-4 font-normal text-right">ACTION</th>
+            <th className="p-4 font-normal"><TechnicalLabel label="UNIT_ID" className="text-zinc-500" /></th>
+            <th className="p-4 font-normal"><TechnicalLabel label="NOMENCLATURE" className="text-zinc-500" /></th>
+            <th className="p-4 font-normal"><TechnicalLabel label="SERIES" className="text-zinc-500" /></th>
+            <th className="p-4 font-normal"><TechnicalLabel label="YIELD" className="text-zinc-500" /></th>
+            <th className="p-4 font-normal text-right"><TechnicalLabel label="STATE" className="text-zinc-500 justify-end" /></th>
+            <th className="p-4 font-normal text-right"><TechnicalLabel label="ACTION" className="text-zinc-500 justify-end" /></th>
           </tr>
         </thead>
         <tbody className="text-xs text-zinc-300">
@@ -56,9 +58,9 @@ export function InventoryTable({ initialArtifacts }: { initialArtifacts: Artifac
                 <button 
                   onClick={() => handleToggleStatus(item.id, item.status)}
                   disabled={loadingId === item.id}
-                  className={`text-[10px] tracking-widest uppercase hover:underline ${item.status === "DE-FRAGMENTED" ? "text-red-500/80" : "text-accent"}`}
+                  className={`text-[10px] tracking-widest uppercase hover:underline ${item.status === "SOLD_OUT" ? "text-red-500/80" : "text-accent"}`}
                 >
-                  [{item.status}]
+                  [{item.status === "AVAILABLE" ? "LOCALIZED" : "DE-FRAGMENTED"}]
                 </button>
               </td>
               <td className="p-4 text-right space-x-4">
@@ -75,10 +77,10 @@ export function InventoryTable({ initialArtifacts }: { initialArtifacts: Artifac
         </tbody>
       </table>
       {artifacts.length === 0 && (
-        <div className="p-8 text-center text-[10px] text-zinc-600 font-mono tracking-widest uppercase">
-          [ CATALOG_EMPTY ]
+        <div className="p-8 text-center">
+          <TechnicalLabel label="CATALOG_EMPTY" className="text-zinc-600 justify-center" />
         </div>
       )}
-    </div>
+    </HudContainer>
   );
 }

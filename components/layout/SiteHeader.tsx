@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { User, ShoppingCart, Shield, Activity } from "lucide-react";
 import { motion } from "framer-motion";
+import { useCart } from "@/lib/contexts/CartContext";
 
 export function SiteHeader() {
   const { data: session } = useSession();
+  const { toggleCart, itemsCount } = useCart();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-md">
@@ -94,10 +96,17 @@ export function SiteHeader() {
               </Link>
             )}
             
-            <Link href="/cart" className="relative p-2 text-zinc-500 hover:text-white transition-colors">
+            <button 
+              onClick={toggleCart}
+              className="relative p-2 text-zinc-500 hover:text-white transition-colors"
+            >
               <ShoppingCart size={18} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
-            </Link>
+              {itemsCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-accent text-black text-[9px] font-bold rounded-full flex items-center justify-center font-mono">
+                  {itemsCount}
+                </span>
+              )}
+            </button>
           </div>
         </div>
 

@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Layers, Maximize, Box } from "lucide-react";
+import { HudContainer } from "@/components/common/HudContainer";
+import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 
 export function PhilosophySection() {
   return (
@@ -14,9 +16,8 @@ export function PhilosophySection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
           
           {/* Technical Visualization Module */}
-          <div className="hud-container aspect-square group">
+          <HudContainer className="aspect-square group" showScanline>
              <div className="absolute inset-0 bg-white/[0.02] -z-10" />
-             <div className="corner" />
              
              {/* Dynamic Central Piece */}
              <div className="absolute inset-20 border border-accent/10 rounded-full flex items-center justify-center">
@@ -30,14 +31,11 @@ export function PhilosophySection() {
              </div>
 
              {/* Tech Readouts around the container */}
-             <div className="absolute top-4 left-4 text-telemetry">MOD_INDEX // P.01</div>
-             <div className="absolute top-4 right-4 text-telemetry">GEO_STABLE // TRUE</div>
-             <div className="absolute bottom-4 left-4 text-telemetry">LAT_SCALE // 1:0.01</div>
-             <div className="absolute bottom-4 right-4 text-telemetry">UNIT_PROTOCOL</div>
-             
-             {/* Scanning Line overlay */}
-             <div className="scanline-overlay" />
-          </div>
+             <TechnicalLabel label="MOD_INDEX" value="P.01" className="absolute top-4 left-4" />
+             <TechnicalLabel label="GEO_STABLE" value="TRUE" className="absolute top-4 right-4" />
+             <TechnicalLabel label="LAT_SCALE" value="1:0.01" className="absolute bottom-4 left-4" />
+             <TechnicalLabel label="UNIT_PROTOCOL" className="absolute bottom-4 right-4" />
+          </HudContainer>
 
           {/* Contemporary "Material Logic" Copy */}
           <div className="space-y-16">

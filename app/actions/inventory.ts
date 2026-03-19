@@ -53,7 +53,7 @@ export async function deleteArtifact(id: string) {
 
 export async function toggleArtifactStatus(id: string, currentStatus: string) {
   try {
-    const newStatus = currentStatus === "DE-FRAGMENTED" ? "LOCALIZED" : "DE-FRAGMENTED";
+    const newStatus = currentStatus === "SOLD_OUT" ? "AVAILABLE" : "SOLD_OUT";
     await prisma.artifact.update({
       where: { id },
       data: { status: newStatus },

@@ -1,18 +1,34 @@
+"use client";
+
 import { getArtifactBySlug } from "@/lib/cms";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Terminal, MoveLeft, Cpu, Activity } from "lucide-react";
+import { HudContainer } from "@/components/common/HudContainer";
+import { TechnicalLabel } from "@/components/common/TechnicalLabel";
+import { SystemButton } from "@/components/common/SystemButton";
+import { useCart } from "@/lib/contexts/CartContext";
+import { useEffect, useState, use } from "react";
+import { Artifact } from "@/lib/cms";
 
-export const dynamic = "force-dynamic";
-
-export default async function ArtifactDetail({
+export default function ArtifactDetail({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const resolvedParams = await params;
-  const artifact = await getArtifactBySlug(resolvedParams.slug);
+  const resolvedParams = use(params);
+  const [artifact, setArtifact] = useState<Artifact | null>(null);
+  const { addItem } = useCart();
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getArtifactBySlug(resolvedParams.slug).then(res => {
+      setArtifact(res);
+      setLoading(false);
+    });
+  }, [resolvedParams.slug]);
+
+  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center font-mono text-zinc-800">LOADING_CORE_DATA...</div>;
   if (!artifact) {
     notFound();
   }
@@ -34,29 +50,26 @@ export default async function ArtifactDetail({
         <div className="absolute top-10 left-10 flex flex-col gap-4">
            <div className="flex items-center gap-2">
               <Activity size={12} className="text-accent animate-pulse" />
-              <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase">SIGNAL_STABLE</span>
+              <TechnicalLabel label="SIGNAL_STABLE" className="text-zinc-500" />
            </div>
            <div className="space-y-1">
-              <span className="text-[7px] font-mono text-zinc-700 uppercase block tracking-wider">UNIT_COORD</span>
-              <span className="text-[10px] font-mono text-zinc-400 uppercase block tracking-widest leading-none">X: 120 / Y: 40 / Z: 40</span>
+              <TechnicalLabel label="UNIT_COORD" className="text-zinc-700 text-[7px]" />
+              <TechnicalLabel label="X: 120 / Y: 40 / Z: 40" className="text-zinc-400 text-[10px]" />
            </div>
         </div>
 
         <div className="absolute bottom-10 right-10 flex flex-col items-end gap-2 text-right">
-           <span className="text-[7px] font-mono text-zinc-700 uppercase block tracking-wider">ENGINEERING_LOG</span>
-           <span className="text-[10px] font-mono text-zinc-500 uppercase block tracking-widest max-w-[200px] leading-tight">
-             PRECISION_TOLERANCE_0.01mm_MEASURED
-           </span>
+           <TechnicalLabel label="ENGINEERING_LOG" className="text-zinc-700 text-[7px]" />
+           <TechnicalLabel label="PRECISION_TOLERANCE_0.01mm_MEASURED" className="text-zinc-500 text-[10px] max-w-[200px] leading-tight" />
         </div>
         
         {/* Placeholder Structural Geometry / Live Image */}
-        <div className="hud-container w-[280px] md:w-[400px] aspect-square flex items-center justify-center group overflow-hidden">
-          <div className="corner" />
+        <HudContainer className="w-[280px] md:w-[400px] aspect-square flex items-center justify-center group overflow-hidden">
           <div className="absolute inset-0 bg-white/[0.01] -z-10 group-hover:bg-accent/[0.02] transition-colors" />
           
-          {artifact.imageUrl ? (
+          {artifact.media.src ? (
             <img 
-              src={artifact.imageUrl} 
+              src={artifact.media.src} 
               alt={artifact.title} 
               className="w-full h-full object-contain p-8 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" 
             />
@@ -67,8 +80,15 @@ export default async function ArtifactDetail({
           )}
           
           {/* Central Core Glow */}
-          {!artifact.imageUrl && <div className="absolute w-2 h-2 bg-accent rounded-full blur-[4px] animate-ping" />}
-        </div>
+          {!artifact.media.src && <div className="absolute w-2 h-2 bg-accent rounded-full blur-[4px] animate-ping" />}
+          
+          {artifact.media.placeholderLabel && !artifact.media.src && (
+            <TechnicalLabel 
+              label={artifact.media.placeholderLabel} 
+              className="absolute bottom-4 text-[7px] text-zinc-800"
+            />
+          )}
+        </HudContainer>
       </section>
 
       {/* Specifications & Actions Pane */}
@@ -86,9 +106,7 @@ export default async function ArtifactDetail({
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <Cpu size={14} className="text-accent" />
-              <span className="text-[11px] font-bold text-accent tracking-[0.4em] uppercase">
-                {artifact.series}
-              </span>
+              <TechnicalLabel label={artifact.series} className="font-bold text-accent" />
             </div>
             <h1 className="text-[44px] md:text-[64px] font-heading leading-none tracking-[-0.08em] text-white uppercase">
               {artifact.title}
@@ -98,7 +116,7 @@ export default async function ArtifactDetail({
           <div className="p-6 bg-white/[0.02] border border-white/5 relative overflow-hidden">
              <div className="absolute top-0 left-0 w-1 h-1 bg-accent" />
              <p className="font-mono text-zinc-500 text-[13px] tracking-tight leading-relaxed uppercase">
-               {artifact.description}
+                {artifact.description}
              </p>
           </div>
 
@@ -106,15 +124,13 @@ export default async function ArtifactDetail({
           <div className="space-y-1">
              <div className="flex items-center gap-2 mb-4">
                 <Terminal size={12} className="text-zinc-700" />
-                <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-widest">UNIT_SPECIFICATIONS</span>
+                <TechnicalLabel label="UNIT_SPECIFICATIONS" className="text-zinc-700 text-[8px]" />
              </div>
              
              <div className="border-y border-white/5">
                 {artifact.specs.map((spec) => (
                   <div key={spec.label} className="flex justify-between py-4 border-b border-white/[0.02] group hover:bg-white/[0.01] transition-colors px-2">
-                    <span className="text-[10px] font-mono tracking-widest text-zinc-600 uppercase group-hover:text-zinc-400 transition-colors">
-                      {spec.label}
-                    </span>
+                    <TechnicalLabel label={spec.label} className="text-zinc-600 group-hover:text-zinc-400 transition-colors" />
                     <span className="text-[11px] font-mono tracking-widest text-white uppercase text-right">
                       {spec.value}
                     </span>
@@ -125,26 +141,34 @@ export default async function ArtifactDetail({
 
           <div className="flex items-center justify-between py-6">
             <div className="flex flex-col">
-               <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-[0.2em] mb-1">UNIT_VALUE</span>
+               <TechnicalLabel label="UNIT_VALUE" className="text-zinc-700 text-[8px] mb-1" />
                <span className="text-3xl font-mono text-white tracking-tighter">{artifact.price}</span>
             </div>
             
             <div className="text-right">
-               <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-[0.2em] mb-1">AVAILABILITY</span>
-               <span className={`text-[11px] font-mono font-bold tracking-widest uppercase block 
-                 ${artifact.status === 'AVAILABLE' ? 'text-accent' : 'text-red-900/40'}`}>
-                 {artifact.status === 'AVAILABLE' ? '[ LOCALIZED ]' : '[ DE-FRAGMENTED ]'}
-               </span>
+               <TechnicalLabel label="AVAILABILITY" className="text-zinc-700 text-[8px] mb-1" />
+               <TechnicalLabel 
+                 label={artifact.status === 'AVAILABLE' ? '[ LOCALIZED ]' : '[ DE-FRAGMENTED ]'} 
+                 className={artifact.status === 'AVAILABLE' ? 'text-accent' : 'text-red-900/40'}
+               />
             </div>
           </div>
 
-          <button 
-            className={`btn-hud w-full py-6 
+          <SystemButton 
+            onClick={() => addItem({
+              id: artifact.id,
+              slug: artifact.slug,
+              title: artifact.title,
+              price: artifact.price,
+              quantity: 1,
+              media: artifact.media
+            })}
+            className={`w-full py-6 
               ${artifact.status === "SOLD_OUT" ? "opacity-30 cursor-not-allowed border-zinc-800 text-zinc-800" : ""}`}
             disabled={artifact.status === "SOLD_OUT"}
           >
             {artifact.status === "SOLD_OUT" ? "UNIT_DEPLETED" : "INIT_ACQUISITION_PROTOCOL"}
-          </button>
+          </SystemButton>
         </div>
       </section>
     </main>
