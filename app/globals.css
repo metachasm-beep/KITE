@@ -3,14 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
-  --accent: #ffffff; /* Shift from Purple to Pure White for Apple UI */
+  --background: #050505;
+  --foreground: #F5F5F7;
+  --accent: #00F2FF; /* HUD Cyan */
+  --muted: #1A1A1A;
 }
 
 @layer base {
   body {
-    @apply bg-black text-white antialiased selection:bg-white selection:text-black;
+    @apply bg-background text-foreground antialiased selection:bg-accent selection:text-black;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
 
@@ -19,42 +20,74 @@
   }
 }
 
-/* Apple-style Smooth Scroll */
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
+@layer components {
+  /* HUD Container with corner markers */
+  .hud-container {
+    @apply relative border border-foreground/10 p-6;
+  }
+
+  .hud-container::before,
+  .hud-container::after,
+  .hud-container .corner::before,
+  .hud-container .corner::after {
+    content: '';
+    @apply absolute w-2 h-2 border-accent/40 pointer-events-none;
+  }
+
+  /* Top Left */
+  .hud-container::before {
+    @apply top-0 left-0 border-t-2 border-l-2;
+  }
+  /* Top Right */
+  .hud-container::after {
+    @apply top-0 right-0 border-t-2 border-r-2;
+  }
+  /* Bottom Left */
+  .hud-container .corner::before {
+    @apply bottom-0 left-0 border-b-2 border-l-2;
+  }
+  /* Bottom Right */
+  .hud-container .corner::after {
+    @apply bottom-0 right-0 border-b-2 border-r-2;
+  }
+
+  .btn-hud {
+    @apply relative px-8 py-3 bg-transparent border border-accent/20 text-accent font-bold tracking-[0.2em] uppercase hover:bg-accent hover:text-black transition-all duration-300 overflow-hidden;
+  }
+
+  .text-scanline {
+    @apply relative overflow-hidden;
+  }
+
+  .text-telemetry {
+    @apply font-mono text-[9px] tracking-[0.1em] text-foreground/40;
+  }
 }
 
-/* Custom Selection for that premium feel */
-::selection {
-  background: white;
-  color: black;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  @apply w-1;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-accent/20 hover:bg-accent/40 transition-colors rounded-full;
 }
 
-/* Hide scrollbar but keep functionality (for that clean look) */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* scanline animation */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
-/* Apple Pro-inspired Backdrop blur */
-.glass {
-  @apply bg-[#000000cc] backdrop-blur-2xl border-b border-[#ffffff10];
-}
-
-/* Custom Gradients - Subtle bone/graphite */
-.bg-graphite {
-  background: radial-gradient(circle at center, #111111 0%, #000000 100%);
-}
-
-/* Button & Link Hover States */
-.btn-apple {
-  @apply px-10 py-4 bg-white text-black font-semibold rounded-full transition-all duration-500 hover:scale-[1.02] active:scale-[0.98];
-}
-
-.link-subtle {
-  @apply text-zinc-500 hover:text-white transition-all duration-300;
+.scanline-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 242, 255, 0.1);
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
 }

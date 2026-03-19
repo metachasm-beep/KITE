@@ -1,68 +1,94 @@
 import Link from "next/link";
 import { getArtifacts } from "@/lib/cms";
+import { Archive, Terminal, Share2 } from "lucide-react";
 
 export default async function CollectionsPage() {
   const artifacts = await getArtifacts();
 
   return (
-    <main className="min-h-screen bg-black pt-24 pb-48">
-      <div className="container mx-auto px-6">
+    <main className="min-h-screen bg-[#050505] pt-32 pb-48 relative overflow-hidden">
+      {/* Background HUD Detail */}
+      <div className="absolute top-0 right-0 w-1/3 aspect-square border-l border-b border-white/5 -z-0 opacity-20 pointer-events-none" />
+
+      <div className="container mx-auto px-6 relative z-10">
         
-        {/* Apple-style Page Header */}
-        <header className="max-w-4xl mb-32">
-          <span className="text-[14px] font-bold text-zinc-500 tracking-[0.2em] mb-4 block uppercase leading-loose">
-            SERIES_CATALOG
-          </span>
-          <h1 className="text-[48px] md:text-[84px] font-heading tracking-tighter text-white mb-12 uppercase leading-[0.9]">
-            The Artifact <br />
-            <span className="text-zinc-700">Collection</span>
-          </h1>
-          <p className="text-[17px] md:text-[22px] font-medium text-zinc-400 max-w-2xl leading-relaxed">
-            Every object is a physical manifestation of high-level geometric theory. Engineered with precision, manufactured for eternity.
-          </p>
+        {/* Page Header - Archive Index Style */}
+        <header className="max-w-4xl mb-32 flex flex-col md:flex-row items-end justify-between gap-12">
+          <div className="space-y-10">
+            <div className="flex items-center gap-4">
+              <Archive size={16} className="text-accent" />
+              <span className="text-[10px] font-mono font-bold text-zinc-600 tracking-[0.4em] uppercase">SYSTEM_ARCHIVE // INDEX_01</span>
+            </div>
+            
+            <h1 className="text-[48px] md:text-[96px] font-heading leading-none tracking-[-0.1em] text-white uppercase">
+              THE <br />
+              <span className="text-zinc-800">DROP_LIST</span>
+            </h1>
+            
+            <p className="text-[16px] md:text-[20px] font-medium text-zinc-500 max-w-xl leading-relaxed">
+              A curated index of physical design units. Each release is a technical study in speculative architecture and high-density material friction.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-end gap-2 border-t border-white/10 pt-4 hidden md:flex">
+             <span className="text-[8px] font-mono text-zinc-700 uppercase">SYS_TELEMETRY</span>
+             <span className="text-[11px] font-mono text-accent uppercase tracking-widest leading-none">U.01_ACTIVE_SYNC</span>
+             <Terminal size={14} className="text-zinc-800" />
+          </div>
         </header>
 
-        {/* The Grid - Clean, minimalist, and precise */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 px-1">
+        {/* The Grid - Archive Vault aesthetic */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-1">
           {artifacts.map((artifact) => (
             <Link 
               key={artifact.slug}
               href={`/collections/${artifact.slug}`}
-              className="group relative block bg-[#050505] border border-white/5 hover:border-white/10 transition-all aspect-[4/5] p-10 flex flex-col justify-between overflow-hidden"
+              className="hud-container group hover:border-accent/30 transition-all duration-500 aspect-[4/5] flex flex-col justify-between"
             >
-              {/* Top Meta Info */}
-              <div className="flex items-start justify-between z-10">
+              <div className="corner" />
+              
+              {/* TOP: Telemetry + Title */}
+              <div className="flex items-start justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono tracking-widest text-zinc-700 group-hover:text-accent transition-colors uppercase">
-                    DROP_SERIES // 01
-                  </span>
-                  <h3 className="text-[18px] md:text-[22px] font-bold text-white tracking-widest group-hover:tracking-[0.15em] transition-all uppercase">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[8px] font-mono text-accent uppercase tracking-tighter">[ SYNCING ]</span>
+                    <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-widest">{artifact.series}</span>
+                  </div>
+                  <h3 className="text-[20px] md:text-[24px] font-bold text-white tracking-widest uppercase group-hover:text-accent transition-colors duration-500">
                     {artifact.title}
                   </h3>
                 </div>
-                <span className="text-[12px] font-bold text-white tracking-widest">
-                  {artifact.price}
-                </span>
+                <div className="flex flex-col items-end">
+                   <span className="text-[11px] font-bold text-white font-mono">{artifact.price}</span>
+                   <Share2 size={12} className="text-zinc-800 mt-2 hover:text-white transition-colors" />
+                </div>
               </div>
 
-              {/* Visual Placeholder for Artifact - Ultra Clean */}
-              <div className="relative flex-1 flex items-center justify-center pointer-events-none">
-                 <div className="w-1/2 aspect-square rounded-full border border-white/5 group-hover:border-white/10 transition-colors flex items-center justify-center">
-                    <div className="w-4 h-4 bg-zinc-900 rounded-full animate-pulse transition-transform group-hover:scale-110" />
+              {/* CENTER: Technical Visualization */}
+              <div className="relative flex-1 flex items-center justify-center p-12">
+                 <div className="absolute inset-0 bg-white/[0.01] -z-10" />
+                 <div className="w-full h-full border border-white/5 relative flex items-center justify-center">
+                    <div className="absolute inset-4 border border-white/5 opacity-50" />
+                    <div className="w-12 h-12 border border-accent/20 rounded-full animate-pulse flex items-center justify-center">
+                       <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_#00F2FF]" />
+                    </div>
                  </div>
               </div>
 
-              {/* Bottom Status / Category */}
-              <div className="flex items-end justify-between z-10">
-                <span className={`text-[9px] font-bold px-3 py-1 border rounded-full tracking-widest uppercase transition-colors 
-                  ${artifact.status === 'AVAILABLE' ? 
-                    'border-zinc-800 text-zinc-500 group-hover:border-white group-hover:text-white' : 
-                    'border-red-900/20 text-red-500/40'}`}>
-                  {artifact.status}
-                </span>
-                <span className="text-[10px] font-mono tracking-widest text-zinc-900 group-hover:text-zinc-400 transition-colors">
-                  SECURE_BUY_ENCRYPTED
-                </span>
+              {/* BOTTOM: DATA STATS */}
+              <div className="flex items-end justify-between border-t border-white/5 pt-6">
+                <div className="space-y-1">
+                  <span className="text-[7px] font-mono text-zinc-700 block uppercase">SYNC_STATUS</span>
+                  <span className={`text-[9px] font-bold font-mono tracking-widest uppercase 
+                    ${artifact.status === 'AVAILABLE' ? 'text-accent' : 'text-red-900/60'}`}>
+                    {artifact.status === 'AVAILABLE' ? 'LOCALIZED' : 'DE-FRAGMENTED'}
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-2 opacity-20 group-hover:opacity-100 transition-opacity">
+                   <span className="text-[9px] font-mono text-zinc-600 uppercase">VIEW_SPEC</span>
+                   <div className="w-4 h-[1px] bg-white" />
+                </div>
               </div>
             </Link>
           ))}

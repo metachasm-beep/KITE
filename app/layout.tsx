@@ -18,8 +18,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "VOIDLAB // Artifacts from Tomorrow",
-  description: "A futuristic collectible brand powered by 3D manufacturing.",
+  title: "UNIT_01 // Physical Design Protocol",
+  description: "A contemporary design studio exploring the intersection of material science and geometric form.",
 };
 
 export default function RootLayout({

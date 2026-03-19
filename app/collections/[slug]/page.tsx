@@ -1,6 +1,7 @@
 import { getArtifactBySlug } from "@/lib/cms";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Terminal, MoveLeft, Cpu, Activity } from "lucide-react";
 
 export default async function ArtifactDetail({
   params,
@@ -15,68 +16,126 @@ export default async function ArtifactDetail({
   }
 
   return (
-    <main className="min-h-[85vh] bg-black text-white flex flex-col md:flex-row border-y border-white/5">
-      {/* 3D Visualizer Placeholder Pane */}
-      <section className="flex-1 min-h-[50vh] bg-[#020202] border-r border-white/5 relative flex items-center justify-center p-12 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05)_0%,transparent_60%)]" />
-        
-        {/* Placeholder structural "artifact" geometry line-art */}
-        <div className="w-[300px] h-[300px] border-[0.5px] border-accent/40 rotate-[35deg] shadow-[0_0_80px_rgba(139,92,246,0.1)] relative z-10 transition-transform duration-1000 hover:rotate-0 flex items-center justify-center">
-          <div className="w-1/2 h-1/2 border-[0.5px] border-white/20 -rotate-45" />
+    <main className="min-h-screen bg-[#050505] text-white flex flex-col lg:flex-row border-y border-white/5 pt-16">
+      
+      {/* 3D Visualizer / HUD Display Pane */}
+      <section className="flex-1 min-h-[60vh] lg:min-h-screen bg-[#020202] border-r border-white/5 relative flex items-center justify-center p-12 overflow-hidden">
+        {/* HUD Overlay Layer */}
+        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,242,255,0.1)_0%,transparent_70%)]" />
+          <div className="absolute top-1/2 left-0 w-full h-px bg-white/5" />
+          <div className="absolute left-1/2 top-0 h-full w-px bg-white/5" />
+          <div className="scanline-overlay" />
         </div>
 
-        <div className="absolute top-6 left-6 flex flex-col gap-1 text-[8px] font-mono tracking-widest text-zinc-600 uppercase">
-          <span>DIM_SCALE: 1:1</span>
-          <span>X: 120 / Y: 40 / Z: 40</span>
+        {/* Diagnostic Labels */}
+        <div className="absolute top-10 left-10 flex flex-col gap-4">
+           <div className="flex items-center gap-2">
+              <Activity size={12} className="text-accent animate-pulse" />
+              <span className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase">SIGNAL_STABLE</span>
+           </div>
+           <div className="space-y-1">
+              <span className="text-[7px] font-mono text-zinc-700 uppercase block tracking-wider">UNIT_COORD</span>
+              <span className="text-[10px] font-mono text-zinc-400 uppercase block tracking-widest leading-none">X: 120 / Y: 40 / Z: 40</span>
+           </div>
+        </div>
+
+        <div className="absolute bottom-10 right-10 flex flex-col items-end gap-2 text-right">
+           <span className="text-[7px] font-mono text-zinc-700 uppercase block tracking-wider">ENGINEERING_LOG</span>
+           <span className="text-[10px] font-mono text-zinc-500 uppercase block tracking-widest max-w-[200px] leading-tight">
+             PRECISION_TOLERANCE_0.01mm_MEASURED
+           </span>
+        </div>
+        
+        {/* Placeholder Structural Geometry */}
+        <div className="hud-container w-[280px] md:w-[400px] aspect-square flex items-center justify-center group">
+          <div className="corner" />
+          <div className="absolute inset-0 bg-white/[0.01] -z-10 group-hover:bg-accent/[0.02] transition-colors" />
+          
+          <div className="w-1/2 h-1/2 border-[0.5px] border-accent/20 rotate-45 flex items-center justify-center group-hover:rotate-0 transition-transform duration-1000">
+            <div className="w-full h-full border-[0.5px] border-white/10 -rotate-90" />
+          </div>
+          
+          {/* Central Core Glow */}
+          <div className="absolute w-2 h-2 bg-accent rounded-full blur-[4px] animate-ping" />
         </div>
       </section>
 
       {/* Specifications & Actions Pane */}
-      <section className="w-full md:w-[450px] lg:w-[600px] p-12 md:p-20 flex flex-col justify-center">
+      <section className="w-full lg:w-[500px] xl:w-[650px] p-12 md:p-24 flex flex-col justify-center relative bg-[#050505]">
+        
         <Link 
           href="/collections"
-          className="text-[10px] font-mono tracking-[0.3em] text-zinc-500 uppercase hover:text-white transition-colors block mb-12"
+          className="flex items-center gap-2 text-[10px] font-mono tracking-[0.3em] text-zinc-600 uppercase hover:text-white transition-colors mb-16"
         >
-          &lt; BACK_TO_ARCHIVE
+          <MoveLeft size={14} />
+          <span>RETURN_TO_ARCHIVE</span>
         </Link>
         
-        <span className="text-[10px] font-mono tracking-[0.4em] text-accent uppercase mb-4 block">
-          {artifact.series}
-        </span>
-        <h1 className="text-4xl lg:text-5xl font-heading tracking-tighter uppercase mb-6 leading-none">
-          {artifact.title}
-        </h1>
-        
-        <p className="font-mono text-zinc-400 text-xs tracking-[0.2em] leading-loose mb-12 uppercase">
-          {artifact.description}
-        </p>
-
-        {/* Spec Grid */}
-        <div className="border border-white/10 mb-12">
-          {artifact.specs.map((spec, index) => (
-            <div key={spec.label} className={`flex justify-between p-4 ${index !== artifact.specs.length - 1 ? "border-b border-white/5" : ""}`}>
-              <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
-                {spec.label}
-              </span>
-              <span className="text-xs font-mono tracking-widest text-zinc-200 uppercase text-right">
-                {spec.value}
+        <div className="space-y-12">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <Cpu size={14} className="text-accent" />
+              <span className="text-[11px] font-bold text-accent tracking-[0.4em] uppercase">
+                {artifact.series}
               </span>
             </div>
-          ))}
-        </div>
+            <h1 className="text-[44px] md:text-[64px] font-heading leading-none tracking-[-0.08em] text-white uppercase">
+              {artifact.title}
+            </h1>
+          </div>
+          
+          <div className="p-6 bg-white/[0.02] border border-white/5 relative overflow-hidden">
+             <div className="absolute top-0 left-0 w-1 h-1 bg-accent" />
+             <p className="font-mono text-zinc-500 text-[13px] tracking-tight leading-relaxed uppercase">
+               {artifact.description}
+             </p>
+          </div>
 
-        <div className="flex items-end justify-between mb-8">
-          <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">RETAIL_VALUE</span>
-          <span className="text-2xl font-mono text-white tracking-widest">{artifact.price}</span>
-        </div>
+          {/* Spec Grid - HUD Style */}
+          <div className="space-y-1">
+             <div className="flex items-center gap-2 mb-4">
+                <Terminal size={12} className="text-zinc-700" />
+                <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-widest">UNIT_SPECIFICATIONS</span>
+             </div>
+             
+             <div className="border-y border-white/5">
+                {artifact.specs.map((spec) => (
+                  <div key={spec.label} className="flex justify-between py-4 border-b border-white/[0.02] group hover:bg-white/[0.01] transition-colors px-2">
+                    <span className="text-[10px] font-mono tracking-widest text-zinc-600 uppercase group-hover:text-zinc-400 transition-colors">
+                      {spec.label}
+                    </span>
+                    <span className="text-[11px] font-mono tracking-widest text-white uppercase text-right">
+                      {spec.value}
+                    </span>
+                  </div>
+                ))}
+             </div>
+          </div>
 
-        <button 
-          className={`w-full py-6 font-mono font-bold tracking-[0.3em] text-xs uppercase transition-all shadow-lg
-            ${artifact.status === "SOLD_OUT" ? "bg-zinc-900 text-zinc-600 cursor-not-allowed border border-white/5" : "bg-accent text-white hover:bg-white hover:text-black hover:shadow-[0_0_30px_rgba(139,92,246,0.4)]"}`}
-          disabled={artifact.status === "SOLD_OUT"}
-        >
-          {artifact.status === "SOLD_OUT" ? "[ DEPLETED ]" : "[ INIT_PURCHASE_SEQUENCE ]"}
-        </button>
+          <div className="flex items-center justify-between py-6">
+            <div className="flex flex-col">
+               <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-[0.2em] mb-1">UNIT_VALUE</span>
+               <span className="text-3xl font-mono text-white tracking-tighter">{artifact.price}</span>
+            </div>
+            
+            <div className="text-right">
+               <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-[0.2em] mb-1">AVAILABILITY</span>
+               <span className={`text-[11px] font-mono font-bold tracking-widest uppercase block 
+                 ${artifact.status === 'AVAILABLE' ? 'text-accent' : 'text-red-900/40'}`}>
+                 {artifact.status === 'AVAILABLE' ? '[ LOCALIZED ]' : '[ DE-FRAGMENTED ]'}
+               </span>
+            </div>
+          </div>
+
+          <button 
+            className={`btn-hud w-full py-6 
+              ${artifact.status === "SOLD_OUT" ? "opacity-30 cursor-not-allowed border-zinc-800 text-zinc-800" : ""}`}
+            disabled={artifact.status === "SOLD_OUT"}
+          >
+            {artifact.status === "SOLD_OUT" ? "UNIT_DEPLETED" : "INIT_ACQUISITION_PROTOCOL"}
+          </button>
+        </div>
       </section>
     </main>
   );
