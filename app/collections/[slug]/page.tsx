@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Terminal, MoveLeft, Cpu, Activity } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function ArtifactDetail({
   params,
 }: {

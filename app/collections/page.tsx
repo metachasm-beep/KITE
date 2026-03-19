@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getArtifacts } from "@/lib/cms";
 import { Archive, Terminal, Share2 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function CollectionsPage() {
   const artifacts = await getArtifacts();
 
