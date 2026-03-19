@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getArtifacts } from "@/lib/cms";
 import { Archive, Terminal, Share2, Plus } from "lucide-react";
@@ -12,7 +13,10 @@ import { Artifact } from "@/lib/cms";
 export default function CollectionsPage() {
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
   const { addItem } = useCart();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [filterSeries, setFilterSeries] = useState<string>("ALL");
+  const [filterStatus, setFilterStatus] = useState<string>("ALL");
 
   useEffect(() => {
     getArtifacts().then(res => {
@@ -22,6 +26,15 @@ export default function CollectionsPage() {
   }, []);
 
   if (loading) return <div className="min-h-screen bg-black flex items-center justify-center font-mono text-zinc-800 uppercase tracking-widest">SYNCHRONIZING_ARCHIVE...</div>;
+
+  const uniqueSeries = ["ALL", ...Array.from(new Set(artifacts.map(a => a.series)))];
+  const statuses = ["ALL", "AVAILABLE", "SOLD_OUT"];
+
+  const filteredArtifacts = artifacts.filter(a => {
+    const seriesMatch = filterSeries === "ALL" || a.series === filterSeries;
+    const statusMatch = filterStatus === "ALL" || a.status === filterStatus;
+    return seriesMatch && statusMatch;
+  });
 
   return (
     <main className="min-h-screen bg-[#050505] pt-32 pb-48 relative overflow-hidden">
@@ -50,14 +63,49 @@ export default function CollectionsPage() {
 
           <div className="flex flex-col items-end gap-2 border-t border-white/10 pt-4 hidden md:flex">
              <TechnicalLabel label="SYS_TELEMETRY" className="text-zinc-700" />
-             <TechnicalLabel label="U.01_ACTIVE_SYNC" className="text-accent leading-none" />
+             <TechnicalLabel label={`${filteredArtifacts.length}_UNITS_MATCHED`} className="text-accent leading-none" />
              <Terminal size={14} className="text-zinc-800" />
           </div>
         </header>
 
+        {/* Filter HUD */}
+        <div className="mb-16 flex flex-col md:flex-row gap-12 border-y border-white/5 py-8">
+           <div className="space-y-4 flex-1">
+              <TechnicalLabel label="FILTER_BY_SERIES" className="text-zinc-600" />
+              <div className="flex flex-wrap gap-4">
+                 {uniqueSeries.map(s => (
+                    <button 
+                      key={s} 
+                      onClick={() => setFilterSeries(s)}
+                      className={`text-[10px] font-mono px-4 py-2 border transition-all uppercase tracking-widest
+                        ${filterSeries === s ? 'border-accent text-accent bg-accent/5' : 'border-white/5 text-zinc-500 hover:text-white'}`}
+                    >
+                      {s === "ALL" ? "ALL_SERIES" : s}
+                    </button>
+                 ))}
+              </div>
+           </div>
+           
+           <div className="space-y-4">
+              <TechnicalLabel label="AVAILABILITY_MATRIX" className="text-zinc-600" />
+              <div className="flex gap-4">
+                 {statuses.map(s => (
+                    <button 
+                      key={s} 
+                      onClick={() => setFilterStatus(s)}
+                      className={`text-[10px] font-mono px-4 py-2 border transition-all uppercase tracking-widest
+                        ${filterStatus === s ? 'border-accent text-accent bg-accent/5' : 'border-white/5 text-zinc-500 hover:text-white'}`}
+                    >
+                      {s === "ALL" ? "ALL_STATUS" : s}
+                    </button>
+                 ))}
+              </div>
+           </div>
+        </div>
+
         {/* The Grid - Archive Vault aesthetic */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-1">
-          {artifacts.map((artifact) => (
+          {filteredArtifacts.map((artifact) => (
             <Link 
               key={artifact.slug}
               href={`/collections/${artifact.slug}`}
@@ -77,23 +125,43 @@ export default function CollectionsPage() {
                   </div>
                   <div className="flex flex-col items-end gap-2">
                      <span className="text-[11px] font-bold text-white font-mono">{artifact.price}</span>
-                     <button 
-                       onClick={(e) => {
-                         e.preventDefault();
-                         e.stopPropagation();
-                         addItem({
-                           id: artifact.id,
-                           slug: artifact.slug,
-                           title: artifact.title,
-                           price: artifact.price,
-                           quantity: 1,
-                           media: artifact.media
-                         });
-                       }}
-                       className="p-1 px-2 border border-white/5 bg-white/5 hover:bg-accent hover:text-black transition-all text-zinc-500 font-mono text-[8px] tracking-tighter uppercase"
-                     >
-                       ADD+
-                     </button>
+                     <div className="flex flex-col gap-2">
+                        <button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            addItem({
+                              id: artifact.id,
+                              slug: artifact.slug,
+                              title: artifact.title,
+                              price: artifact.price,
+                              quantity: 1,
+                              media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                            });
+                          }}
+                          className="p-1 px-3 border border-white/5 bg-white/5 hover:bg-accent hover:text-black transition-all text-zinc-500 font-mono text-[8px] tracking-tighter uppercase"
+                        >
+                          ADD_TO_CART
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            addItem({
+                              id: artifact.id,
+                              slug: artifact.slug,
+                              title: artifact.title,
+                              price: artifact.price,
+                              quantity: 1,
+                              media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                            });
+                            router.push("/checkout?method=PHONEPE");
+                          }}
+                          className="p-1 px-3 border border-accent/20 bg-accent/5 hover:bg-accent hover:text-black transition-all text-accent font-mono text-[8px] tracking-tighter uppercase"
+                        >
+                          BUY_NOW
+                        </button>
+                     </div>
                   </div>
                 </div>
 

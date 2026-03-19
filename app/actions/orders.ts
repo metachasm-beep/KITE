@@ -5,9 +5,12 @@ import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+import { initiatePhonePePayment } from "@/lib/phonepe";
+
 export async function createOrder(data: {
   items: { artifactId: string; title: string; quantity: number; price: number }[];
   totalAmount: number;
+  paymentMethod: "CASH" | "PHONEPE";
   shippingAddress: {
     line1: string;
     line2?: string;
@@ -36,6 +39,7 @@ export async function createOrder(data: {
           userId: user.id,
           totalAmount: data.totalAmount,
           status: "PENDING",
+          paymentMethod: data.paymentMethod,
           items: {
             create: data.items.map(item => ({
               artifactId: item.artifactId,
@@ -47,14 +51,24 @@ export async function createOrder(data: {
           timeline: {
             create: {
               status: "PENDING",
-              note: "ACQUISITION_PROTOCOL_INITIALIZED"
+              note: data.paymentMethod === "PHONEPE" 
+                ? "ACQUISITION_INITIALIZED // WAITING_FOR_SETTLEMENT"
+                : "ACQUISITION_INITIALIZED // CASH_PROTOCOL"
             }
           }
         }
       });
 
-      // Also save the address if it's the first time or update?
-      // For now, just save to user addresses if not already there
+      // Update merchantTransactionId if PhonePe
+      if (data.paymentMethod === "PHONEPE") {
+        const txId = `UNIT01_${newOrder.id}_${Date.now()}`;
+        await tx.order.update({
+          where: { id: newOrder.id },
+          data: { merchantTransactionId: txId }
+        });
+        return { ...newOrder, merchantTransactionId: txId };
+      }
+
       await tx.address.create({
         data: {
           userId: user.id,
@@ -69,6 +83,27 @@ export async function createOrder(data: {
 
       return newOrder;
     });
+
+    if (data.paymentMethod === "PHONEPE" && order.merchantTransactionId) {
+      const callbackUrl = `${process.env.NEXTAUTH_URL}/api/payment/callback`;
+      const paymentRes = await initiatePhonePePayment({
+        amount: data.totalAmount,
+        transactionId: order.merchantTransactionId,
+        merchantOrderId: order.id,
+        callbackUrl,
+      });
+
+      if (paymentRes.success) {
+        return { 
+          success: true, 
+          orderId: order.id, 
+          redirectUrl: paymentRes.redirectUrl 
+        };
+      } else {
+        // Mark order as failed or keep pending? For now, return error
+        return { success: false, error: paymentRes.error };
+      }
+    }
 
     revalidatePath("/account");
     return { success: true, orderId: order.id };

@@ -112,12 +112,12 @@ export function HeroSection() {
               <div className="flex gap-12">
                 <Link href="/system" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
                   <Cpu size={14} className="text-accent group-hover:animate-pulse" />
-                  <span className="text-[10px] font-mono tracking-widest uppercase">LOGIC_PROTOCOL</span>
+                  <span className="text-[10px] font-mono tracking-widest uppercase">MISSION_PROTOCOL</span>
                 </Link>
 
-                <Link href="/status" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
+                <Link href="/telemetry" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
                   <Activity size={14} className="text-accent group-hover:animate-pulse" />
-                  <span className="text-[10px] font-mono tracking-widest uppercase">STATUS_TELEMETRY</span>
+                  <span className="text-[10px] font-mono tracking-widest uppercase">TECHNICAL_TELEMETRY</span>
                 </Link>
               </div>
 

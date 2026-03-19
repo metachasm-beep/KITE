@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingBag, Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
+import { X, ShoppingBag, Trash2, Plus, Minus, ArrowRight, CreditCard } from 'lucide-react';
 import { useCart } from '@/lib/contexts/CartContext';
 import { HudContainer } from '../common/HudContainer';
 import { TechnicalLabel } from '../common/TechnicalLabel';
@@ -129,6 +129,15 @@ export const CartDrawer = () => {
                 <SystemButton href="/checkout" onClick={toggleCart} className="w-full py-6 flex items-center justify-center gap-3">
                   INIT_CHECKOUT_PROTOCOL
                   <ArrowRight size={16} />
+                </SystemButton>
+                
+                <SystemButton 
+                  href="/checkout?method=PHONEPE" 
+                  onClick={toggleCart}
+                  className="w-full py-4 border-accent/20 bg-accent/5 hover:bg-accent/10 text-accent flex items-center justify-center gap-3 text-[10px]"
+                >
+                  FAST_SETTLEMENT (PHONEPE)
+                  <CreditCard size={14} />
                 </SystemButton>
                 
                 <div className="flex justify-center">

@@ -38,8 +38,9 @@ export function SiteHeader() {
         <nav className="hidden md:flex items-center gap-8">
           {[
             { label: "ARCHIVE", href: "/collections" },
-            { label: "LOGIC", href: "/system" },
-            { label: "STATUS", href: "/status" }
+            { label: "PROTOCOL", href: "/system" },
+            { label: "TELEMETRY", href: "/telemetry" },
+            { label: "COMMS", href: "/comms" }
           ].map((item) => (
             <Link 
               key={item.label} 

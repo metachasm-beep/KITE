@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useCart } from "@/lib/contexts/CartContext";
 import { createOrder } from "@/app/actions/orders";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { HudContainer } from "@/components/common/HudContainer";
 import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 import { SystemButton } from "@/components/common/SystemButton";
@@ -15,9 +16,20 @@ type Step = "SUMMARY" | "SHIPPING" | "PAYMENT" | "COMPLETE";
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart } = useCart();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("SUMMARY");
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"CASH" | "PHONEPE">("PHONEPE");
+
+  useEffect(() => {
+    const method = searchParams.get("method");
+    if (method === "PHONEPE") {
+      setPaymentMethod("PHONEPE");
+    } else if (method === "CASH") {
+      setPaymentMethod("CASH");
+    }
+  }, [searchParams]);
 
   const [address, setAddress] = useState({
     line1: "",
@@ -38,10 +50,15 @@ export default function CheckoutPage() {
         price: parseFloat(i.price.replace(/[^0-9.]/g, '')),
       })),
       totalAmount,
+      paymentMethod,
       shippingAddress: address,
     });
 
     if (res.success) {
+      if (res.redirectUrl) {
+        window.location.href = res.redirectUrl;
+        return;
+      }
       setOrderId(res.orderId || "");
       clearCart();
       setStep("COMPLETE");
@@ -156,25 +173,53 @@ export default function CheckoutPage() {
                    <div className="flex items-center gap-3 border-b border-white/5 pb-4">
                       <TechnicalLabel label="SETTLEMENT_METHOD" className="text-zinc-500" />
                    </div>
-                   <HudContainer className="p-8 bg-black border-accent/20 flex items-center justify-between group cursor-pointer">
-                      <div className="flex items-center gap-6">
-                         <div className="w-12 h-12 border border-accent/40 flex items-center justify-center rounded-full">
-                            <CreditCard size={20} className="text-accent" />
-                         </div>
-                         <div className="space-y-1">
-                            <h3 className="text-lg font-bold text-white uppercase tracking-tight">CASH_UPON_LOCALIZATION</h3>
-                            <TechnicalLabel label="AVAILABLE_SERVICE" className="text-accent" />
-                         </div>
-                      </div>
-                      <div className="w-6 h-6 rounded-full border-2 border-accent flex items-center justify-center">
-                         <div className="w-3 h-3 bg-accent rounded-full" />
-                      </div>
-                   </HudContainer>
-                   <div className="p-6 border border-white/5 bg-white/[0.01]">
-                      <p className="text-[11px] font-mono text-zinc-500 leading-relaxed uppercase">
-                         SETTLEMENT WILL BE EXECUTED MANUALLY UPON PHYSICAL UNIT LOCALIZATION AT DESTINATION. NO DIGITAL CURRENCY TRANSFER REQUIRED AT THIS STAGE.
-                      </p>
-                   </div>
+                   <div className="space-y-4">
+                       <HudContainer 
+                         onClick={() => setPaymentMethod("PHONEPE")}
+                         className={`p-8 bg-black border-accent/20 flex items-center justify-between group cursor-pointer transition-all
+                           ${paymentMethod === "PHONEPE" ? 'border-accent shadow-[0_0_20px_rgba(0,242,255,0.1)]' : 'opacity-40 hover:opacity-100'}`}
+                       >
+                          <div className="flex items-center gap-6">
+                             <div className="w-12 h-12 border border-accent/40 flex items-center justify-center rounded-full">
+                                <CreditCard size={20} className="text-accent" />
+                             </div>
+                             <div className="space-y-1">
+                                <h3 className="text-lg font-bold text-white uppercase tracking-tight">PHONEPE_GATEWAY</h3>
+                                <TechnicalLabel label="DIGITAL_SETTLEMENT" className="text-accent" />
+                             </div>
+                          </div>
+                          <div className="w-6 h-6 rounded-full border-2 border-accent flex items-center justify-center">
+                             {paymentMethod === "PHONEPE" && <div className="w-3 h-3 bg-accent rounded-full" />}
+                          </div>
+                       </HudContainer>
+
+                       <HudContainer 
+                         onClick={() => setPaymentMethod("CASH")}
+                         className={`p-8 bg-black border-white/5 flex items-center justify-between group cursor-pointer transition-all
+                           ${paymentMethod === "CASH" ? 'border-white/20' : 'opacity-40 hover:opacity-100'}`}
+                       >
+                          <div className="flex items-center gap-6">
+                             <div className="w-12 h-12 border border-white/10 flex items-center justify-center rounded-full">
+                                <Package size={20} className="text-zinc-500" />
+                             </div>
+                             <div className="space-y-1">
+                                <h3 className="text-lg font-bold text-zinc-400 uppercase tracking-tight">CASH_UPON_LOCALIZATION</h3>
+                                <TechnicalLabel label="MANUAL_PROTOCOL" className="text-zinc-600" />
+                             </div>
+                          </div>
+                          <div className="w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center">
+                             {paymentMethod === "CASH" && <div className="w-3 h-3 bg-zinc-400 rounded-full" />}
+                          </div>
+                       </HudContainer>
+                    </div>
+
+                    <div className="p-6 border border-white/5 bg-white/[0.01]">
+                       <p className="text-[11px] font-mono text-zinc-500 leading-relaxed uppercase">
+                          {paymentMethod === "PHONEPE" 
+                            ? "YOU WILL BE REDIRECTED TO THE SECURE PHONEPE VAULT TO INITIALIZE DIGITAL SETTLEMENT. ACQUISITION PROTOCOL FINALIZES UPON SUCCESSFUL HANDSHAKE."
+                            : "SETTLEMENT WILL BE EXECUTED MANUALLY UPON PHYSICAL UNIT LOCALIZATION AT DESTINATION. NO DIGITAL CURRENCY TRANSFER REQUIRED AT THIS STAGE."}
+                       </p>
+                    </div>
                    <div className="flex gap-4">
                       <button onClick={() => setStep("SHIPPING")} className="px-8 py-4 border border-white/5 text-zinc-600 font-mono text-[10px] hover:text-white transition-colors uppercase font-bold">BACK</button>
                       <SystemButton disabled={loading} onClick={handleCheckout} className="flex-1 py-6">
