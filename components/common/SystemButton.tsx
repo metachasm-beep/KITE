@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface SystemButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'outline';
 }
 
 export const SystemButton = ({ 
