@@ -84,6 +84,7 @@ model Address {
   state      String
   postalCode String
   country    String @default("IN")
+  phone      String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -136,12 +137,29 @@ model Order {
   paymentStatus         PaymentStatus @default(PENDING)
   paymentMethod         PaymentMethod @default(CASH)
   merchantTransactionId String?     @unique
+  shippingAddress       Json?
+  billingAddress        Json?
+  
+  // Shiprocket Integration
+  shiprocketOrderId     String?     @unique
+  shipmentId            String?     @unique
+  awbCode               String?     @unique
+  courierName           String?
+  trackingStatus        String?     @default("PENDING")
+
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 
   user      User           @relation(fields: [userId], references: [id])
   items     OrderItem[]
   timeline  OrderTimeline[]
+}
+
+model ShiprocketAuth {
+  id        String   @id @default("singleton")
+  jwtToken  String   @db.Text
+  expiresAt DateTime
+  updatedAt DateTime @updatedAt
 }
 
 model OrderItem {

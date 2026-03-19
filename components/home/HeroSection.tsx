@@ -50,7 +50,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* CENTER: Main Cinematic Mission Control */}
+          {/* CENTER: Main Content */}
           <div className="col-span-1 xl:col-span-8 flex flex-col items-center xl:items-start text-center xl:text-left mt-16 xl:mt-0">
             
             <motion.div 
@@ -59,11 +59,11 @@ export function HeroSection() {
               transition={{ duration: 1 }}
               className="flex items-center gap-6 mb-8"
             >
-               <span className="text-[9px] font-mono text-zinc-500 tracking-[0.4em] uppercase">SYSTEM_STATE</span>
+               <span className="text-[9px] font-mono text-zinc-400 tracking-[0.4em] uppercase">Status</span>
                <div className="flex gap-1">
-                 {[1,2,3].map(i => <div key={i} className="w-1 h-3 bg-accent animate-pulse" style={{ animationDelay: `${i * 150}ms` }} />)}
+                 {[1,2,3].map(i => <div key={i} className="w-1 h-3 bg-accent" />)}
                </div>
-               <span className="text-[9px] font-bold text-white tracking-widest uppercase">INITIALIZED</span>
+               <span className="text-[9px] font-bold text-foreground tracking-widest uppercase">Online</span>
             </motion.div>
 
             {/* Huge Title */}
@@ -72,15 +72,15 @@ export function HeroSection() {
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[72px] md:text-[120px] lg:text-[160px] font-heading leading-none tracking-[-0.08em] text-white flex items-center gap-1"
+                className="text-[72px] md:text-[120px] lg:text-[160px] font-heading leading-none tracking-[-0.08em] text-foreground flex items-center gap-1"
               >
-                UNIT<span className="text-zinc-900 stroke-zinc-700 font-black">_01</span>
+                STUDIO<span className="text-zinc-100 stroke-zinc-200 font-black">_01</span>
               </motion.h1>
               
               {/* Corner Brackets */}
-              <div className="absolute -inset-4 md:-inset-8 border border-white/5 opacity-50 pointer-events-none hidden md:block">
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent/40" />
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-accent/40" />
+              <div className="absolute -inset-4 md:-inset-8 border border-black/5 opacity-50 pointer-events-none hidden md:block">
+                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent/20" />
+                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-accent/20" />
               </div>
             </div>
 
@@ -89,47 +89,45 @@ export function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 1.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-white/10 pt-12 w-full text-left"
+              className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-black/10 pt-12 w-full text-left"
             >
               <div className="space-y-6">
-                <span className="text-[10px] font-bold text-accent tracking-[0.4em] uppercase block">THE PROTOCOL</span>
-                <p className="text-[13px] md:text-[14px] font-mono tracking-tight text-zinc-400 uppercase leading-relaxed">
-                  We are a physical design laboratory engineering geometric studies in heavy-density materials. Our architecture bridges digital telemetry with tactile presence. 
+                <span className="text-[10px] font-bold text-accent tracking-[0.4em] uppercase block">Our Philosophy</span>
+                <p className="text-[13px] md:text-[14px] font-mono tracking-tight text-zinc-500 uppercase leading-relaxed">
+                  We are a physical design studio creating unique studies in high-quality materials. Our work bridges digital precision with tactile craft. 
                 </p>
               </div>
 
               <div className="space-y-6">
-                <span className="text-[10px] font-bold text-zinc-600 tracking-[0.4em] uppercase block">THE MANUFACTURE</span>
-                <p className="text-[13px] md:text-[14px] font-mono tracking-tight text-zinc-400 uppercase leading-relaxed">
-                  Every object is rigorously specified for exact tolerances. We do not mass-produce; we allocate units to the archive through strict drop mechanics.
+                <span className="text-[10px] font-bold text-zinc-400 tracking-[0.4em] uppercase block">Small Batches</span>
+                <p className="text-[13px] md:text-[14px] font-mono tracking-tight text-zinc-500 uppercase leading-relaxed">
+                  Every object is crafted to exact standards. We focus on quality over quantity, releasing limited editions through our digital archive.
                 </p>
               </div>
             </motion.div>
 
-            {/* CTAs & Logs */}
+            {/* CTAs */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 1 }}
-              className="mt-16 w-full flex flex-col md:flex-row items-center gap-8 justify-between border border-white/5 p-6 bg-white/[0.01]"
+              className="mt-16 w-full flex flex-col md:flex-row items-center gap-8 justify-between border border-black/5 p-6 bg-muted"
             >
               <div className="flex gap-12">
-                <Link href="/system" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
-                  <Cpu size={14} className="text-accent group-hover:animate-pulse" />
-                  <span className="text-[10px] font-mono tracking-widest uppercase">MISSION_PROTOCOL</span>
+                <Link href="/collections" className="flex items-center gap-4 text-zinc-400 w-full md:w-auto hover:text-foreground transition-colors group cursor-pointer">
+                  <span className="text-[10px] font-mono tracking-widest uppercase">View Collections</span>
                 </Link>
 
-                <Link href="/telemetry" className="flex items-center gap-4 text-zinc-500 w-full md:w-auto hover:text-white transition-colors group cursor-pointer">
-                  <Activity size={14} className="text-accent group-hover:animate-pulse" />
-                  <span className="text-[10px] font-mono tracking-widest uppercase">TECHNICAL_TELEMETRY</span>
+                <Link href="/system" className="flex items-center gap-4 text-zinc-400 w-full md:w-auto hover:text-foreground transition-colors group cursor-pointer">
+                  <span className="text-[10px] font-mono tracking-widest uppercase">Our Story</span>
                 </Link>
               </div>
 
               <Link 
                 href="/collections" 
-                className="btn-hud group py-4 px-10 text-[11px] w-full md:w-auto"
+                className="btn-hud group py-4 px-10 text-[11px] w-full md:w-auto bg-white text-accent border-accent/30 hover:bg-accent hover:text-white"
               >
-                ACCESS_ARCHIVE
+                Enter Shop
                 <ChevronRight size={14} className="inline ml-3 group-hover:translate-x-1.5 transition-transform" />
               </Link>
             </motion.div>

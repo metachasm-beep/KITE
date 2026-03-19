@@ -7,17 +7,17 @@ import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 
 export function PhilosophySection() {
   return (
-    <section className="py-48 px-6 bg-[#050505] border-y border-white/5 relative">
-      {/* Background HUD Scan Grid */}
+    <section className="py-48 px-6 bg-background border-y border-black/5 relative">
+      {/* Background Subtle Grid */}
       <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+           style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
       <div className="container mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
           
-          {/* Technical Visualization Module */}
-          <HudContainer className="aspect-square group" showScanline>
-             <div className="absolute inset-0 bg-white/[0.02] -z-10" />
+          {/* Visualization Module */}
+          <HudContainer className="aspect-square group bg-white border-black/5" showScanline>
+             <div className="absolute inset-0 bg-black/[0.01] -z-10" />
              
              {/* Dynamic Central Piece */}
              <div className="absolute inset-20 border border-accent/10 rounded-full flex items-center justify-center">
@@ -26,18 +26,16 @@ export function PhilosophySection() {
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                   className="absolute inset-0 border-t border-accent/40 rounded-full"
                 />
-                <div className="w-1/2 h-1/2 bg-white/5 blur-3xl rounded-full" />
-                <Box size={80} className="text-white/20 group-hover:text-accent/40 transition-colors duration-700" />
+                <div className="w-1/2 h-1/2 bg-accent/5 blur-3xl rounded-full" />
+                <Box size={80} className="text-zinc-100 group-hover:text-accent/40 transition-colors duration-700" />
              </div>
 
-             {/* Tech Readouts around the container */}
-             <TechnicalLabel label="MOD_INDEX" value="P.01" className="absolute top-4 left-4" />
-             <TechnicalLabel label="GEO_STABLE" value="TRUE" className="absolute top-4 right-4" />
-             <TechnicalLabel label="LAT_SCALE" value="1:0.01" className="absolute bottom-4 left-4" />
-             <TechnicalLabel label="UNIT_PROTOCOL" className="absolute bottom-4 right-4" />
+             {/* Discrete Readouts */}
+             <span className="absolute top-4 left-4 text-[9px] font-mono text-zinc-300 uppercase tracking-widest">Study P.01</span>
+             <span className="absolute bottom-4 right-4 text-[9px] font-mono text-zinc-300 uppercase tracking-widest">Design Logic</span>
           </HudContainer>
 
-          {/* Contemporary "Material Logic" Copy */}
+          {/* Contemporary Copy */}
           <div className="space-y-16">
             <div className="space-y-6">
               <motion.span 
@@ -45,17 +43,17 @@ export function PhilosophySection() {
                 whileInView={{ opacity: 1 }}
                 className="text-[11px] font-bold text-accent tracking-[0.4em] uppercase block"
               >
-                STUDY_REF // MATERIAL_LOGIC
+                Our Philosophy
               </motion.span>
               
               <motion.h3 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1 }}
-                className="text-[48px] md:text-[84px] font-heading leading-none tracking-[-0.08em] text-white uppercase"
+                className="text-[48px] md:text-[84px] font-heading leading-none tracking-[-0.08em] text-foreground uppercase"
               >
                 STUDIES IN <br />
-                <span className="text-zinc-800">FORM & WEIGHT</span>
+                <span className="text-zinc-200">FORM & BEAUTY</span>
               </motion.h3>
 
               <div className="w-24 h-[1px] bg-accent/40" />
@@ -67,27 +65,27 @@ export function PhilosophySection() {
               transition={{ delay: 0.4 }}
               className="text-[17px] md:text-[20px] font-medium text-zinc-500 leading-relaxed max-w-xl"
             >
-              Design is a dialogue between material and math. We minimize the noise to find the essential line. No fluff. Just high-density form for those who value the technical edge.
+              Design is a dialogue between material and proportion. We minimize the noise to find the essential line. Every curve is deliberate, every texture is intentional.
             </motion.p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <div className="flex gap-4">
-                <div className="p-3 bg-white/5 border border-white/5 h-fit">
+                <div className="p-3 bg-muted border border-black/5 h-fit">
                    <Layers size={20} className="text-accent" />
                 </div>
                 <div className="space-y-2">
-                   <span className="text-[12px] font-bold text-white tracking-widest uppercase block">ZERO-POINT_LAYER</span>
-                   <p className="text-[12px] text-zinc-600 leading-relaxed">Manufacturing processes rooted in contemporary precision engineering.</p>
+                   <span className="text-[12px] font-bold text-foreground tracking-widest uppercase block">Precise Craft</span>
+                   <p className="text-[12px] text-zinc-500 leading-relaxed">Manufacturing processes rooted in contemporary precision engineering.</p>
                 </div>
               </div>
               
               <div className="flex gap-4">
-                <div className="p-3 bg-white/5 border border-white/5 h-fit">
+                <div className="p-3 bg-muted border border-black/5 h-fit">
                    <Maximize size={20} className="text-accent" />
                 </div>
                 <div className="space-y-2">
-                   <span className="text-[12px] font-bold text-white tracking-widest uppercase block">ARCH_RIGOR</span>
-                   <p className="text-[12px] text-zinc-600 leading-relaxed">Balancing sculptural presence with structural architectural logic.</p>
+                   <span className="text-[12px] font-bold text-foreground tracking-widest uppercase block">Structural Rigor</span>
+                   <p className="text-[12px] text-zinc-500 leading-relaxed">Balancing sculptural presence with structural architectural logic.</p>
                 </div>
               </div>
             </div>

@@ -17,7 +17,7 @@ export const TechnicalLabel = ({
       className={cn("text-telemetry uppercase flex items-center gap-2", className)} 
       {...props}
     >
-      {label} {value && <span className="text-white/60">// {value}</span>}
+      {label} {value && <span className="opacity-60">// {value}</span>}
     </span>
   );
 };

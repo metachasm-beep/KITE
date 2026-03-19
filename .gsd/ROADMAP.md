@@ -54,3 +54,13 @@
 - [ ] Provision and Migrate PostgreSQL on Supabase (completed/awaiting local run).
 - [ ] Deploy Next.js to Vercel and activate Google OAuth redirect.
 - [ ] Final End-to-End Audit.
+
+### Phase 6: Logistics & Post-Purchase Automation (📦 Shiprocket)
+**Status**: ✅ Finished
+**Objective**: Integrate Shiprocket for automated fulfillment and tracking.
+**Deliverables**:
+- [x] Prisma schema updates for tracking and JWT storage.
+- [x] Automated 9-day JWT refresh mechanism.
+- [x] Shiprocket API service (Create Order, AWB, Pickup).
+- [x] Checkout integration for automated fulfillment flow.
+- [x] Webhook handler for real-time tracking updates.

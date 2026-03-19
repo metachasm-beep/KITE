@@ -38,6 +38,7 @@ function CheckoutPageContent() {
     state: "",
     postalCode: "",
     country: "IN",
+    phone: "",
   });
 
   const handleCheckout = async () => {
@@ -70,34 +71,34 @@ function CheckoutPageContent() {
 
   if (items.length === 0 && step !== "COMPLETE") {
      return (
-       <main className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center space-y-8">
-          <Package size={48} className="text-zinc-900" />
-          <TechnicalLabel label="ERROR" value="CART_EMPTY" className="text-red-900" />
-          <SystemButton href="/collections" className="px-12 py-4">RETURN_TO_ARCHIVE</SystemButton>
+       <main className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-8">
+          <Package size={48} className="text-zinc-100" />
+          <p className="text-zinc-400 font-mono text-xs uppercase tracking-widest">Your cart is empty</p>
+          <SystemButton href="/collections" className="px-12 py-4">Return to Shop</SystemButton>
        </main>
      );
   }
 
   return (
-    <main className="min-h-screen bg-[#050505] pt-32 pb-48 px-6">
-      <div className="container mx-auto max-w-5xl">
+    <main className="min-h-screen bg-background pt-32 pb-48 px-6">
+      <div className="container mx-auto max-w-5xl text-foreground">
         
-        {/* Step Indicator HUD */}
+        {/* Step Indicator */}
         <div className="flex items-center justify-between mb-24 max-w-3xl mx-auto relative">
-           <div className="absolute top-1/2 left-0 w-full h-px bg-white/5 -z-10" />
+           <div className="absolute top-1/2 left-0 w-full h-px bg-black/5 -z-10" />
            {[
-             { id: "SUMMARY", label: "01_SUMMARY", icon: Package },
-             { id: "SHIPPING", label: "02_LOGISTICS", icon: MapPin },
-             { id: "PAYMENT", label: "03_SETTLEMENT", icon: CreditCard },
-             { id: "COMPLETE", label: "04_EXECUTE", icon: CheckCircle2 },
+             { id: "SUMMARY", label: "01_Summary", icon: Package },
+             { id: "SHIPPING", label: "02_Shipping", icon: MapPin },
+             { id: "PAYMENT", label: "03_Payment", icon: CreditCard },
+             { id: "COMPLETE", label: "04_Complete", icon: CheckCircle2 },
            ].map((s, i) => (
              <div key={s.id} className="flex flex-col items-center gap-3">
                 <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-500
-                  ${step === s.id ? 'bg-accent border-accent text-black scale-110 shadow-[0_0_15px_#00F2FF]' : 
-                   (i < ["SUMMARY", "SHIPPING", "PAYMENT", "COMPLETE"].indexOf(step) ? 'bg-zinc-800 border-zinc-700 text-zinc-400' : 'bg-black border-white/10 text-zinc-800')}`}>
+                  ${step === s.id ? 'bg-accent border-accent text-white scale-110 shadow-[0_0_15px_rgba(0,128,128,0.2)]' : 
+                   (i < ["SUMMARY", "SHIPPING", "PAYMENT", "COMPLETE"].indexOf(step) ? 'bg-zinc-100 border-zinc-200 text-zinc-400' : 'bg-white border-black/10 text-zinc-200')}`}>
                    { <s.icon size={14} /> }
                 </div>
-                <TechnicalLabel label={s.label} className={step === s.id ? 'text-accent' : 'text-zinc-800'} />
+                <span className={`text-[10px] font-mono uppercase tracking-widest ${step === s.id ? 'text-accent font-bold' : 'text-zinc-300'}`}>{s.label}</span>
              </div>
            ))}
         </div>
@@ -108,84 +109,88 @@ function CheckoutPageContent() {
             <AnimatePresence mode="wait">
               {step === "SUMMARY" && (
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                   <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                      <TechnicalLabel label="ALLOCATION_REVIEW" className="text-zinc-500" />
+                   <div className="flex items-center gap-3 border-b border-black/5 pb-4">
+                      <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest font-bold">Review Your Items</span>
                    </div>
                    <div className="space-y-4">
                       {items.map(item => (
-                        <HudContainer key={item.id} className="p-4 flex gap-6 bg-white/[0.01]">
-                           <div className="w-16 h-16 border border-white/5 bg-black p-2 flex items-center justify-center">
-                              {item.media.src ? <img src={item.media.src} alt={item.title} className="w-full h-full object-contain opacity-60" /> : <div className="w-2 h-2 bg-zinc-800 rounded-full" />}
+                        <HudContainer key={item.id} className="p-4 flex gap-6 bg-white border-black/5">
+                           <div className="w-16 h-16 border border-black/5 bg-muted p-2 flex items-center justify-center">
+                              {item.media.src ? <img src={item.media.src} alt={item.title} className="w-full h-full object-contain" /> : <div className="w-2 h-2 bg-zinc-200 rounded-full" />}
                            </div>
                            <div className="flex-1 flex justify-between items-center">
                               <div className="space-y-1">
-                                 <h3 className="text-sm font-bold text-white uppercase">{item.title}</h3>
-                                 <TechnicalLabel label="UNIT_PRICE" value={item.price} className="text-zinc-700 text-[9px]" />
+                                 <h3 className="text-sm font-bold text-foreground uppercase">{item.title}</h3>
+                                 <p className="text-zinc-400 text-[10px] uppercase font-mono tracking-tighter">Price: {item.price}</p>
                               </div>
                               <div className="text-right space-y-1">
-                                 <TechnicalLabel label="QTY" value={item.quantity.toString()} className="text-zinc-700 text-[9px] justify-end" />
-                                 <span className="text-sm font-mono text-white">₹{(parseFloat(item.price.replace(/[^0-9.]/g, '')) * item.quantity).toLocaleString()}</span>
+                                 <p className="text-zinc-400 text-[10px] uppercase font-mono tracking-tighter">Qty: {item.quantity}</p>
+                                 <span className="text-sm font-mono text-foreground font-bold">₹{(parseFloat(item.price.replace(/[^0-9.]/g, '')) * item.quantity).toLocaleString()}</span>
                               </div>
                            </div>
                         </HudContainer>
                       ))}
                    </div>
-                   <SystemButton onClick={() => setStep("SHIPPING")} className="w-full py-6">PROCEED_TO_LOGISTICS</SystemButton>
+                   <SystemButton onClick={() => setStep("SHIPPING")} className="w-full py-6">Next: Shipping Details</SystemButton>
                 </motion.div>
               )}
 
               {step === "SHIPPING" && (
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                   <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                      <TechnicalLabel label="LOGISTICS_DESTINATION" className="text-zinc-500" />
+                   <div className="flex items-center gap-3 border-b border-black/5 pb-4">
+                      <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest font-bold">Shipping Destination</span>
                    </div>
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono">
                       <div className="md:col-span-2 space-y-2">
-                         <TechnicalLabel label="SECURE_LINE_1" className="text-[9px] text-zinc-600" />
-                         <input required type="text" className="w-full bg-white/[0.02] border border-white/5 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors" value={address.line1} onChange={e => setAddress({...address, line1: e.target.value})} placeholder="UNIT_NUMBER / STREET_NAME" />
+                         <span className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">Street Address</span>
+                         <input required type="text" className="w-full bg-muted border border-black/5 p-4 text-xs text-foreground focus:outline-none focus:border-accent transition-colors" value={address.line1} onChange={e => setAddress({...address, line1: e.target.value})} placeholder="Unit / Street Name" />
                       </div>
                       <div className="space-y-2">
-                         <TechnicalLabel label="CITY" className="text-[9px] text-zinc-600" />
-                         <input required type="text" className="w-full bg-white/[0.02] border border-white/5 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors" value={address.city} onChange={e => setAddress({...address, city: e.target.value})} />
+                         <span className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">City</span>
+                         <input required type="text" className="w-full bg-muted border border-black/5 p-4 text-xs text-foreground focus:outline-none focus:border-accent transition-colors" value={address.city} onChange={e => setAddress({...address, city: e.target.value})} />
                       </div>
                       <div className="space-y-2">
-                         <TechnicalLabel label="STATE" className="text-[9px] text-zinc-600" />
-                         <input required type="text" className="w-full bg-white/[0.02] border border-white/5 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors" value={address.state} onChange={e => setAddress({...address, state: e.target.value})} />
+                         <span className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">State</span>
+                         <input required type="text" className="w-full bg-muted border border-black/5 p-4 text-xs text-foreground focus:outline-none focus:border-accent transition-colors" value={address.state} onChange={e => setAddress({...address, state: e.target.value})} />
                       </div>
                       <div className="space-y-2">
-                         <TechnicalLabel label="POSTAL_CODE" className="text-[9px] text-zinc-600" />
-                         <input required type="text" className="w-full bg-white/[0.02] border border-white/5 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors" value={address.postalCode} onChange={e => setAddress({...address, postalCode: e.target.value})} />
+                         <span className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">Postal Code</span>
+                         <input required type="text" className="w-full bg-muted border border-black/5 p-4 text-xs text-foreground focus:outline-none focus:border-accent transition-colors" value={address.postalCode} onChange={e => setAddress({...address, postalCode: e.target.value})} />
                       </div>
                       <div className="space-y-2">
-                         <TechnicalLabel label="COUNTRY" className="text-[9px] text-zinc-600" />
-                         <input disabled type="text" className="w-full bg-white/[0.02] border border-white/5 p-4 text-xs text-zinc-600 uppercase" value={address.country} />
+                         <span className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">Contact Phone</span>
+                         <input required type="tel" className="w-full bg-muted border border-black/5 p-4 text-xs text-foreground focus:outline-none focus:border-accent transition-colors" value={address.phone} onChange={e => setAddress({...address, phone: e.target.value})} placeholder="+91 00000 00000" />
+                      </div>
+                      <div className="space-y-2">
+                         <span className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">Country</span>
+                         <input disabled type="text" className="w-full bg-muted border border-black/5 p-4 text-xs text-zinc-400 uppercase" value={address.country} />
                       </div>
                    </div>
                    <div className="flex gap-4">
-                      <button onClick={() => setStep("SUMMARY")} className="px-8 py-4 border border-white/5 text-zinc-600 font-mono text-[10px] hover:text-white transition-colors uppercase font-bold">BACK</button>
-                      <SystemButton onClick={() => setStep("PAYMENT")} className="flex-1 py-6">CONFIRM_LOGISTICS</SystemButton>
+                      <button onClick={() => setStep("SUMMARY")} className="px-8 py-4 border border-black/5 text-zinc-400 font-mono text-[10px] hover:text-foreground transition-colors uppercase font-bold">Back</button>
+                      <SystemButton onClick={() => setStep("PAYMENT")} className="flex-1 py-6">Next: Payment Method</SystemButton>
                    </div>
                 </motion.div>
               )}
 
               {step === "PAYMENT" && (
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-                   <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                      <TechnicalLabel label="SETTLEMENT_METHOD" className="text-zinc-500" />
+                   <div className="flex items-center gap-3 border-b border-black/5 pb-4">
+                      <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest font-bold">Select Payment Method</span>
                    </div>
                    <div className="space-y-4">
                        <HudContainer 
                          onClick={() => setPaymentMethod("PHONEPE")}
-                         className={`p-8 bg-black border-accent/20 flex items-center justify-between group cursor-pointer transition-all
-                           ${paymentMethod === "PHONEPE" ? 'border-accent shadow-[0_0_20px_rgba(0,242,255,0.1)]' : 'opacity-40 hover:opacity-100'}`}
+                         className={`p-8 bg-white border-black/5 flex items-center justify-between group cursor-pointer transition-all
+                           ${paymentMethod === "PHONEPE" ? 'border-accent bg-accent/[0.02] shadow-[0_0_20px_rgba(0,128,128,0.05)]' : 'opacity-60 hover:opacity-100'}`}
                        >
                           <div className="flex items-center gap-6">
-                             <div className="w-12 h-12 border border-accent/40 flex items-center justify-center rounded-full">
+                             <div className="w-12 h-12 border border-accent/20 flex items-center justify-center rounded-full bg-accent/5">
                                 <CreditCard size={20} className="text-accent" />
                              </div>
                              <div className="space-y-1">
-                                <h3 className="text-lg font-bold text-white uppercase tracking-tight">PHONEPE_GATEWAY</h3>
-                                <TechnicalLabel label="DIGITAL_SETTLEMENT" className="text-accent" />
+                                <h3 className="text-lg font-bold text-foreground uppercase tracking-tight">ONLINE PAYMENT</h3>
+                                <p className="text-accent font-mono text-[10px] uppercase tracking-widest">Pay Securely via PhonePe</p>
                              </div>
                           </div>
                           <div className="w-6 h-6 rounded-full border-2 border-accent flex items-center justify-center">
@@ -195,35 +200,35 @@ function CheckoutPageContent() {
 
                        <HudContainer 
                          onClick={() => setPaymentMethod("CASH")}
-                         className={`p-8 bg-black border-white/5 flex items-center justify-between group cursor-pointer transition-all
-                           ${paymentMethod === "CASH" ? 'border-white/20' : 'opacity-40 hover:opacity-100'}`}
+                         className={`p-8 bg-white border-black/5 flex items-center justify-between group cursor-pointer transition-all
+                           ${paymentMethod === "CASH" ? 'border-black/20 bg-black/[0.01]' : 'opacity-60 hover:opacity-100'}`}
                        >
                           <div className="flex items-center gap-6">
-                             <div className="w-12 h-12 border border-white/10 flex items-center justify-center rounded-full">
-                                <Package size={20} className="text-zinc-500" />
+                             <div className="w-12 h-12 border border-black/10 flex items-center justify-center rounded-full bg-muted">
+                                <Package size={20} className="text-zinc-400" />
                              </div>
                              <div className="space-y-1">
-                                <h3 className="text-lg font-bold text-zinc-400 uppercase tracking-tight">CASH_UPON_LOCALIZATION</h3>
-                                <TechnicalLabel label="MANUAL_PROTOCOL" className="text-zinc-600" />
+                                <h3 className="text-lg font-bold text-zinc-500 uppercase tracking-tight">CASH ON DELIVERY</h3>
+                                <p className="text-zinc-300 font-mono text-[10px] uppercase tracking-widest">Local Settlement Protocol</p>
                              </div>
                           </div>
-                          <div className="w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center">
-                             {paymentMethod === "CASH" && <div className="w-3 h-3 bg-zinc-400 rounded-full" />}
+                          <div className="w-6 h-6 rounded-full border-2 border-black/10 flex items-center justify-center">
+                             {paymentMethod === "CASH" && <div className="w-3 h-3 bg-zinc-300 rounded-full" />}
                           </div>
                        </HudContainer>
                     </div>
 
-                    <div className="p-6 border border-white/5 bg-white/[0.01]">
-                       <p className="text-[11px] font-mono text-zinc-500 leading-relaxed uppercase">
+                    <div className="p-6 border border-black/5 bg-muted">
+                       <p className="text-[11px] font-mono text-zinc-400 leading-relaxed uppercase">
                           {paymentMethod === "PHONEPE" 
-                            ? "YOU WILL BE REDIRECTED TO THE SECURE PHONEPE VAULT TO INITIALIZE DIGITAL SETTLEMENT. ACQUISITION PROTOCOL FINALIZES UPON SUCCESSFUL HANDSHAKE."
-                            : "SETTLEMENT WILL BE EXECUTED MANUALLY UPON PHYSICAL UNIT LOCALIZATION AT DESTINATION. NO DIGITAL CURRENCY TRANSFER REQUIRED AT THIS STAGE."}
+                            ? "YOU WILL BE REDIRECTED TO A SECURE PAYMENT GATEWAY TO COMPLETE THE TRANSACTION. YOUR ORDER WILL BE CONFIRMED INSTANTLY."
+                            : "SETTLEMENT WILL BE COMPLETED MANUALLY WHEN THE PACKAGE IS DELIVERED. NO ADVANCE DIGITAL PAYMENT IS REQUIRED."}
                        </p>
                     </div>
                    <div className="flex gap-4">
-                      <button onClick={() => setStep("SHIPPING")} className="px-8 py-4 border border-white/5 text-zinc-600 font-mono text-[10px] hover:text-white transition-colors uppercase font-bold">BACK</button>
-                      <SystemButton disabled={loading} onClick={handleCheckout} className="flex-1 py-6">
-                        {loading ? <Loader2 className="animate-spin mx-auto" /> : "EXECUTE_ACQUISITION_PROTOCOL"}
+                      <button onClick={() => setStep("SHIPPING")} className="px-8 py-4 border border-black/5 text-zinc-400 font-mono text-[10px] hover:text-foreground transition-colors uppercase font-bold">Back</button>
+                      <SystemButton disabled={loading} onClick={handleCheckout} className="flex-1 py-6 bg-accent text-white hover:bg-black">
+                        {loading ? <Loader2 className="animate-spin mx-auto" /> : "COMPLETE PURCHASE"}
                       </SystemButton>
                    </div>
                 </motion.div>
@@ -231,22 +236,22 @@ function CheckoutPageContent() {
 
               {step === "COMPLETE" && (
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center p-12 text-center space-y-10">
-                   <div className="w-24 h-24 rounded-full border-2 border-accent flex items-center justify-center shadow-[0_0_30px_#00F2FF]">
+                   <div className="w-24 h-24 rounded-full border-2 border-accent flex items-center justify-center shadow-[0_0_30px_rgba(0,128,128,0.1)]">
                       <CheckCircle2 size={48} className="text-accent" />
                    </div>
                    <div className="space-y-4">
-                      <TechnicalLabel label="PROTOCOL_SUCCESS" className="text-accent justify-center" />
-                      <h2 className="text-[48px] font-heading leading-none tracking-tighter text-white uppercase">ACQUISITION_LOCK</h2>
+                      <span className="text-accent font-mono text-xs uppercase font-bold tracking-[0.4em] block">Operation Successful</span>
+                      <h2 className="text-[48px] font-heading leading-none tracking-tighter text-foreground uppercase">Order Confirmed</h2>
                       <div className="space-y-1">
-                         <TechnicalLabel label="ORDER_REFERENCE" value={orderId?.toUpperCase() || ""} className="text-zinc-500 justify-center" />
+                         <span className="text-zinc-500 font-mono text-[11px] uppercase tracking-widest block">Reference ID: {orderId?.toUpperCase() || "PENDING"}</span>
                       </div>
                    </div>
-                   <p className="max-w-md text-zinc-500 font-mono text-xs leading-relaxed uppercase">
-                      YOUR DESIGN STUDY HAS BEEN INITIALIZED IN THE SECURE BATCH. TELEMETRY UPDATES WILL BE TRANSMITTED AS THE UNIT MOVES THROUGH CORE LOGISTICS.
+                   <p className="max-w-md text-zinc-400 font-mono text-xs leading-relaxed uppercase">
+                      Your unique design piece has been reserved. You will receive telemetry updates as your item moves through our fulfillment protocol.
                    </p>
                    <div className="flex gap-6">
-                      <SystemButton href="/account" className="px-12 py-4">GO_TO_COMMAND_CENTER</SystemButton>
-                      <SystemButton href="/" variant="outline" className="px-12 py-4 border-zinc-800 text-zinc-500 hover:text-white">RETURN_TO_BASE</SystemButton>
+                      <SystemButton href="/account" className="px-12 py-4">View Orders</SystemButton>
+                      <SystemButton href="/" variant="outline" className="px-12 py-4 border-black/10 text-zinc-400 hover:text-foreground">Home Base</SystemButton>
                    </div>
                 </motion.div>
               )}
@@ -256,41 +261,37 @@ function CheckoutPageContent() {
           {/* Sidebar Summary Area */}
           <aside className="space-y-12">
              <div className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                  <TechnicalLabel label="SETTLEMENT_SUMMARY" className="text-zinc-500" />
+                <div className="flex items-center gap-3 border-b border-black/5 pb-4">
+                  <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest font-bold">Price Summary</span>
                 </div>
                 
-                <HudContainer className="p-8 space-y-8 bg-black">
+                <HudContainer className="p-8 space-y-8 bg-white border-black/5">
                    <div className="space-y-4">
-                      <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                         <span>UNIT_COST_TOTAL</span>
-                         <span className="text-white">₹{totalAmount.toLocaleString()}</span>
+                      <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-400">
+                         <span>Subtotal</span>
+                         <span className="text-foreground">₹{totalAmount.toLocaleString()}</span>
                       </div>
-                      <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                         <span>PROTOCOL_FEE (TAX)</span>
-                         <span className="text-white">₹0.00</span>
-                      </div>
-                      <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                         <span>LOGISTICS_LEVY</span>
-                         <span className="text-accent">FREE_SYNC</span>
+                      <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-400">
+                         <span>Shipping</span>
+                         <span className="text-accent">Free</span>
                       </div>
                    </div>
 
-                   <div className="h-px bg-white/5 w-full" />
+                   <div className="h-px bg-black/5 w-full" />
 
                    <div className="flex justify-between items-end">
-                      <TechnicalLabel label="TOTAL_YIELD" className="text-zinc-500" />
-                      <span className="text-3xl font-mono text-white tracking-tighter">
+                      <span className="text-zinc-400 font-mono text-[10px] uppercase tracking-widest">Total</span>
+                      <span className="text-3xl font-mono text-foreground tracking-tighter">
                          ₹{totalAmount.toLocaleString()}
                       </span>
                    </div>
                 </HudContainer>
              </div>
 
-             <div className="p-6 bg-white/[0.01] border border-white/5">
-                <TechnicalLabel label="SECURITY_STATUS" value="ENCRYPTED" className="text-zinc-700 text-[8px] mb-4" />
-                <p className="text-[9px] font-mono text-zinc-800 leading-relaxed uppercase">
-                   ALL TRANSACTIONS ARE MONITORED VIA SPECULATIVE SECURITY PROTOCOL 0x77-UNIT01. YOUR IDENTITY IS PROTECTED BY THE ARCHIVE.
+             <div className="p-6 bg-muted border border-black/5">
+                <span className="text-zinc-400 text-[8px] uppercase font-bold tracking-widest block mb-4">Secure Checkout</span>
+                <p className="text-[9px] font-mono text-zinc-500 leading-relaxed uppercase">
+                   Your transaction is protected by industry standard encryption. We do not store your payment details on our servers.
                 </p>
              </div>
           </aside>
@@ -304,9 +305,9 @@ export default function CheckoutPage() {
   return (
     <Suspense 
       fallback={
-        <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center space-y-8">
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-8">
            <Loader2 className="animate-spin text-accent" size={48} />
-           <TechnicalLabel label="INITIALIZING_SECURE_RELAY" className="animate-pulse" />
+           <p className="animate-pulse text-zinc-400 font-mono text-xs uppercase tracking-widest">Loading Gateway...</p>
         </div>
       }
     >

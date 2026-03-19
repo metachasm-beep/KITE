@@ -43,6 +43,10 @@ export async function POST(request: Request) {
           }
         });
       });
+
+      // Trigger Shiprocket fulfillment as it's now paid
+      const { processOrderFulfillment } = await import("@/lib/services/fulfillment");
+      processOrderFulfillment(order.id).catch(e => console.error("Auto Fulfillment Failed:", e));
       
       return NextResponse.redirect(new URL(`/account/orders/${order.id}`, request.url));
     } else {

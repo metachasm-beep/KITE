@@ -37,3 +37,10 @@ A contemporary physical design protocol, UNIT_01. We engineer tactile "studies" 
 - [x] Working "Drops" system that can filter by Series/Archive.
 - [x] Secure user auth and order tracking system.
 - [x] Production-ready Prisma schema reflecting the UNIT_01 transactional model.
+- [ ] Automated logistics integration via Shiprocket for order fulfillment and tracking.
+
+## Logistics (Shiprocket)
+1. **Automated Fulfillment**: Upon successful payment, orders are pushed to Shiprocket.
+2. **AWB & Pickup**: Automatic generation of AWB and pickup requests.
+3. **Live Tracking**: Webhook-based tracking updates reflected in the user account.
+4. **Token Management**: Automated 9-day JWT refresh to maintain API connectivity.

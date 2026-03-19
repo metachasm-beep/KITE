@@ -18,6 +18,7 @@ export async function createOrder(data: {
     state: string;
     postalCode: string;
     country: string;
+    phone: string;
   };
 }) {
   const session = await getServerSession(authOptions);
@@ -26,11 +27,20 @@ export async function createOrder(data: {
   }
 
   try {
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
       where: { email: session.user.email }
     });
 
-    if (!user) return { success: false, error: "USER_NOT_FOUND" };
+    if (!user) {
+      // Create user if they exist in session but not in DB (fallback for legacy sessions)
+      user = await prisma.user.create({
+        data: {
+          email: session.user.email,
+          name: session.user.name,
+          image: session.user.image,
+        }
+      });
+    }
 
     // Create the order and items in a transaction
     const order = await prisma.$transaction(async (tx) => {
@@ -40,6 +50,8 @@ export async function createOrder(data: {
           totalAmount: data.totalAmount,
           status: "PENDING",
           paymentMethod: data.paymentMethod,
+          shippingAddress: data.shippingAddress as any,
+          billingAddress: data.shippingAddress as any, // Simple case: billing = shipping
           items: {
             create: data.items.map(item => ({
               artifactId: item.artifactId,
@@ -59,16 +71,7 @@ export async function createOrder(data: {
         }
       });
 
-      // Update merchantTransactionId if PhonePe
-      if (data.paymentMethod === "PHONEPE") {
-        const txId = `UNIT01_${newOrder.id}_${Date.now()}`;
-        await tx.order.update({
-          where: { id: newOrder.id },
-          data: { merchantTransactionId: txId }
-        });
-        return { ...newOrder, merchantTransactionId: txId };
-      }
-
+      // Also create an address entry for the user if it's new
       await tx.address.create({
         data: {
           userId: user.id,
@@ -78,11 +81,32 @@ export async function createOrder(data: {
           state: data.shippingAddress.state,
           postalCode: data.shippingAddress.postalCode,
           country: data.shippingAddress.country,
+          phone: data.shippingAddress.phone,
         }
       });
 
+      // Update merchantTransactionId if PhonePe
+      if (data.paymentMethod === "PHONEPE") {
+        const txId = `UNIT01_${newOrder.id}_${Date.now()}`;
+        const updatedOrder = await tx.order.update({
+          where: { id: newOrder.id },
+          data: { merchantTransactionId: txId }
+        });
+        return { ...updatedOrder, merchantTransactionId: txId };
+      }
+
       return newOrder;
     });
+
+    // ────────────────────────────────────────────────────────────
+    // SHIPROCKET FULFILLMENT SYNC (Wave 1: Only for CASH)
+    // ────────────────────────────────────────────────────────────
+    if (data.paymentMethod === "CASH") {
+      // Lazy import to avoid cyclic or premature deps
+      const { processOrderFulfillment } = await import("@/lib/services/fulfillment");
+      // Background promise so as not to block response
+      processOrderFulfillment(order.id).catch(e => console.error("Auto Fulfillment Failed:", e));
+    }
 
     if (data.paymentMethod === "PHONEPE" && order.merchantTransactionId) {
       const callbackUrl = `${process.env.NEXTAUTH_URL}/api/payment/callback`;

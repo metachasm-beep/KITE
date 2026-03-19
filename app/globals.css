@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --background: #050505;
-  --foreground: #F5F5F7;
-  --accent: #00F2FF; /* HUD Cyan */
-  --muted: #1A1A1A;
+  --background: #FFFFFF;
+  --foreground: #0A0A0A;
+  --accent: #008080; /* Tech Teal - better for light theme */
+  --muted: #F5F5F7;
 }
 
 @layer base {
@@ -87,7 +87,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: rgba(0, 242, 255, 0.1);
+  background: rgba(0, 128, 128, 0.05);
   animation: scanline 4s linear infinite;
   pointer-events: none;
 }

@@ -29,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-black text-white selection:bg-accent selection:text-white`}>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-background text-foreground selection:bg-accent selection:text-white`}>
         <Providers>
           <SiteHeader />
           <CartDrawer />
