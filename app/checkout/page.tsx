@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useCart } from "@/lib/contexts/CartContext";
 import { createOrder } from "@/app/actions/orders";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 type Step = "SUMMARY" | "SHIPPING" | "PAYMENT" | "COMPLETE";
 
-export default function CheckoutPage() {
+function CheckoutPageContent() {
   const { items, totalAmount, clearCart } = useCart();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -297,5 +297,20 @@ export default function CheckoutPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center space-y-8">
+           <Loader2 className="animate-spin text-accent" size={48} />
+           <TechnicalLabel label="INITIALIZING_SECURE_RELAY" className="animate-pulse" />
+        </div>
+      }
+    >
+      <CheckoutPageContent />
+    </Suspense>
   );
 }
