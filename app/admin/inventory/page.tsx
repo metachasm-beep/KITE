@@ -1,6 +1,11 @@
 import { InventoryTable } from "@/components/admin/InventoryTable";
+import { getArtifacts } from "@/lib/cms";
+import Link from "next/link";
 
-export default function Inventory() {
+export const dynamic = "force-dynamic";
+
+export default async function Inventory() {
+  const artifacts = await getArtifacts();
   return (
     <div className="space-y-12">
       <header className="border-b border-white/10 pb-6 flex items-end justify-between">
@@ -10,13 +15,12 @@ export default function Inventory() {
             Configure unit allocations and design protocol specs
           </p>
         </div>
-        <button className="px-6 py-3 bg-white/5 border border-white/10 text-white font-mono font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-white/10 transition-colors flex items-center gap-2">
+        <Link href="/admin/inventory/new" className="px-6 py-3 bg-white/5 border border-white/10 text-white font-mono font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-white/10 transition-colors flex items-center gap-2">
           <div className="w-1.5 h-1.5 bg-accent" />
           ALLOCATE_UNIT 
-        </button>
+        </Link>
       </header>
-      
-      <InventoryTable />
+      <InventoryTable initialArtifacts={artifacts} />
     </div>
   );
 }

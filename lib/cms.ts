@@ -13,7 +13,7 @@ export type Artifact = {
   description: string;
   price: string;
   specs: ArtifactSpec[];
-  status: "AVAILABLE" | "SOLD_OUT" | "ARCHIVED";
+  status: string;
 };
 
 /**
