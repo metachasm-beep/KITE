@@ -27,8 +27,8 @@ export default async function AdminLayout({
       <aside className="w-64 border-r border-white/10 flex flex-col pt-10">
         <div className="px-6 mb-12">
           <span className="text-xl font-heading tracking-tighter text-accent uppercase block">
-            SECURE_SYS<br />
-            <span className="text-white">VOID[ADMIN]</span>
+            UNIT_01<br />
+            <span className="text-white">MISSION_CONTROL</span>
           </span>
         </div>
 
