@@ -12,7 +12,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         // Evaluate if the user's email matches the configured admin email
-        if (user.email === process.env.ADMIN_EMAIL) {
+        const adminEmail = process.env.ADMIN_EMAIL || "metachasm@gmail.com";
+        if (user.email === adminEmail) {
           token.role = "admin";
         } else {
           token.role = "user";

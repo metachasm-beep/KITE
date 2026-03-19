@@ -37,7 +37,7 @@ export function SiteHeader() {
           {[
             { label: "ARCHIVE", href: "/collections" },
             { label: "LOGIC", href: "/system" },
-            { label: "STATUS", href: "/system" }
+            { label: "STATUS", href: "/status" }
           ].map((item) => (
             <Link 
               key={item.label} 
