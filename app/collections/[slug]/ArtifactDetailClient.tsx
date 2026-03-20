@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { MoveLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { MoveLeft } from "lucide-react";
 import { useCart } from "@/lib/contexts/CartContext";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 import { Artifact } from "@/lib/cms";
-import { useState } from "react";
+import { SpringAccordion, type AccordionItem } from "@/components/ruixen/spring-accordion";
 
 interface ArtifactDetailClientProps {
   artifact: Artifact;
@@ -123,42 +123,9 @@ const FAQ_DATA = {
   ]
 };
 
-function FAQAccordion({ faqData }: { faqData: typeof FAQ_DATA.baselab }) {
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const { isCyberpunk } = useTheme();
-
-  return (
-    <div className="space-y-3">
-      {faqData.map((item, i) => (
-        <div
-          key={i}
-          className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-            isCyberpunk
-              ? "border-[#00f5d4]/20 bg-[#0d1117]"
-              : "border-black/5 bg-muted/20"
-          } ${openIdx === i ? (isCyberpunk ? "border-[#00f5d4]/50" : "border-black/10") : ""}`}
-        >
-          <button
-            onClick={() => setOpenIdx(openIdx === i ? null : i)}
-            className="w-full flex items-center justify-between p-5 text-left"
-          >
-            <span className={`text-sm font-semibold ${isCyberpunk ? "text-[#00f5d4]/90 font-mono tracking-wider" : "text-foreground"}`}>
-              {item.q}
-            </span>
-            {openIdx === i
-              ? <ChevronUp size={16} className={isCyberpunk ? "text-[#00f5d4]" : "text-zinc-400"} />
-              : <ChevronDown size={16} className={isCyberpunk ? "text-[#00f5d4]/50" : "text-zinc-400"} />
-            }
-          </button>
-          {openIdx === i && (
-            <div className={`px-5 pb-5 text-sm leading-relaxed font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
-              {item.a}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  );
+// FAQ data converted to AccordionItem format for SpringAccordion
+function toAccordionItems(data: { q: string; a: string }[]): AccordionItem[] {
+  return data.map((d) => ({ question: d.q, answer: d.a }));
 }
 
 export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientProps) {
@@ -343,7 +310,7 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
             <h3 className={`text-xl font-semibold tracking-tight ${isCyberpunk ? "text-[#e8f4f8] font-mono uppercase" : "text-foreground"}`}>
               {isCyberpunk ? "QUERY_RESOLUTION_DATABASE" : "Frequently Asked Questions"}
             </h3>
-            <FAQAccordion faqData={faqItems} />
+            <SpringAccordion items={toAccordionItems(faqItems)} />
           </div>
 
         </div>

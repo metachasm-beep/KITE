@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/lib/contexts/ThemeContext";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CartDrawer } from "@/components/layout/CartDrawer";
+import { FloatingNavbar } from "@/components/ruixen/floating-navbar";
+import { CyberpunkExtras } from "@/components/common/CyberpunkExtras";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,6 +32,8 @@ export default function RootLayout({
           <Providers>
             <SiteHeader />
             <CartDrawer />
+            <FloatingNavbar />
+            <CyberpunkExtras />
             <div className="pt-20">
               {children}
             </div>
