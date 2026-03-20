@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 interface HudContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  showScanline?: boolean;
+  showScanline?: boolean; // Kept for backwards compatibility but ignored visually
 }
 
 export const HudContainer = ({ 
@@ -13,9 +13,7 @@ export const HudContainer = ({
   ...props 
 }: HudContainerProps) => {
   return (
-    <div className={cn("hud-container", className)} {...props}>
-      <div className="corner" />
-      {showScanline && <div className="scanline-overlay" />}
+    <div className={cn("baselab-card", className)} {...props}>
       {children}
     </div>
   );

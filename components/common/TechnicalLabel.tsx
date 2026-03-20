@@ -14,10 +14,10 @@ export const TechnicalLabel = ({
 }: TechnicalLabelProps) => {
   return (
     <span 
-      className={cn("text-telemetry uppercase flex items-center gap-2", className)} 
+      className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted text-xs font-medium text-foreground/80 tracking-wide", className)} 
       {...props}
     >
-      {label} {value && <span className="opacity-60">// {value}</span>}
+      {label} {value && <span className="opacity-60 text-accent ml-1">{value}</span>}
     </span>
   );
 };

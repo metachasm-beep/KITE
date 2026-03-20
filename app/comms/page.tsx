@@ -1,128 +1,197 @@
 "use client";
 
 import { useState } from "react";
-import { HudContainer } from "@/components/common/HudContainer";
-import { TechnicalLabel } from "@/components/common/TechnicalLabel";
-import { SystemButton } from "@/components/common/SystemButton";
-import { Send, Terminal, Wifi } from "lucide-react";
+import { Send, CheckCircle2, MapPin, Mail, Clock, Zap } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTheme } from "@/lib/contexts/ThemeContext";
 
 export default function CommsPage() {
-  const [status, setStatus] = useState<"IDLE" | "TRANSMITTING" | "SUCCESS">("IDLE");
+  const [status, setStatus] = useState<"IDLE" | "SENDING" | "SUCCESS">("IDLE");
+  const { isCyberpunk } = useTheme();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("TRANSMITTING");
+    setStatus("SENDING");
     setTimeout(() => setStatus("SUCCESS"), 2000);
   };
 
   return (
-    <main className="min-h-screen bg-[#050505] pt-32 pb-48 px-6 overflow-hidden">
-      <div className="container mx-auto max-w-4xl">
+    <main className={`min-h-screen pt-32 pb-40 px-6 overflow-hidden transition-colors duration-500 ${isCyberpunk ? "bg-[#080808] text-[#e8f4f8]" : "bg-white text-foreground"}`}>
+      <div className="container mx-auto max-w-5xl">
         
-        {/* Header HUD */}
-        <header className="mb-24 flex flex-col items-center text-center space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-accent rounded-full animate-ping" />
-            <TechnicalLabel label="COMMS_ESTABLISHED" value="SECURE_LINE" />
+        {/* Header Section */}
+        <header className="mb-20 text-center space-y-6">
+          <div className={`inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full mx-auto border ${isCyberpunk ? "border-[#00f5d4]/30 bg-[#0d1117]" : "bg-muted border-black/5"}`}>
+            {isCyberpunk ? <Zap size={12} className="text-[#00f5d4] animate-pulse" /> : <span className="w-2 h-2 rounded-full bg-accent" />}
+            <span className={`text-sm font-medium ${isCyberpunk ? "text-[#00f5d4] font-mono tracking-widest uppercase" : "text-zinc-600"}`}>
+              {isCyberpunk ? "COMMS_RELAY::ACTIVE" : "We respond within 24 hours"}
+            </span>
           </div>
-          <h1 className="text-5xl md:text-8xl font-heading tracking-[-0.05em] text-white uppercase">
-            MISSION <br />
-            <span className="text-zinc-900 stroke-zinc-700">COMMUNICATIONS</span>
+          <h1 className={`text-5xl md:text-7xl font-semibold tracking-tight ${isCyberpunk ? "text-[#e8f4f8] font-mono cyber-glow" : "text-foreground"}`}>
+            {isCyberpunk ? "MISSION_COMMS" : "We'd love to\nhear from you"}
           </h1>
-          <p className="max-w-xl text-xs font-mono text-zinc-500 uppercase tracking-widest leading-relaxed">
-            SECURE RELAY FOR CRITICAL INQUIRIES, PROTOCOL FEEDBACK, AND GEOMETRIC ANOMALY REPORTING. ALL TRANSMISSIONS ARE ENCRYPTED.
+          <p className={`max-w-xl mx-auto text-base leading-relaxed font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
+            {isCyberpunk 
+              ? "Transmit your inquiry through the secure relay. All channels AES-256 encrypted. Response window: 24 cycles." 
+              : "Got a question about your order? Need help with a product? Or just want to say hello? Drop us a message — a real human will get back to you shortly."}
           </p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
           
-          {/* Transmission Status Sidebar */}
+          {/* Contact Information Sidebar */}
           <aside className="lg:col-span-2 space-y-8">
-            <HudContainer className="p-8 bg-black border-white/5 space-y-8">
+            <div className={`p-8 rounded-3xl border space-y-8 h-full ${isCyberpunk ? "bg-[#0d1117] border-[#00f5d4]/20" : "bg-muted/20 border-black/5"}`}>
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <TechnicalLabel label="SIGNAL_STRENGTH" className="text-zinc-600" />
-                  <div className="flex gap-0.5">
-                    {[1,2,3,4,5].map(i => <div key={i} className={`w-1 h-3 ${i < 5 ? 'bg-accent' : 'bg-zinc-900'}`} />)}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <TechnicalLabel label="LATENCY" className="text-zinc-600" />
-                  <span className="text-[10px] font-mono text-accent uppercase">12MS // STABLE</span>
-                </div>
+                <h3 className={`text-xl font-semibold tracking-tight ${isCyberpunk ? "text-[#e8f4f8] font-mono uppercase" : "text-foreground"}`}>
+                  {isCyberpunk ? "CONTACT_RELAYS" : "Ways to reach us"}
+                </h3>
+                <p className={`text-sm leading-relaxed font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
+                  {isCyberpunk 
+                    ? "Multiple relay channels are available. All monitored by the BaseLab ops team." 
+                    : "Our support team is small, attentive, and genuinely cares. Every message is read personally."}
+                </p>
               </div>
 
-              <div className="h-px bg-white/5" />
-
-              <div className="space-y-4">
-                 <div className="flex items-center gap-3">
-                    <Wifi size={14} className="text-accent animate-pulse" />
-                    <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">ACTIVE_ENCRYPTION</span>
+              <div className="space-y-6">
+                 <div className="flex items-start gap-4">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm ${isCyberpunk ? "border border-[#00f5d4]/30 bg-[#080808]" : "bg-white border border-black/5"}`}>
+                       <Mail size={18} className={isCyberpunk ? "text-[#00f5d4]" : "text-zinc-500"} />
+                    </div>
+                    <div className="space-y-1 pt-1">
+                       <p className={`text-sm font-semibold ${isCyberpunk ? "text-[#00f5d4] font-mono uppercase tracking-wider" : "text-foreground"}`}>
+                         {isCyberpunk ? "EMAIL_RELAY" : "Email us"}
+                       </p>
+                       <a href="mailto:support@baselab.co" className={`text-sm transition-colors ${isCyberpunk ? "text-[#00f5d4]/60 font-mono hover:text-[#00f5d4]" : "text-zinc-500 hover:text-foreground"}`}>
+                         support@baselab.co
+                       </a>
+                    </div>
                  </div>
-                 <p className="text-[8px] font-mono text-zinc-700 leading-relaxed uppercase">
-                   AES-256 BIT ROTATION PROTOCOL ACTIVATED. YOUR IDENTITY IS PROTECTED BY THE UNIT_01 SECURE VAULT.
-                 </p>
-              </div>
-            </HudContainer>
 
-            <div className="p-6 bg-white/[0.01] border border-white/5 hidden lg:block">
-              <div className="flex items-center gap-3 mb-4">
-                <Terminal size={14} className="text-zinc-800" />
-                <TechnicalLabel label="SYSTEM_LOGS" className="text-zinc-800" />
-              </div>
-              <div className="space-y-2 font-mono text-[7px] text-zinc-800 uppercase leading-none">
-                <p>[20:03:12] RELAY_INITIALIZED</p>
-                <p>[20:03:13] HANDSHAKE_SUCCESS</p>
-                <p>[20:03:14] BUFFER_READY</p>
+                 <div className="flex items-start gap-4">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm ${isCyberpunk ? "border border-[#00f5d4]/30 bg-[#080808]" : "bg-white border border-black/5"}`}>
+                       <MapPin size={18} className={isCyberpunk ? "text-[#00f5d4]" : "text-zinc-500"} />
+                    </div>
+                    <div className="space-y-1 pt-1">
+                       <p className={`text-sm font-semibold ${isCyberpunk ? "text-[#00f5d4] font-mono uppercase tracking-wider" : "text-foreground"}`}>
+                         {isCyberpunk ? "LOCATION_NODE" : "Where we are"}
+                       </p>
+                       <p className={`text-sm leading-relaxed ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
+                          BaseLab Studios<br />
+                          Indiranagar, Bangalore<br />
+                          Karnataka 560038
+                       </p>
+                    </div>
+                 </div>
+
+                 <div className="flex items-start gap-4">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm ${isCyberpunk ? "border border-[#00f5d4]/30 bg-[#080808]" : "bg-white border border-black/5"}`}>
+                       <Clock size={18} className={isCyberpunk ? "text-[#00f5d4]" : "text-zinc-500"} />
+                    </div>
+                    <div className="space-y-1 pt-1">
+                       <p className={`text-sm font-semibold ${isCyberpunk ? "text-[#00f5d4] font-mono uppercase tracking-wider" : "text-foreground"}`}>
+                         {isCyberpunk ? "RESPONSE_WINDOW" : "When we reply"}
+                       </p>
+                       <p className={`text-sm ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
+                         {isCyberpunk ? "Mon–Fri :: 09:00–18:00 IST" : "Mon – Fri, 9AM to 6PM IST. Usually same or next day."}
+                       </p>
+                    </div>
+                 </div>
               </div>
             </div>
           </aside>
 
-          {/* Contact Form HUD */}
+          {/* Contact Form Area */}
           <div className="lg:col-span-3">
-            <HudContainer className="p-8 md:p-12 bg-black border-accent/10 relative overflow-hidden">
+            <div className={`p-8 md:p-12 rounded-3xl border shadow-lg relative overflow-hidden ${isCyberpunk ? "bg-[#0d1117] border-[#00f5d4]/20" : "bg-white border-black/5"}`}>
                {status === "SUCCESS" ? (
                  <motion.div 
                    initial={{ opacity: 0, scale: 0.95 }}
                    animate={{ opacity: 1, scale: 1 }}
-                   className="flex flex-col items-center justify-center py-24 text-center space-y-8"
+                   className="flex flex-col items-center justify-center py-20 text-center space-y-6"
                  >
-                    <div className="w-16 h-16 rounded-full border border-accent flex items-center justify-center text-accent shadow-[0_0_20px_rgba(0,242,255,0.15)]">
-                       <Send size={24} />
+                    <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 ${isCyberpunk ? "border border-[#00f5d4]/50 bg-[#00f5d4]/10 text-[#00f5d4] shadow-[0_0_20px_rgba(0,245,212,0.2)]" : "bg-accent/10 text-accent"}`}>
+                       <CheckCircle2 size={40} strokeWidth={1.5} />
                     </div>
-                    <div className="space-y-2">
-                       <TechnicalLabel label="TRANSMISSION_COMPLETE" className="text-accent justify-center" />
-                       <h3 className="text-3xl font-heading text-white uppercase">SUCCESSFUL_RELAY</h3>
-                    </div>
-                    <button onClick={() => setStatus("IDLE")} className="text-[10px] font-mono text-zinc-600 hover:text-white uppercase tracking-widest underline underline-offset-8">
-                       NEW_TRANSMISSION
+                    <h3 className={`text-3xl font-semibold tracking-tight ${isCyberpunk ? "text-[#00f5d4] font-mono cyber-glow uppercase" : "text-foreground"}`}>
+                      {isCyberpunk ? "TRANSMISSION_SENT" : "Message received!"}
+                    </h3>
+                    <p className={`text-base font-medium max-w-sm ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
+                       {isCyberpunk 
+                         ? "Your data packet has been received. A BaseLab operator will respond within 24 cycles."
+                         : "Thanks for reaching out! A member of our team will personally respond within 24 hours."}
+                    </p>
+                    <button 
+                      onClick={() => setStatus("IDLE")} 
+                      className={`mt-8 px-8 py-3 text-sm font-medium transition-colors ${isCyberpunk ? "border border-[#00f5d4]/40 text-[#00f5d4] hover:bg-[#00f5d4]/10 font-mono tracking-widest uppercase" : "bg-muted text-foreground rounded-full hover:bg-black/5"}`}
+                    >
+                       {isCyberpunk ? "NEW_TRANSMISSION" : "Send another message"}
                     </button>
                  </motion.div>
                ) : (
-                 <form onSubmit={handleSubmit} className="space-y-8">
+                 <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in duration-500">
                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <TechnicalLabel label="AGENT_NOMENCLATURE" value="(NAME)" className="text-zinc-500" />
-                        <input required type="text" className="w-full bg-white/[0.01] border border-white/5 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors uppercase font-mono" placeholder="AGENT_NAME" />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div className="space-y-2">
+                           <label className={`text-sm font-semibold block ${isCyberpunk ? "text-[#00f5d4]/80 font-mono uppercase tracking-wider" : "text-foreground"}`}>
+                             {isCyberpunk ? "AGENT_NAME" : "Your name"}
+                           </label>
+                           <input 
+                             required 
+                             type="text" 
+                             className={`w-full px-4 py-3.5 text-sm focus:outline-none transition-all font-medium ${isCyberpunk ? "bg-[#080808] border border-[#00f5d4]/20 text-[#e8f4f8] focus:border-[#00f5d4] focus:shadow-[0_0_10px_rgba(0,245,212,0.2)] font-mono placeholder:text-[#00f5d4]/20" : "bg-muted/20 border border-black/10 rounded-xl text-foreground focus:ring-2 focus:ring-accent/20 focus:border-accent placeholder:text-zinc-400"}`}
+                             placeholder={isCyberpunk ? "DESIGNATE_NAME..." : "e.g. Sarah Johnson"} 
+                           />
+                         </div>
+                         <div className="space-y-2">
+                           <label className={`text-sm font-semibold block ${isCyberpunk ? "text-[#00f5d4]/80 font-mono uppercase tracking-wider" : "text-foreground"}`}>
+                             {isCyberpunk ? "CONTACT_RELAY" : "Email address"}
+                           </label>
+                           <input 
+                             required 
+                             type="email" 
+                             className={`w-full px-4 py-3.5 text-sm focus:outline-none transition-all font-medium ${isCyberpunk ? "bg-[#080808] border border-[#00f5d4]/20 text-[#e8f4f8] focus:border-[#00f5d4] focus:shadow-[0_0_10px_rgba(0,245,212,0.2)] font-mono placeholder:text-[#00f5d4]/20" : "bg-muted/20 border border-black/10 rounded-xl text-foreground focus:ring-2 focus:ring-accent/20 focus:border-accent placeholder:text-zinc-400"}`}
+                             placeholder={isCyberpunk ? "INPUT_EMAIL..." : "you@example.com"} 
+                           />
+                         </div>
                       </div>
                       <div className="space-y-2">
-                        <TechnicalLabel label="SECURE_RELAY_ADDRESS" value="(EMAIL)" className="text-zinc-500" />
-                        <input required type="email" className="w-full bg-white/[0.01] border border-white/5 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors uppercase font-mono" placeholder="AGENT_EMAIL" />
+                        <label className={`text-sm font-semibold block ${isCyberpunk ? "text-[#00f5d4]/80 font-mono uppercase tracking-wider" : "text-foreground"}`}>
+                          {isCyberpunk ? "INQUIRY_TYPE" : "What's this about?"}
+                        </label>
+                        <input 
+                          required 
+                          type="text" 
+                          className={`w-full px-4 py-3.5 text-sm focus:outline-none transition-all font-medium ${isCyberpunk ? "bg-[#080808] border border-[#00f5d4]/20 text-[#e8f4f8] focus:border-[#00f5d4] focus:shadow-[0_0_10px_rgba(0,245,212,0.2)] font-mono placeholder:text-[#00f5d4]/20" : "bg-muted/20 border border-black/10 rounded-xl text-foreground focus:ring-2 focus:ring-accent/20 focus:border-accent placeholder:text-zinc-400"}`}
+                          placeholder={isCyberpunk ? "QUERY_SUBJECT..." : "Order help, product question, general feedback..."} 
+                        />
                       </div>
                       <div className="space-y-2">
-                        <TechnicalLabel label="MISSION_INTEL" value="(MESSAGE)" className="text-zinc-500" />
-                        <textarea required rows={5} className="w-full bg-white/[0.01] border border-white/5 p-4 text-xs text-white focus:outline-none focus:border-accent transition-colors uppercase font-mono resize-none" placeholder="TRANSMIT_YOUR_MESSAGE_HERE..." />
+                        <label className={`text-sm font-semibold block ${isCyberpunk ? "text-[#00f5d4]/80 font-mono uppercase tracking-wider" : "text-foreground"}`}>
+                          {isCyberpunk ? "MESSAGE_PAYLOAD" : "Tell us more"}
+                        </label>
+                        <textarea 
+                          required 
+                          rows={6} 
+                          className={`w-full px-4 py-3.5 text-sm focus:outline-none transition-all resize-none font-medium ${isCyberpunk ? "bg-[#080808] border border-[#00f5d4]/20 text-[#e8f4f8] focus:border-[#00f5d4] focus:shadow-[0_0_10px_rgba(0,245,212,0.2)] font-mono placeholder:text-[#00f5d4]/20" : "bg-muted/20 border border-black/10 rounded-xl text-foreground focus:ring-2 focus:ring-accent/20 focus:border-accent placeholder:text-zinc-400"}`}
+                          placeholder={isCyberpunk ? "INPUT_MESSAGE_PAYLOAD..." : "The more detail you share, the faster we can help. No question is too small!"} 
+                        />
                       </div>
                    </div>
 
-                   <SystemButton disabled={status === "TRANSMITTING"} type="submit" className="w-full py-6 flex items-center justify-center gap-4">
-                     {status === "TRANSMITTING" ? "TRANSMITTING..." : "INITIALIZE_RELAY"}
-                     <Send size={14} className={status === "TRANSMITTING" ? "animate-pulse" : ""} />
-                   </SystemButton>
+                   <button 
+                     disabled={status === "SENDING"} 
+                     type="submit" 
+                     className={`w-full py-4 font-semibold text-base flex items-center justify-center gap-3 disabled:opacity-70 transition-all ${isCyberpunk ? "border border-[#00f5d4] text-[#00f5d4] hover:bg-[#00f5d4]/10 font-mono tracking-widest uppercase shadow-[0_0_10px_rgba(0,245,212,0.2)] hover:shadow-[0_0_20px_rgba(0,245,212,0.4)]" : "bg-foreground text-white rounded-full hover:bg-black shadow-sm"}`}
+                   >
+                     {status === "SENDING" 
+                       ? (isCyberpunk ? "TRANSMITTING..." : "Sending...") 
+                       : (isCyberpunk ? "SEND_TRANSMISSION" : "Send message")}
+                     <Send size={18} className={status === "SENDING" ? "animate-pulse" : ""} strokeWidth={2} />
+                   </button>
                  </form>
                )}
-            </HudContainer>
+            </div>
           </div>
 
         </div>

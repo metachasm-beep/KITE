@@ -2,114 +2,106 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { User, ShoppingCart, Shield, Activity } from "lucide-react";
-import { motion } from "framer-motion";
+import { User, ShoppingCart, Shield } from "lucide-react";
 import { useCart } from "@/lib/contexts/CartContext";
+import { useTheme } from "@/lib/contexts/ThemeContext";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 export function SiteHeader() {
   const { data: session } = useSession();
   const { toggleCart, itemsCount } = useCart();
+  const { isCyberpunk } = useTheme();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-black/5 bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto h-16 px-6 flex items-center justify-between text-foreground">
+    <header className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-500
+      ${isCyberpunk
+        ? "bg-black/90 backdrop-blur-xl border-[#00f5d4]/20"
+        : "bg-white/70 backdrop-blur-xl border-black/5"
+      }`}>
+      <div className="container mx-auto h-16 px-6 flex items-center justify-between">
         
-        {/* BRANDING: UNIT_01 */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-6 h-6 border border-accent/40 flex items-center justify-center overflow-hidden">
-            <motion.div 
-              animate={{ height: ["0%", "100%", "0%"] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-x-0 bg-accent/20 w-full"
-            />
-            <span className="text-[10px] font-bold text-accent z-10">01</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[14px] font-bold tracking-[-0.05em] text-foreground uppercase group-hover:text-accent transition-colors">
-              UNIT_01
-            </span>
-            <span className="text-[8px] font-mono text-zinc-400 tracking-widest uppercase -mt-1">
-              DESIGN_STUDIO
-            </span>
-          </div>
+        {/* BRANDING */}
+        <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
+          <span className={`text-xl font-semibold tracking-tight transition-colors duration-500 ${isCyberpunk ? "text-[#00f5d4] font-mono cyber-glow" : "text-foreground"}`}>
+            {isCyberpunk ? "BASELAB.SYS" : "BaseLab"}
+          </span>
         </Link>
 
-        {/* NAVIGATION: User-friendly Labels */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* CENTER: Theme Toggle */}
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <ThemeToggle />
+        </div>
+
+        {/* NAVIGATION (hidden on mobile) */}
+        <nav className="hidden lg:flex items-center gap-8 mr-8">
           {[
-            { label: "SHOP", href: "/collections" },
-            { label: "ABOUT", href: "/system" },
-            { label: "DETAILS", href: "/telemetry" },
-            { label: "SUPPORT", href: "/comms" }
+            { label: isCyberpunk ? "STORE" : "Shop", href: "/collections" },
+            { label: isCyberpunk ? "INTEL" : "About", href: "/system" },
+            { label: isCyberpunk ? "SPECS" : "Details", href: "/telemetry" },
+            { label: isCyberpunk ? "COMMS" : "Support", href: "/comms" }
           ].map((item) => (
             <Link 
               key={item.label} 
               href={item.href} 
               className="relative group px-2 py-1"
             >
-              <span className="text-[11px] font-bold text-zinc-400 group-hover:text-foreground transition-colors tracking-widest uppercase">
+              <span className={`text-sm font-medium transition-colors tracking-wide ${isCyberpunk ? "text-[#00f5d4]/60 hover:text-[#00f5d4] font-mono" : "text-zinc-500 hover:text-foreground"}`}>
                 {item.label}
               </span>
-              <motion.div 
-                className="absolute bottom-0 left-0 h-[1px] bg-accent"
-                initial={{ width: 0 }}
-                whileHover={{ width: "100%" }}
-              />
             </Link>
           ))}
         </nav>
 
         {/* ACTIONS */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-4">
-            {session ? (
-              <div className="flex items-center gap-4">
-                {(session.user as any)?.role === "admin" && (
-                  <Link href="/admin" className="p-2 text-zinc-400 hover:text-foreground transition-colors">
-                    <Shield size={16} />
-                  </Link>
+        <div className="flex items-center gap-4 flex-shrink-0">
+          {session ? (
+            <div className="flex items-center gap-4">
+              {(session.user as any)?.role === "admin" && (
+                <Link href="/admin" className={`p-2 transition-colors ${isCyberpunk ? "text-[#00f5d4]/60 hover:text-[#00f5d4]" : "text-zinc-500 hover:text-foreground"}`}>
+                  <Shield size={18} />
+                </Link>
+              )}
+              <Link href="/account" className={`p-0.5 transition-colors border rounded-full overflow-hidden w-8 h-8 flex items-center justify-center ${isCyberpunk ? "border-[#00f5d4]/30 bg-[#0d1117]" : "border-black/5 bg-muted"} shadow-sm`}>
+                {session.user?.image ? (
+                  <img src={session.user.image} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <User size={16} className={isCyberpunk ? "text-[#00f5d4]" : "text-zinc-500"} />
                 )}
-                <Link href="/account" className="p-0.5 text-zinc-400 hover:text-foreground transition-colors border border-black/5 rounded-full overflow-hidden w-8 h-8 flex items-center justify-center bg-muted">
-                  {session.user?.image ? (
-                    <img src={session.user.image} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <User size={16} />
-                  )}
-                </Link>
-                <button 
-                  onClick={() => signOut({ callbackUrl: '/' })}
-                  className="p-1 px-3 text-[10px] tracking-widest uppercase font-mono text-zinc-400 hover:text-red-500 border border-black/5 bg-black/[0.02] hover:bg-black/[0.05] transition-colors"
-                >
-                  LOGOUT
-                </button>
-                
-                {/* Cart only visible for logged in users */}
-                <button 
-                  onClick={toggleCart}
-                  className="relative p-2 text-zinc-400 hover:text-foreground transition-colors"
-                >
-                  <ShoppingCart size={18} />
-                  {itemsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-accent text-white text-[9px] font-bold rounded-full flex items-center justify-center font-mono">
-                      {itemsCount}
-                    </span>
-                  )}
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-6">
-                <Link 
-                  href="/api/auth/signin" 
-                  className="text-[10px] font-bold text-zinc-400 hover:text-accent transition-colors tracking-widest uppercase"
-                >
-                  [ SIGN_IN ]
-                </Link>
-              </div>
-            )}
-          </div>
+              </Link>
+              <button 
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className={`px-4 py-1.5 text-xs font-medium rounded-full transition-colors ${isCyberpunk ? "text-[#00f5d4]/60 hover:text-red-400 font-mono tracking-wider" : "text-zinc-500 hover:text-red-500 hover:bg-red-50"}`}
+              >
+                {isCyberpunk ? "EXIT" : "Sign Out"}
+              </button>
+              
+              {/* Cart — only visible for logged in users */}
+              <button 
+                onClick={toggleCart}
+                className={`relative p-2 transition-colors ${isCyberpunk ? "text-[#00f5d4]/60 hover:text-[#00f5d4]" : "text-zinc-500 hover:text-foreground"}`}
+              >
+                <ShoppingCart size={18} />
+                {itemsCount > 0 && (
+                  <span className={`absolute -top-1 -right-1 w-4 h-4 text-white text-[10px] font-bold rounded-full flex items-center justify-center ${isCyberpunk ? "bg-[#00f5d4] text-black" : "bg-accent"}`}>
+                    {itemsCount}
+                  </span>
+                )}
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-6">
+              <Link 
+                href="/api/auth/signin" 
+                className={`px-5 py-2 text-sm font-medium rounded-full transition-colors ${isCyberpunk ? "border border-[#00f5d4]/50 text-[#00f5d4] hover:bg-[#00f5d4]/10 font-mono tracking-wider rounded-none" : "text-white bg-foreground hover:bg-black"}`}
+              >
+                {isCyberpunk ? "CONNECT" : "Sign In"}
+              </Link>
+            </div>
+          )}
         </div>
 
       </div>
     </header>
   );
 }
+

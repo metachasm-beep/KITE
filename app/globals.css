@@ -2,92 +2,140 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── BaseLab Default Theme ─── */
 :root {
   --background: #FFFFFF;
-  --foreground: #0A0A0A;
-  --accent: #008080; /* Tech Teal - better for light theme */
+  --foreground: #1D1D1F;
+  --accent: #0066CC;
   --muted: #F5F5F7;
+}
+
+/* ─── Cyberpunk / Transformers Theme ─── */
+[data-theme="cyberpunk"] {
+  --background: #080808;
+  --foreground: #e8f4f8;
+  --accent: #00f5d4;
+  --muted: #0f1117;
+
+  color-scheme: dark;
+}
+
+[data-theme="cyberpunk"] body {
+  background-color: #080808;
+  color: #e8f4f8;
+}
+
+/* Cyberpunk card override */
+[data-theme="cyberpunk"] .hud-container,
+[data-theme="cyberpunk"] .baselab-card {
+  background: #0d1117;
+  border: 1px solid rgba(0, 245, 212, 0.2);
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.05), inset 0 1px 0 rgba(0,245,212,0.08);
+  border-radius: 0.5rem;
+}
+
+[data-theme="cyberpunk"] .hud-container:hover,
+[data-theme="cyberpunk"] .baselab-card:hover {
+  border-color: rgba(0, 245, 212, 0.4);
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.12);
+}
+
+/* Cyberpunk neon button */
+[data-theme="cyberpunk"] .btn-hud,
+[data-theme="cyberpunk"] .baselab-button {
+  background: transparent;
+  color: #00f5d4;
+  border: 1px solid #00f5d4;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.3);
+}
+
+[data-theme="cyberpunk"] .btn-hud:hover,
+[data-theme="cyberpunk"] .baselab-button:hover {
+  background: rgba(0, 245, 212, 0.1);
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.5);
+}
+
+/* Cyberpunk neon scrollbar */
+[data-theme="cyberpunk"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 212, 0.3);
+}
+
+/* Cyberpunk scanline texture on images/screens */
+[data-theme="cyberpunk"] .cyber-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 245, 212, 0.02) 2px,
+    rgba(0, 245, 212, 0.02) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Cyberpunk neon text glow */
+[data-theme="cyberpunk"] .cyber-glow {
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.8), 0 0 20px rgba(0, 245, 212, 0.4);
+}
+
+/* Cyberpunk grid lines */
+[data-theme="cyberpunk"] .cyber-grid {
+  background-image:
+    linear-gradient(rgba(0, 245, 212, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 212, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-accent selection:text-black;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    @apply bg-background text-foreground antialiased selection:bg-accent selection:text-white;
   }
 
   h1, h2, h3, h4, .font-heading {
-    @apply font-[var(--font-space-grotesk)] font-bold;
+    @apply font-sans;
   }
 }
 
 @layer components {
-  /* HUD Container with corner markers */
-  .hud-container {
-    @apply relative border border-foreground/10 p-6;
+  .hud-container, .baselab-card {
+    @apply bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-black/5 p-6 overflow-hidden transition-shadow duration-300;
+  }
+  
+  .hud-container:hover, .baselab-card:hover {
+    @apply shadow-[0_8px_32px_rgba(0,0,0,0.08)];
   }
 
-  .hud-container::before,
-  .hud-container::after,
-  .hud-container .corner::before,
-  .hud-container .corner::after {
-    content: '';
-    @apply absolute w-2 h-2 border-accent/40 pointer-events-none;
+  .btn-hud, .baselab-button {
+    @apply relative px-8 py-3 bg-foreground text-white rounded-full font-medium tracking-wide hover:bg-black transition-colors duration-300 overflow-hidden text-sm;
   }
 
-  /* Top Left */
-  .hud-container::before {
-    @apply top-0 left-0 border-t-2 border-l-2;
-  }
-  /* Top Right */
-  .hud-container::after {
-    @apply top-0 right-0 border-t-2 border-r-2;
-  }
-  /* Bottom Left */
-  .hud-container .corner::before {
-    @apply bottom-0 left-0 border-b-2 border-l-2;
-  }
-  /* Bottom Right */
-  .hud-container .corner::after {
-    @apply bottom-0 right-0 border-b-2 border-r-2;
-  }
-
-  .btn-hud {
-    @apply relative px-8 py-3 bg-transparent border border-accent/20 text-accent font-bold tracking-[0.2em] uppercase hover:bg-accent hover:text-black transition-all duration-300 overflow-hidden;
-  }
-
-  .text-scanline {
-    @apply relative overflow-hidden;
+  .baselab-button-secondary {
+    @apply relative px-8 py-3 bg-muted text-foreground rounded-full font-medium tracking-wide hover:bg-black/5 transition-colors duration-300 overflow-hidden text-sm;
   }
 
   .text-telemetry {
-    @apply font-mono text-[9px] tracking-[0.1em] text-foreground/40;
+    @apply text-xs font-medium text-zinc-500 uppercase tracking-wider;
+  }
+  
+  .glass-header {
+    @apply bg-white/70 backdrop-blur-xl border-b border-black/5;
   }
 }
 
-/* Custom Scrollbar */
+/* Default sleek scrollbar */
 ::-webkit-scrollbar {
-  @apply w-1;
+  @apply w-1.5 h-1.5;
 }
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-accent/20 hover:bg-accent/40 transition-colors rounded-full;
-}
-
-/* scanline animation */
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
-}
-
-.scanline-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: rgba(0, 128, 128, 0.05);
-  animation: scanline 4s linear infinite;
-  pointer-events: none;
+  @apply bg-black/10 hover:bg-black/20 transition-colors rounded-full;
 }

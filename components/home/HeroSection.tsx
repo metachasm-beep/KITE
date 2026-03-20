@@ -6,161 +6,85 @@ import { ChevronRight, Cpu, Network, Activity, Database, Crosshair } from "lucid
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[100vh] bg-[#050505] flex flex-col justify-center overflow-hidden py-32 xl:py-0">
-      {/* HUD Layer 0: Landing Hero Background */}
+    <section className="relative min-h-[90vh] bg-white flex flex-col justify-center overflow-hidden pt-32 pb-20">
+      {/* Background Soft Gradients */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img 
-          src="/images/hero.png" 
-          alt="Landing Hero" 
-          className="w-full h-full object-cover opacity-[0.25] mix-blend-screen grayscale"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
-        <div className="absolute inset-0 bg-radial-gradient from-transparent to-black opacity-80" />
-        <div className="scanline-overlay opacity-20" />
+        {/* Soft abstract blurs instead of scanlines */}
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-muted/50 blur-3xl opacity-50 mix-blend-multiply" />
+        <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[60%] rounded-full bg-accent/5 blur-3xl opacity-60 mix-blend-multiply" />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10 flex flex-col items-center text-center">
         
-        {/* Core Content Container */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 xl:grid-cols-12 gap-12 items-center">
-          
-          {/* LEFT: Nav/Telemetry Detail (Desktop) */}
-          <div className="hidden xl:flex col-span-2 flex-col gap-16 opacity-40">
-            <div className="space-y-4">
-               <span className="text-[9px] font-mono text-white/50 block tracking-widest uppercase">NAV_VECTR // 01</span>
-               <Link href="/status" className="w-24 h-24 border border-white/10 relative flex items-center justify-center group hover:bg-white/[0.02] transition-colors">
-                  <div className="absolute inset-2 border-t border-r border-accent/40 rounded-full animate-spin-slow group-hover:border-accent transition-colors" />
-                  <Crosshair size={20} className="text-accent/60 group-hover:text-accent transition-colors" />
-               </Link>
-            </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-black/5 mb-8"
+        >
+           <span className="w-1.5 h-1.5 rounded-full bg-foreground" />
+           <span className="text-xs font-medium text-zinc-600 tracking-wide">BaseLab Collection 01 Available</span>
+        </motion.div>
 
-            <div className="space-y-6">
-              {[
-                { icon: <Database size={14} />, label: "DATA_LAKE", val: "SYNCED" },
-                { icon: <Activity size={14} />, label: "ENV_STBL", val: "94.2%" },
-                { icon: <Network size={14} />, label: "NET_NODE", val: "ACTIVE" }
-              ].map((stat, i) => (
-                <div key={i} className="flex flex-col gap-1 border-l-2 border-white/10 pl-3">
-                    <span className="flex items-center gap-2 text-[8px] font-mono text-white/40 uppercase tracking-widest">
-                      {stat.icon} {stat.label}
-                    </span>
-                    <span className="text-[11px] font-mono text-accent uppercase tracking-widest">{stat.val}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* CENTER: Main Content */}
-          <div className="col-span-1 xl:col-span-8 flex flex-col items-center xl:items-start text-center xl:text-left mt-16 xl:mt-0">
-            
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              className="flex items-center gap-6 mb-8"
-            >
-               <span className="text-[9px] font-mono text-zinc-400 tracking-[0.4em] uppercase">Status</span>
-               <div className="flex gap-1">
-                 {[1,2,3].map(i => <div key={i} className="w-1 h-3 bg-accent" />)}
-               </div>
-               <span className="text-[9px] font-bold text-foreground tracking-widest uppercase">Online</span>
-            </motion.div>
-
-            {/* Huge Title */}
-            <div className="relative mb-16 w-full flex justify-center xl:justify-start">
-              <motion.h1 
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[72px] md:text-[120px] lg:text-[160px] font-heading leading-none tracking-[-0.08em] text-foreground flex items-center gap-1"
-              >
-                STUDIO<span className="text-zinc-100 stroke-zinc-200 font-black">_01</span>
-              </motion.h1>
-              
-              {/* Corner Brackets */}
-              <div className="absolute -inset-4 md:-inset-8 border border-black/5 opacity-50 pointer-events-none hidden md:block">
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent/20" />
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-accent/20" />
-              </div>
-            </div>
-
-            {/* High-Density Copy Grid */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 1.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-black/10 pt-12 w-full text-left"
-            >
-              <div className="space-y-6">
-                <span className="text-[10px] font-bold text-accent tracking-[0.4em] uppercase block">Our Philosophy</span>
-                <p className="text-[13px] md:text-[14px] font-mono tracking-tight text-zinc-500 uppercase leading-relaxed">
-                  We are a physical design studio creating unique studies in high-quality materials. Our work bridges digital precision with tactile craft. 
-                </p>
-              </div>
-
-              <div className="space-y-6">
-                <span className="text-[10px] font-bold text-zinc-400 tracking-[0.4em] uppercase block">Small Batches</span>
-                <p className="text-[13px] md:text-[14px] font-mono tracking-tight text-zinc-500 uppercase leading-relaxed">
-                  Every object is crafted to exact standards. We focus on quality over quantity, releasing limited editions through our digital archive.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 1 }}
-              className="mt-16 w-full flex flex-col md:flex-row items-center gap-8 justify-between border border-black/5 p-6 bg-muted"
-            >
-              <div className="flex gap-12">
-                <Link href="/collections" className="flex items-center gap-4 text-zinc-400 w-full md:w-auto hover:text-foreground transition-colors group cursor-pointer">
-                  <span className="text-[10px] font-mono tracking-widest uppercase">View Collections</span>
-                </Link>
-
-                <Link href="/system" className="flex items-center gap-4 text-zinc-400 w-full md:w-auto hover:text-foreground transition-colors group cursor-pointer">
-                  <span className="text-[10px] font-mono tracking-widest uppercase">Our Story</span>
-                </Link>
-              </div>
-
-              <Link 
-                href="/collections" 
-                className="btn-hud group py-4 px-10 text-[11px] w-full md:w-auto bg-white text-accent border-accent/30 hover:bg-accent hover:text-white"
-              >
-                Enter Shop
-                <ChevronRight size={14} className="inline ml-3 group-hover:translate-x-1.5 transition-transform" />
-              </Link>
-            </motion.div>
-
-          </div>
-
-          {/* RIGHT: Rotating Model / Tech Vis (Desktop) */}
-          <div className="hidden xl:flex col-span-2 justify-end">
-             <Link href="/collections" className="w-56 h-[500px] border border-white/5 relative flex flex-col justify-between p-6 opacity-80 overflow-hidden group hover:opacity-100 hover:border-accent/30 transition-all cursor-pointer">
-                <div className="absolute inset-0 bg-accent/[0.02]" />
-                
-                {/* Tech readouts top */}
-                <div className="space-y-1">
-                   <span className="text-[8px] font-mono text-zinc-600 block tracking-widest">GEO_WEIGHT</span>
-                   <span className="text-[10px] font-mono text-white block tracking-widest">2.14KG // RESIN</span>
-                </div>
-
-                {/* Rotating wireframe illusion */}
-                <div className="flex-1 flex items-center justify-center relative">
-                   <div className="w-32 h-32 border border-accent/20 rotate-45 group-hover:rotate-0 transition-transform duration-[2000ms] shadow-[0_0_40px_rgba(0,242,255,0.05)] group-hover:shadow-[0_0_60px_rgba(0,242,255,0.15)]" />
-                   <div className="w-24 h-24 border border-white/20 -rotate-45 absolute group-hover:-rotate-90 transition-transform duration-[3000ms]" />
-                   <div className="w-1 h-1 bg-accent rounded-full absolute animate-ping group-hover:scale-150 transition-transform" />
-                </div>
-
-                {/* Tech readouts bottom */}
-                <div className="space-y-1 text-right">
-                   <span className="text-[8px] font-mono text-zinc-600 block tracking-widest group-hover:text-accent/60 transition-colors">STATUS</span>
-                   <span className="text-[10px] font-mono text-accent block tracking-widest animate-pulse">CALIBRATED</span>
-                </div>
-             </Link>
-          </div>
-
+        {/* Huge Title */}
+        <div className="relative mb-8 w-full max-w-5xl mx-auto flex justify-center">
+          <motion.h1 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-6xl md:text-8xl lg:text-9xl font-semibold leading-[0.9] tracking-tight text-foreground"
+          >
+            Refined <br className="hidden md:block" />
+            <span className="text-zinc-300">Essentials</span>
+          </motion.h1>
         </div>
+
+        {/* Subtitle */}
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 1 }}
+          className="text-lg md:text-xl font-medium text-zinc-500 max-w-2xl mx-auto leading-relaxed mb-12"
+        >
+          Discover premium, minimalist hardware designed for modern living. We bridge the gap between architectural form and everyday utility.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="flex flex-col sm:flex-row items-center gap-4"
+        >
+          <Link 
+            href="/collections" 
+            className="px-8 py-4 bg-foreground text-white rounded-full font-medium hover:bg-black transition-colors w-full sm:w-auto shadow-sm"
+          >
+            Explore the Shop
+          </Link>
+          <Link 
+            href="/system" 
+            className="px-8 py-4 bg-muted text-foreground rounded-full font-medium hover:bg-black/5 transition-colors w-full sm:w-auto border border-black/5"
+          >
+            Our Story
+          </Link>
+        </motion.div>
+
+        {/* Minimal Hero Graphic / Product Hint */}
+        <motion.div
+           initial={{ opacity: 0, y: 40 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ delay: 0.8, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+           className="mt-20 w-full max-w-4xl max-h-[400px] h-64 md:h-96 bg-muted/30 rounded-3xl border border-black/5 flex items-center justify-center relative overflow-hidden"
+        >
+           {/* Abstract minimalist geometry */ }
+           <div className="absolute w-[80%] h-[80%] border border-black/5 rounded-full" />
+           <div className="absolute w-[60%] h-[60%] border border-black/5 rounded-full bg-white/50 backdrop-blur-sm" />
+           <div className="absolute w-24 h-24 bg-white shadow-xl rounded-2xl rotate-12 flex items-center justify-center">
+              <div className="w-10 h-10 border-2 border-zinc-200 rounded-full" />
+           </div>
+        </motion.div>
+
       </div>
     </section>
   );

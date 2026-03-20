@@ -14,7 +14,7 @@ export const SystemButton = ({
   variant = 'primary',
   ...props 
 }: SystemButtonProps) => {
-  const baseClasses = "btn-hud group";
+  const baseClasses = variant === 'secondary' ? "baselab-button-secondary group" : "baselab-button group";
   
   if (href) {
     return (
