@@ -4,6 +4,7 @@ import { HudContainer } from "@/components/common/HudContainer";
 import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 import { Cog, ShieldCheck, Truck, Zap } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTheme } from "@/lib/contexts/ThemeContext";
 
 export default function TelemetryPage() {
   const { isCyberpunk } = useTheme();
