@@ -27,14 +27,24 @@ export function HeroSection() {
           />
         ) : (
           <div className="absolute inset-0">
+            {/* The primary hero background image provided by the user */}
+            <div className="absolute inset-0 opacity-10 mix-blend-multiply">
+              <img 
+                src="/images/wmremove-transformed.png" 
+                alt="Background" 
+                className="w-full h-full object-cover object-center scale-110"
+              />
+            </div>
+            
             <Aurora 
               colorStops={['#f4f4f5', '#e4e4e7', '#f4f4f5']} 
               amplitude={0.5} 
-              className="opacity-40" 
+              className="opacity-30" 
             />
+            
             {/* Soft abstract blurs as layer on top of Aurora for BaseLab */}
-            <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-zinc-100/50 blur-3xl opacity-50 mix-blend-multiply" />
-            <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[60%] rounded-full bg-zinc-50/50 blur-3xl opacity-60 mix-blend-multiply" />
+            <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-zinc-100/40 blur-3xl mix-blend-multiply" />
+            <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[60%] rounded-full bg-zinc-50/40 blur-3xl mix-blend-multiply" />
           </div>
         )}
       </div>

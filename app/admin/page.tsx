@@ -10,14 +10,14 @@ export default function AdminOverview() {
     <div className="space-y-12">
       <header className="border-b border-black/5 pb-6 flex justify-between items-end">
         <div>
-          <h1 className="text-4xl font-heading tracking-[-0.05em] text-foreground uppercase">SYS_OVERVIEW</h1>
+          <h1 className="text-4xl font-heading tracking-[-0.05em] text-foreground text-outline uppercase">SYS_OVERVIEW</h1>
           <p className="font-mono text-[10px] text-zinc-400 tracking-[0.3em] uppercase mt-2">
             Global metrics and allocation telemetry
           </p>
         </div>
         <div className="text-right">
             <span className="font-mono text-[9px] text-accent tracking-[0.3em] uppercase block animate-pulse">LIVE_SYNC</span>
-            <span className="font-mono text-[10px] text-zinc-300 tracking-widest uppercase">NODE: AP-NORTHEAST-1</span>
+            <span className="font-mono text-[10px] text-zinc-500 tracking-widest uppercase">NODE: AP-NORTHEAST-1</span>
         </div>
       </header>
 

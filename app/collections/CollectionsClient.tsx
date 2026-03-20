@@ -9,8 +9,10 @@ import { useCart } from "@/lib/contexts/CartContext";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 import { useState } from "react";
 import { Artifact } from "@/lib/cms";
-import GlitchText from "@/components/reactbits/GlitchText";
 import DecryptedText from "@/components/reactbits/DecryptedText";
+import BlurText from "@/components/reactbits/BlurText";
+import TrueFocus from "@/components/reactbits/TrueFocus";
+import VariableWeight from "@/components/reactbits/VariableWeight";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/ThreeDCard";
 import { SystemButton } from "@/components/common/SystemButton";
 
@@ -50,15 +52,29 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
             </div>
             
             {isCyberpunk ? (
-              <div className="flex flex-col items-start">
-                <GlitchText speed={0.4} className="text-[#00f5d4] font-mono leading-none !m-0 !p-0">
-                  THE_CATALOG
-                </GlitchText>
+              <div className="flex flex-col items-start min-h-[80px] justify-end">
+                <DecryptedText
+                  text="THE_CATALOG"
+                  className="text-6xl md:text-8xl font-mono text-[#00f5d4] leading-none"
+                  animateOn="view"
+                  speed={50}
+                />
               </div>
             ) : (
-              <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-foreground">
-                The <span className="text-zinc-300">Catalog</span>
-              </h1>
+              <div className="space-y-2">
+                <BlurText
+                  text="The Catalog"
+                  className="text-5xl md:text-7xl font-semibold tracking-tight text-foreground"
+                  delay={150}
+                  animateBy="letters"
+                  direction="bottom"
+                />
+                <TrueFocus
+                  sentence="Curating the future of minimal hardware."
+                  className="text-lg text-zinc-500"
+                  focusRadius={100}
+                />
+              </div>
             )}
             
             <div className="max-w-xl">
@@ -70,9 +86,12 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                   className="text-sm font-mono text-[#00f5d4]/60 leading-relaxed uppercase tracking-wider"
                 />
               ) : (
-                <p className="text-lg text-zinc-500 leading-relaxed">
-                  Explore our current collection of physical design units. Each piece is crafted using premium materials and precise engineering.
-                </p>
+                <VariableWeight
+                  text="Discover premium, minimalist hardware designed for modern living. We bridge the gap between architectural form and everyday utility."
+                  className="text-lg text-zinc-500 leading-relaxed"
+                  initialWeight={300}
+                  hoverWeight={600}
+                />
               )}
             </div>
           </div>
@@ -91,10 +110,10 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                 {isCyberpunk ? "// FILTER_BY_SERIES" : "Filter by Series"}
               </p>
               <div className="flex flex-wrap gap-3">
-                 {uniqueSeries.map((s: any) => (
+                 {uniqueSeries.map((s) => (
                     <button 
-                      key={s as string} 
-                      onClick={() => setFilterSeries(s as string)}
+                      key={s} 
+                      onClick={() => setFilterSeries(s)}
                       className={`text-sm font-medium px-5 py-2 transition-all duration-300
                         ${isCyberpunk 
                           ? filterSeries === s 

@@ -127,6 +127,14 @@
   .glass-header {
     @apply bg-white/70 backdrop-blur-xl border-b border-black/5;
   }
+
+  .text-outline {
+    text-shadow: 
+      -1px -1px 0 theme('colors.background'),  
+       1px -1px 0 theme('colors.background'),
+      -1px  1px 0 theme('colors.background'),
+       1px  1px 0 theme('colors.background');
+  }
 }
 
 /* Default sleek scrollbar */

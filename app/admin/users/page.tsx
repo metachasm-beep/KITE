@@ -10,9 +10,9 @@ export default async function AdminUsersPage() {
   });
 
   return (
-    <div className="space-y-12 text-white">
-      <header className="border-b border-white/10 pb-6">
-        <h1 className="text-4xl font-heading tracking-[-0.05em]">IDENT_VAULT_SNC</h1>
+    <div className="space-y-12">
+      <header className="border-b border-black/5 pb-6">
+        <h1 className="text-4xl font-heading tracking-[-0.05em] text-foreground text-outline">IDENT_VAULT_SNC</h1>
         <TechnicalLabel label="SYS_PROTOCOL" value="USER_MANAGEMENT" className="mt-2 text-zinc-500" />
       </header>
 

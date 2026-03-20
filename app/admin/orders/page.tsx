@@ -19,9 +19,9 @@ export default async function AdminOrdersPage() {
   });
 
   return (
-    <div className="space-y-12 text-white">
-      <header className="border-b border-white/10 pb-6">
-        <h1 className="text-4xl font-heading tracking-[-0.05em]">LOGISTICS_TELEMETRY</h1>
+    <div className="space-y-12">
+      <header className="border-b border-black/5 pb-6">
+        <h1 className="text-4xl font-heading tracking-[-0.05em] text-foreground text-outline uppercase">LOGISTICS_TELEMETRY</h1>
         <TechnicalLabel label="SYS_PROTOCOL" value="ORDER_FULFILLMENT" className="mt-2 text-zinc-500" />
       </header>
 
