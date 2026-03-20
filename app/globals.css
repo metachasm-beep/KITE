@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── BaseLab Default Theme ─── */
+/* ─── BaseLab Default Theme (Stone + Gold) ─── */
 :root {
-  --background: #FFFFFF;
-  --foreground: #1D1D1F;
-  --accent: #0066CC;
-  --muted: #F5F5F7;
+  --background: #FAFAF9;
+  --foreground: #0C0A09;
+  --accent: #CA8A04;
+  --muted: #F5F5F4;
 }
 
 /* ─── Cyberpunk / Transformers Theme ─── */
@@ -105,45 +105,53 @@
 
 @layer components {
   .hud-container, .baselab-card {
-    @apply bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-black/5 p-6 overflow-hidden transition-shadow duration-300;
+    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border border-white/20 p-6 overflow-hidden transition-all duration-500 ease-out;
   }
   
   .hud-container:hover, .baselab-card:hover {
-    @apply shadow-[0_8px_32px_rgba(0,0,0,0.08)];
+    @apply shadow-[0_12px_48px_rgba(0,0,0,0.08)] -translate-y-1 border-white/40;
+  }
+
+  /* Liquid Glass Effect */
+  .liquid-glass {
+    @apply bg-white/40 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.02)] relative overflow-hidden;
+  }
+
+  .liquid-glass::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50 pointer-events-none;
   }
 
   .btn-hud, .baselab-button {
-    @apply relative px-8 py-3 bg-foreground text-white rounded-full font-medium tracking-wide hover:bg-black transition-colors duration-300 overflow-hidden text-sm;
+    @apply relative px-8 py-4 bg-foreground text-background rounded-full font-medium tracking-wide hover:opacity-90 active:scale-95 transition-all duration-300 overflow-hidden text-sm flex items-center justify-center gap-2;
+  }
+
+  .btn-hud-primary {
+    @apply bg-accent text-white shadow-[0_4px_20px_rgba(202,138,4,0.3)] hover:shadow-[0_8px_30px_rgba(202,138,4,0.5)];
   }
 
   .baselab-button-secondary {
-    @apply relative px-8 py-3 bg-muted text-foreground rounded-full font-medium tracking-wide hover:bg-black/5 transition-colors duration-300 overflow-hidden text-sm;
+    @apply relative px-8 py-4 bg-muted text-foreground rounded-full font-medium tracking-wide hover:bg-stone-200 active:scale-95 transition-all duration-300 overflow-hidden text-sm flex items-center justify-center gap-2;
   }
 
   .text-telemetry {
-    @apply text-xs font-medium text-zinc-500 uppercase tracking-wider;
+    @apply text-[10px] font-bold text-stone-400 uppercase tracking-[0.2em] font-jost;
   }
   
   .glass-header {
-    @apply bg-white/70 backdrop-blur-xl border-b border-black/5;
+    @apply bg-background/80 backdrop-blur-xl border-b border-foreground/5 sticky top-0 z-50;
   }
 
   .text-outline {
     text-shadow: 
-      -1px -1px 0 theme('colors.background'),  
-       1px -1px 0 theme('colors.background'),
-      -1px  1px 0 theme('colors.background'),
-       1px  1px 0 theme('colors.background');
+      -1px -1px 0 var(--background),  
+       1px -1px 0 var(--background),
+      -1px  1px 0 var(--background),
+       1px  1px 0 var(--background);
   }
 }
 
-/* Default sleek scrollbar */
-::-webkit-scrollbar {
-  @apply w-1.5 h-1.5;
-}
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-::-webkit-scrollbar-thumb {
-  @apply bg-black/10 hover:bg-black/20 transition-colors rounded-full;
+/* BaseLab refined scrollbar */
+:root ::-webkit-scrollbar-thumb {
+  @apply bg-stone-300 hover:bg-stone-400;
 }

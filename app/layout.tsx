@@ -10,9 +10,16 @@ import { CartDrawer } from "@/components/layout/CartDrawer";
 import { FloatingNavbar } from "@/components/ruixen/floating-navbar";
 import { CyberpunkExtras } from "@/components/common/CyberpunkExtras";
 
-const inter = Inter({
+const bodoni = Bodoni_Moda({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-bodoni",
+  display: "swap",
+});
+
+const jost = Jost({
+  subsets: ["latin"],
+  variable: "--font-jost",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} font-sans antialiased bg-background text-foreground selection:bg-accent selection:text-white`}>
+      <body className={`${bodoni.variable} ${jost.variable} font-jost antialiased bg-background text-foreground selection:bg-accent selection:text-white`}>
         <ThemeProvider>
           <Providers>
             <SiteHeader />

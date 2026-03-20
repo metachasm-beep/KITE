@@ -13,16 +13,16 @@ export function SiteHeader() {
   const { isCyberpunk } = useTheme();
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-500
+    <header className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-500 font-jost
       ${isCyberpunk
-        ? "bg-black/90 backdrop-blur-xl border-[#00f5d4]/20"
-        : "bg-white/70 backdrop-blur-xl border-black/5"
+        ? "bg-black/80 backdrop-blur-xl border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
+        : "bg-background/70 backdrop-blur-xl border-foreground/5"
       }`}>
-      <div className="container mx-auto h-16 px-6 flex items-center justify-between">
+      <div className="container mx-auto h-20 px-6 flex items-center justify-between">
         
         {/* BRANDING */}
         <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-          <span className={`text-xl font-semibold tracking-tight transition-colors duration-500 ${isCyberpunk ? "text-[#00f5d4] font-mono cyber-glow" : "text-foreground"}`}>
+          <span className={`text-2xl font-bold tracking-tight transition-colors duration-500 ${isCyberpunk ? "text-[#00f5d4] font-mono cyber-glow" : "text-foreground font-heading"}`}>
             {isCyberpunk ? "BASELAB.SYS" : "BaseLab"}
           </span>
         </Link>

@@ -36,16 +36,18 @@ export const CartDrawer = () => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className={`fixed top-0 right-0 h-full w-full sm:w-[480px] shadow-2xl z-[101] flex flex-col transition-colors duration-500 ${
-              isCyberpunk ? "bg-[#080808] border-l border-[#00f5d4]/20" : "bg-white"
+            className={`fixed top-0 right-0 h-full w-full sm:w-[520px] shadow-2xl z-[101] flex flex-col transition-all duration-500 font-jost ${
+              isCyberpunk 
+                ? "bg-[#080808]/90 backdrop-blur-3xl border-l border-white/10" 
+                : "bg-background/80 backdrop-blur-3xl border-l border-foreground/5 shadow-[-20px_0_50px_rgba(0,0,0,0.05)]"
             }`}
           >
             {/* Header */}
             <div className={`p-6 border-b flex items-center justify-between ${isCyberpunk ? "border-[#00f5d4]/20 bg-[#080808]/80 backdrop-blur-md" : "border-black/5 bg-white/80 backdrop-blur-md"}`}>
               <div className="flex items-center gap-3">
                 <ShoppingBag size={20} className={isCyberpunk ? "text-[#00f5d4]" : "text-foreground"} />
-                <h2 className={`text-lg font-semibold tracking-tight ${isCyberpunk ? "text-[#e8f4f8] font-mono uppercase tracking-widest" : "text-foreground"}`}>
-                  {isCyberpunk ? "CART.EXE" : "Your Cart"}
+                <h2 className={`text-xl font-bold tracking-tight ${isCyberpunk ? "text-[#e8f4f8] font-mono uppercase tracking-widest" : "text-foreground font-heading"}`}>
+                  {isCyberpunk ? "CART.SYS" : "Shopping Bag"}
                 </h2>
               </div>
               <button 
@@ -66,9 +68,13 @@ export const CartDrawer = () => {
                   </p>
                   <button 
                     onClick={toggleCart}
-                    className={`px-8 py-3 text-sm font-medium transition-colors ${isCyberpunk ? "border border-[#00f5d4]/40 text-[#00f5d4] hover:bg-[#00f5d4]/10 font-mono tracking-widest uppercase" : "bg-muted text-foreground hover:bg-black/5 rounded-full"}`}
+                    className={`px-10 py-4 text-sm font-medium transition-all active:scale-95 ${
+                      isCyberpunk 
+                        ? "border border-[#00f5d4]/40 text-[#00f5d4] hover:bg-[#00f5d4]/10 font-mono tracking-widest uppercase" 
+                        : "bg-accent text-white hover:opacity-90 rounded-full shadow-lg shadow-accent/20 font-jost"
+                    }`}
                   >
-                    {isCyberpunk ? "CONTINUE_BROWSING" : "Continue Shopping"}
+                    {isCyberpunk ? "BACK_TO_ARCHIVE" : "Explore Collections"}
                   </button>
                 </div>
               ) : (
@@ -139,14 +145,14 @@ export const CartDrawer = () => {
                 {/* Checkout CTA — uses a button + router.push so the cart reliably closes first */}
                 <button 
                   onClick={() => handleCheckout('/checkout')}
-                  className={`w-full py-4 flex items-center justify-center gap-2 text-sm font-medium transition-all ${
+                  className={`w-full py-5 flex items-center justify-center gap-3 text-sm font-bold tracking-wide transition-all active:scale-[0.98] ${
                     isCyberpunk
                       ? "border border-[#00f5d4] text-[#00f5d4] hover:bg-[#00f5d4]/10 font-mono tracking-widest uppercase shadow-[0_0_10px_rgba(0,245,212,0.3)] hover:shadow-[0_0_20px_rgba(0,245,212,0.5)]"
-                      : "bg-foreground hover:bg-black text-white rounded-full shadow-sm"
+                      : "bg-accent text-white hover:opacity-90 rounded-full shadow-[0_8px_30px_rgba(202,138,4,0.3)]"
                   }`}
                 >
-                  {isCyberpunk ? "INITIATE_CHECKOUT" : "Checkout"}
-                  <ArrowRight size={16} />
+                  {isCyberpunk ? "INITIATE_CHECKOUT" : "Proceed to Checkout"}
+                  <ArrowRight size={18} />
                 </button>
                 
                 {/* Express Pay */}

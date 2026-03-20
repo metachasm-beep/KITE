@@ -9,17 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#000000",
-        foreground: "#FFFFFF",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         accent: {
-          DEFAULT: "#8B5CF6", // Cyber Purple
-          hover: "#7C3AED",
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent)", // We can add a hover logic if needed, but for now keeping it same
         },
-        muted: "#111111",
+        muted: "var(--muted)",
       },
       fontFamily: {
-        heading: ["var(--font-space-grotesk)", "sans-serif"],
-        body: ["var(--font-inter)", "sans-serif"],
+        heading: ["var(--font-bodoni)", "serif"],
+        body: ["var(--font-jost)", "sans-serif"],
+        jost: ["var(--font-jost)", "sans-serif"],
+        bodoni: ["var(--font-bodoni)", "serif"],
       },
       keyframes: {
         glitch: {

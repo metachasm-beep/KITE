@@ -81,7 +81,7 @@ export function HeroSection() {
           ) : (
             <BlurText
               text="Refined Essentials"
-              className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1] tracking-tight text-foreground"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1] tracking-tight text-foreground font-heading"
               delay={80}
               animateBy="words"
               direction="bottom"
@@ -100,12 +100,12 @@ export function HeroSection() {
           {isCyberpunk ? (
             <DecryptedText 
               text="ADVANCED HARDWARE REPOSITORY. BRIDGING THE GAP BETWEEN ARCHITECTURAL FORM AND NUMERICAL UTILITY."
-              animateOn="view"
+              animateOn="view" 
               speed={40}
               className="text-sm md:text-base font-mono text-[#00f5d4]/60 leading-relaxed uppercase tracking-wider"
             />
           ) : (
-            <p className="text-lg md:text-xl font-medium text-zinc-500 leading-relaxed">
+            <p className="text-lg md:text-xl font-medium text-zinc-500 leading-relaxed font-jost">
               Discover premium, minimalist hardware designed for modern living. We bridge the gap between architectural form and everyday utility.
             </p>
           )}

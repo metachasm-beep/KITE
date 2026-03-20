@@ -38,8 +38,8 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
   });
 
   return (
-    <main className={`min-h-screen pt-32 pb-40 relative transition-colors duration-700
-      ${isCyberpunk ? "bg-black text-[#00f5d4]" : "bg-white text-foreground"}`}>
+    <main className={`min-h-screen pt-32 pb-40 relative transition-colors duration-700 font-jost
+      ${isCyberpunk ? "bg-black text-[#00f5d4]" : "bg-background text-foreground"}`}>
       <div className="container mx-auto px-6 relative z-10">
         
         {/* Page Header */}
@@ -62,17 +62,17 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                 />
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <BlurText
                   text="The Catalog"
-                  className="text-5xl md:text-7xl font-semibold tracking-tight text-foreground"
+                  className="text-5xl md:text-8xl font-bold tracking-tight text-foreground font-heading"
                   delay={150}
                   animateBy="letters"
                   direction="bottom"
                 />
                 <TrueFocus
                   sentence="Curating the future of minimal hardware."
-                  className="text-lg text-zinc-500"
+                  className="text-xl text-stone-500 font-jost"
                   focusRadius={100}
                 />
               </div>
@@ -89,9 +89,9 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
               ) : (
                 <VariableWeight
                   text="Discover premium, minimalist hardware designed for modern living. We bridge the gap between architectural form and everyday utility."
-                  className="text-lg text-zinc-500 leading-relaxed"
+                  className="text-xl text-stone-500 leading-relaxed font-jost"
                   initialWeight={300}
-                  hoverWeight={600}
+                  hoverWeight={500}
                 />
               )}
             </div>
@@ -115,14 +115,14 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                     <button 
                       key={s} 
                       onClick={() => setFilterSeries(s)}
-                      className={`text-sm font-medium px-5 py-2 transition-all duration-300
+                      className={`text-sm font-medium px-6 py-2.5 transition-all duration-300 font-jost
                         ${isCyberpunk 
                           ? filterSeries === s 
                             ? "bg-[#00f5d4] text-black shadow-[0_0_15px_rgba(0,245,212,0.4)]" 
                             : "bg-black border border-[#00f5d4]/30 text-[#00f5d4]/60 hover:border-[#00f5d4] hover:text-[#00f5d4]" 
                           : filterSeries === s 
-                            ? "bg-foreground text-white rounded-full" 
-                            : "bg-muted text-zinc-600 hover:bg-black/5 rounded-full"}`}
+                            ? "bg-foreground text-background rounded-full shadow-lg" 
+                            : "bg-stone-200/50 text-stone-600 hover:bg-stone-200 rounded-full"}`}
                     >
                       {isCyberpunk ? (s === "ALL" ? "ALL_SERIES" : s.toUpperCase()) : (s === "ALL" ? "All Series" : s)}
                     </button>
@@ -162,7 +162,7 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
               <CardBody className={`relative group/card w-full h-auto rounded-3xl p-6 border transition-all duration-500
                 ${isCyberpunk 
                   ? "bg-black border-[#00f5d4]/10 group-hover/card:border-[#00f5d4]/40 shadow-[0_0_30px_rgba(0,245,212,0.05)]" 
-                  : "bg-white border-black/5 shadow-[0_4px_24px_rgba(0,0,0,0.04)]"}`}>
+                  : "bg-white/50 backdrop-blur-sm border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.02)] group-hover/card:shadow-[0_12px_48px_rgba(0,0,0,0.06)] group-hover/card:-translate-y-2"}`}>
                 
                 <CardItem translateZ="50" className="w-full flex flex-col">
                   {/* Card Media Wrapper */}

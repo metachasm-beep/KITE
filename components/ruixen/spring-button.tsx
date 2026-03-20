@@ -81,13 +81,13 @@ export function SpringButton({
   const baseVariantClasses = {
     primary: isCyberpunk
       ? "border border-[#00f5d4] text-[#00f5d4] bg-transparent hover:bg-[#00f5d4]/10 shadow-[0_0_10px_rgba(0,245,212,0.25)] hover:shadow-[0_0_20px_rgba(0,245,212,0.45)] font-mono tracking-widest uppercase"
-      : "bg-foreground text-white hover:bg-black shadow-sm rounded-full",
+      : "bg-accent text-white hover:opacity-90 shadow-[0_4px_20px_rgba(202,138,4,0.3)] hover:shadow-[0_8px_30px_rgba(202,138,4,0.5)] rounded-full",
     secondary: isCyberpunk
       ? "border border-[#00f5d4]/30 text-[#00f5d4]/70 hover:border-[#00f5d4]/60 hover:text-[#00f5d4] font-mono tracking-wider uppercase"
-      : "bg-muted text-foreground hover:bg-black/5 rounded-full",
+      : "bg-stone-200/50 text-stone-600 hover:bg-stone-200 rounded-full",
     ghost: isCyberpunk
       ? "text-[#00f5d4]/60 hover:text-[#00f5d4] font-mono tracking-wider"
-      : "text-zinc-500 hover:text-foreground",
+      : "text-stone-500 hover:text-foreground",
   };
 
   return (
@@ -99,7 +99,7 @@ export function SpringButton({
       onClick={onClick}
       disabled={disabled}
       type={type}
-      className={`inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed select-none ${baseVariantClasses[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed select-none font-jost ${baseVariantClasses[variant]} ${className}`}
     >
       {children}
     </motion.button>
