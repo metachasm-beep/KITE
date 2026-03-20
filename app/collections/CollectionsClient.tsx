@@ -29,47 +29,42 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
   });
 
   return (
-    <main className="min-h-screen bg-background pt-32 pb-48 relative overflow-hidden">
-      {/* Background HUD Detail */}
-      <div className="absolute top-0 right-0 w-1/3 aspect-square border-l border-b border-black/5 -z-0 opacity-20 pointer-events-none" />
-
+    <main className="min-h-screen bg-white pt-32 pb-40 relative">
       <div className="container mx-auto px-6 relative z-10">
         
         {/* Page Header */}
-        <header className="max-w-4xl mb-32 flex flex-col md:flex-row items-end justify-between gap-12">
-          <div className="space-y-10">
-            <div className="flex items-center gap-4">
-              <Archive size={16} className="text-accent" />
-              <span className="text-[10px] font-mono font-bold text-accent tracking-[0.3em] uppercase">Archive Index</span>
+        <header className="max-w-4xl mb-20 flex flex-col md:flex-row items-end justify-between gap-12">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <Archive size={16} className="text-zinc-400" />
+              <span className="text-xs font-medium text-zinc-500 uppercase tracking-widest">Archive Index</span>
             </div>
             
-            <h1 className="text-[48px] md:text-[96px] font-heading leading-none tracking-[-0.1em] text-foreground uppercase">
-              THE <br />
-              <span className="text-zinc-200">CATALOG</span>
+            <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-foreground">
+              The <span className="text-zinc-400">Catalog</span>
             </h1>
             
-            <p className="text-[16px] md:text-[20px] font-medium text-zinc-500 max-w-xl leading-relaxed">
-              Explore our current collection of physical design units. Each piece is crafted using high-density materials and precise engineering.
+            <p className="text-lg text-zinc-500 max-w-xl leading-relaxed">
+              Explore our current collection of physical design units. Each piece is crafted using premium materials and precise engineering.
             </p>
           </div>
 
-          <div className="flex flex-col items-end gap-2 border-t border-black/10 pt-4 hidden md:flex">
-             <span className="text-[10px] font-mono text-accent uppercase tracking-widest">{filteredArtifacts.length} Units Available</span>
-             <Terminal size={14} className="text-zinc-200" />
+          <div className="hidden md:flex flex-col items-end gap-2 border-t border-black/5 pt-4">
+             <span className="text-sm font-medium text-zinc-500">{filteredArtifacts.length} Units Available</span>
           </div>
         </header>
 
         {/* Filter Section */}
-        <div className="mb-16 flex flex-col md:flex-row gap-12 border-y border-black/5 py-8">
+        <div className="mb-12 flex flex-col md:flex-row gap-8 border-y border-black/5 py-8">
            <div className="space-y-4 flex-1">
-              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Filter by Series</p>
-              <div className="flex flex-wrap gap-4">
+              <p className="text-xs font-medium text-zinc-400 uppercase tracking-widest">Filter by Series</p>
+              <div className="flex flex-wrap gap-3">
                  {uniqueSeries.map(s => (
                     <button 
                       key={s} 
                       onClick={() => setFilterSeries(s)}
-                      className={`text-[10px] font-mono px-4 py-2 border transition-all uppercase tracking-widest
-                        ${filterSeries === s ? 'border-accent text-accent bg-accent/5' : 'border-black/5 text-zinc-400 hover:text-foreground'}`}
+                      className={`text-sm font-medium px-5 py-2 rounded-full transition-colors
+                        ${filterSeries === s ? 'bg-foreground text-white' : 'bg-muted text-zinc-600 hover:bg-black/5'}`}
                     >
                       {s === "ALL" ? "All Series" : s}
                     </button>
@@ -78,16 +73,17 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
            </div>
            
            <div className="space-y-4">
-              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Availability</p>
-              <div className="flex gap-4">
+              <p className="text-xs font-medium text-zinc-400 uppercase tracking-widest">Availability</p>
+              <div className="flex flex-wrap gap-3">
                  {statuses.map(s => (
                     <button 
                       key={s} 
                       onClick={() => setFilterStatus(s)}
-                      className={`text-[10px] font-mono px-4 py-2 border transition-all uppercase tracking-widest
-                        ${filterStatus === s ? 'border-accent text-accent bg-accent/5' : 'border-black/5 text-zinc-400 hover:text-foreground'}`}
+                      className={`text-sm font-medium px-5 py-2 rounded-full transition-colors
+                        ${filterStatus === s ? 'bg-foreground text-white' : 'bg-muted text-zinc-600 hover:bg-black/5'}`}
                     >
-                      {s === "ALL" ? "All Status" : s}
+                      {s === "ALL" ? "All Status" : 
+                       s === "AVAILABLE" ? "In Stock" : "Sold Out"}
                     </button>
                  ))}
               </div>
@@ -95,96 +91,90 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
         </div>
 
         {/* The Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredArtifacts.map((artifact) => (
             <Link 
               key={artifact.slug}
               href={`/collections/${artifact.slug}`}
-              className="group"
+              className="group flex flex-col"
             >
-              <HudContainer className="hover:border-accent/30 transition-all duration-500 aspect-[4/5] flex flex-col justify-between bg-white">
-                {/* TOP: Title & Price */}
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[8px] font-mono text-accent uppercase tracking-widest">Series 01</span>
-                    </div>
-                    <h3 className="text-[20px] md:text-[24px] font-bold text-foreground tracking-widest uppercase group-hover:text-accent transition-colors duration-500">
+              <div className="aspect-[4/5] bg-muted/30 rounded-3xl p-6 relative flex flex-col items-center justify-center overflow-hidden transition-all duration-500 group-hover:bg-muted/60">
+                 {/* Top Tags */}
+                 <div className="absolute top-6 left-6 flex items-center gap-2">
+                    <span className="text-xs font-semibold text-zinc-500 tracking-wide uppercase">{artifact.series || "Series 01"}</span>
+                 </div>
+                 
+                 {/* Status Tag */}
+                 <div className="absolute top-6 right-6">
+                    <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full ${artifact.status === 'AVAILABLE' ? 'bg-accent/10 text-accent' : 'bg-red-500/10 text-red-500'}`}>
+                      {artifact.status === 'AVAILABLE' ? 'In Stock' : 'Sold Out'}
+                    </span>
+                 </div>
+
+                 {/* Center Image */}
+                 <div className="w-full h-2/3 relative flex items-center justify-center mt-12">
+                    {artifact.media.src ? (
+                       <img 
+                         src={artifact.media.src} 
+                         alt={artifact.title} 
+                         className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-700" 
+                       />
+                    ) : (
+                      <div className="w-20 h-20 rounded-2xl border border-black/5 bg-white shadow-sm flex items-center justify-center">
+                         <div className="w-2 h-2 bg-zinc-300 rounded-full" />
+                      </div>
+                    )}
+                 </div>
+              </div>
+              
+              {/* Bottom Content Area outside the card */}
+              <div className="pt-6 px-2 flex justify-between items-start">
+                 <div className="space-y-1">
+                    <h3 className="text-lg font-semibold text-foreground tracking-tight group-hover:text-accent transition-colors">
                       {artifact.title}
                     </h3>
-                  </div>
-                  <div className="flex flex-col items-end gap-2 text-right">
-                     <span className="text-[11px] font-bold text-foreground font-mono">{artifact.price}</span>
-                     <div className="flex flex-col gap-2">
-                        <button 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            addItem({
-                              id: artifact.id, 
-                              slug: artifact.slug,
-                              title: artifact.title,
-                              price: artifact.price,
-                              quantity: 1,
-                              media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
-                            });
-                          }}
-                          className="p-1 px-3 border border-black/5 bg-muted hover:bg-black hover:text-white transition-all text-zinc-500 font-mono text-[8px] tracking-tighter uppercase"
-                        >
-                          Add to Cart
-                        </button>
-                        <button 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            addItem({
-                              id: artifact.id,
-                              slug: artifact.slug,
-                              title: artifact.title,
-                              price: artifact.price,
-                              quantity: 1,
-                              media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
-                            });
-                            router.push("/checkout?method=PHONEPE");
-                          }}
-                          className="p-1 px-3 border border-accent/20 bg-accent/5 hover:bg-accent hover:text-white transition-all text-accent font-mono text-[8px] tracking-tighter uppercase"
-                        >
-                          Buy Now
-                        </button>
-                     </div>
-                  </div>
-                </div>
-
-                {/* CENTER: Image */}
-                <div className="relative flex-1 flex items-center justify-center p-6 bg-muted overflow-hidden my-6">
-                   {artifact.media.src ? (
-                      <img 
-                        src={artifact.media.src} 
-                        alt={artifact.title} 
-                        className="w-full h-full object-contain group-hover:scale-105 transition-all duration-700" 
-                      />
-                   ) : (
-                     <div className="w-full h-full border border-black/5 relative flex items-center justify-center">
-                        <div className="w-2 h-2 bg-zinc-200 rounded-full" />
-                     </div>
-                   )}
-                </div>
-
-                {/* BOTTOM: Status */}
-                <div className="flex items-end justify-between border-t border-black/5 pt-6">
-                  <div className="space-y-1">
-                    <span className="text-zinc-400 text-[8px] uppercase font-bold tracking-widest">Availability</span>
-                    <p className={`text-[10px] font-bold uppercase transition-colors ${artifact.status === 'AVAILABLE' ? 'text-accent' : 'text-red-400'}`}>
-                      {artifact.status === 'AVAILABLE' ? 'In Stock' : 'Sold Out'}
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 opacity-20 group-hover:opacity-100 transition-opacity">
-                     <span className="text-zinc-600 text-[9px] uppercase font-bold">Details</span>
-                     <div className="w-4 h-[1px] bg-black" />
-                  </div>
-                </div>
-              </HudContainer>
+                    <p className="text-zinc-500 font-medium">{artifact.price}</p>
+                 </div>
+                 
+                 <div className="flex gap-2">
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addItem({
+                          id: artifact.id, 
+                          slug: artifact.slug,
+                          title: artifact.title,
+                          price: artifact.price,
+                          quantity: 1,
+                          media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                        });
+                      }}
+                      className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-zinc-600 hover:bg-foreground hover:text-white transition-colors"
+                      title="Add to Cart"
+                    >
+                      <Plus size={18} />
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addItem({
+                          id: artifact.id,
+                          slug: artifact.slug,
+                          title: artifact.title,
+                          price: artifact.price,
+                          quantity: 1,
+                          media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                        });
+                        router.push("/checkout?method=PHONEPE");
+                      }}
+                      className="px-5 h-10 rounded-full bg-accent/10 text-accent font-medium text-sm hover:bg-accent hover:text-white transition-colors"
+                    >
+                      Buy Now
+                    </button>
+                 </div>
+              </div>
             </Link>
           ))}
         </div>
