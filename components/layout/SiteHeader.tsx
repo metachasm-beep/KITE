@@ -70,7 +70,7 @@ export function SiteHeader() {
                   </Link>
                 )}
                 <Link href="/account" className="p-0.5 text-zinc-400 hover:text-foreground transition-colors border border-black/5 rounded-full overflow-hidden w-8 h-8 flex items-center justify-center bg-muted">
-                  {session.user.image ? (
+                  {session.user?.image ? (
                     <img src={session.user.image} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
                     <User size={16} />
