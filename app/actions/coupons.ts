@@ -58,3 +58,13 @@ export async function validateCoupon(code: string) {
     }
   };
 }
+export async function getCoupons() {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user as any).role !== "admin") {
+    throw new Error("UNAUTHORIZED_ACCESS");
+  }
+
+  return await prisma.coupon.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+}

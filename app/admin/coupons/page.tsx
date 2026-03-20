@@ -29,7 +29,7 @@ export default function CouponsAdmin() {
 
   const loadCoupons = async () => {
     try {
-      const res = await fetch("/api/admin/coupons").then(r => r.json());
+      const res = await getCoupons();
       setCoupons(res);
     } catch (e) {
       console.error(e);
