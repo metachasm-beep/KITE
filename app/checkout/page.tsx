@@ -3,13 +3,14 @@
 import { useState, Suspense } from "react";
 import { useCart } from "@/lib/contexts/CartContext";
 import { createOrder } from "@/app/actions/orders";
+import { validateCoupon } from "@/app/actions/coupons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { HudContainer } from "@/components/common/HudContainer";
 import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 import { SystemButton } from "@/components/common/SystemButton";
-import { Package, MapPin, CreditCard, ChevronRight, Loader2, CheckCircle2, Lock } from "lucide-react";
+import { Package, MapPin, CreditCard, ChevronRight, Loader2, CheckCircle2, Lock, Tag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Step = "SUMMARY" | "SHIPPING" | "PAYMENT" | "COMPLETE";
@@ -23,6 +24,11 @@ function CheckoutPageContent() {
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"CASH" | "PHONEPE">("PHONEPE");
+
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [couponError, setCouponError] = useState("");
+  const [isApplying, setIsApplying] = useState(false);
 
   useEffect(() => {
     const method = searchParams.get("method");
@@ -43,6 +49,19 @@ function CheckoutPageContent() {
     phone: "",
   });
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode) return;
+    setIsApplying(true);
+    setCouponError("");
+    const res = await validateCoupon(couponCode);
+    if (res.success) {
+      setAppliedCoupon(res.coupon);
+    } else {
+      setCouponError(res.error || "INVALID_COUPON");
+    }
+    setIsApplying(false);
+  };
+
   const handleCheckout = async () => {
     setLoading(true);
     const res = await createOrder({
@@ -52,9 +71,10 @@ function CheckoutPageContent() {
         quantity: i.quantity,
         price: parseFloat(i.price.replace(/[^0-9.]/g, '')),
       })),
-      totalAmount,
+      totalAmount: discountedTotal, // Send the amount the user expects to pay
       paymentMethod,
       shippingAddress: address,
+      couponCode: appliedCoupon?.code,
     });
 
     if (res.success) {
@@ -74,6 +94,12 @@ function CheckoutPageContent() {
       setLoading(false);
     }
   };
+
+  const discountedTotal = appliedCoupon 
+    ? (appliedCoupon.discountType === "PERCENTAGE" 
+        ? totalAmount - (totalAmount * appliedCoupon.discountValue / 100)
+        : Math.max(0, totalAmount - appliedCoupon.discountValue))
+    : totalAmount;
 
   if (status === "loading") {
     return (
@@ -303,6 +329,12 @@ function CheckoutPageContent() {
                          <span>Subtotal</span>
                          <span className="text-foreground">₹{totalAmount.toLocaleString()}</span>
                       </div>
+                      {appliedCoupon && (
+                        <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-accent">
+                           <span>Discount ({appliedCoupon.code})</span>
+                           <span>-₹{(totalAmount - discountedTotal).toLocaleString()}</span>
+                        </div>
+                      )}
                       <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-zinc-400">
                          <span>Shipping</span>
                          <span className="text-accent">Free</span>
@@ -314,10 +346,35 @@ function CheckoutPageContent() {
                    <div className="flex justify-between items-end">
                       <span className="text-zinc-400 font-mono text-[10px] uppercase tracking-widest">Total</span>
                       <span className="text-3xl font-mono text-foreground tracking-tighter">
-                         ₹{totalAmount.toLocaleString()}
+                         ₹{discountedTotal.toLocaleString()}
                       </span>
                    </div>
                 </HudContainer>
+
+                <div className="space-y-4">
+                   <div className="flex items-center gap-2 mb-2">
+                      <Tag size={12} className="text-zinc-400" />
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 font-bold">Offer Code</span>
+                   </div>
+                   <div className="flex gap-2">
+                      <input 
+                        type="text" 
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        placeholder="ENTER_CODE"
+                        className="flex-1 bg-muted border border-black/5 p-3 text-[10px] font-mono text-foreground focus:outline-none focus:border-accent uppercase"
+                      />
+                      <button 
+                        onClick={handleApplyCoupon}
+                        disabled={isApplying || !couponCode}
+                        className="px-6 py-2 bg-black text-white text-[10px] font-mono uppercase tracking-widest hover:bg-accent transition-colors disabled:opacity-40"
+                      >
+                         {isApplying ? <Loader2 size={12} className="animate-spin" /> : "APPLY"}
+                      </button>
+                   </div>
+                   {couponError && <p className="text-[9px] font-mono text-red-500 uppercase">{couponError}</p>}
+                   {appliedCoupon && <p className="text-[9px] font-mono text-accent uppercase font-bold">Coupon Applied: {appliedCoupon.code}</p>}
+                </div>
              </div>
 
              <div className="p-6 bg-muted border border-black/5">

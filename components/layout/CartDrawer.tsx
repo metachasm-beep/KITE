@@ -125,14 +125,18 @@ export const CartDrawer = () => {
                   <div className="h-px bg-accent/10 w-full" />
                 </div>
                 
-                <SystemButton href="/checkout" onClick={toggleCart} className="w-full py-6 flex items-center justify-center gap-3">
+                <SystemButton 
+                  href="/checkout" 
+                  onClick={() => toggleCart()} 
+                  className="w-full py-6 flex items-center justify-center gap-3"
+                >
                   CHECKOUT
                   <ArrowRight size={16} />
                 </SystemButton>
                 
                 <SystemButton 
                   href="/checkout?method=PHONEPE" 
-                  onClick={toggleCart}
+                  onClick={() => toggleCart()}
                   className="w-full py-4 border-accent/20 bg-accent/5 hover:bg-accent/10 text-accent flex items-center justify-center gap-3 text-[10px]"
                 >
                   FAST SETTLEMENT

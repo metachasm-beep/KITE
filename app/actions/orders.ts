@@ -20,6 +20,7 @@ export async function createOrder(data: {
     country: string;
     phone: string;
   };
+  couponCode?: string;
 }) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user?.email) {
@@ -42,16 +43,45 @@ export async function createOrder(data: {
       });
     }
 
+    // Calculate base total from items
+    const baseTotal = data.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    let finalTotal = baseTotal;
+    let discountAmount = 0;
+    let couponId: string | null = null;
+
+    if (data.couponCode) {
+       const coupon = await prisma.coupon.findUnique({
+          where: { code: data.couponCode.toUpperCase() }
+       });
+
+       if (coupon && coupon.isActive && (!coupon.expiresAt || coupon.expiresAt > new Date()) && (!coupon.usageLimit || coupon.usageCount < coupon.usageLimit)) {
+          couponId = coupon.id;
+          if (coupon.discountType === "PERCENTAGE") {
+             discountAmount = (baseTotal * coupon.discountValue) / 100;
+          } else {
+             discountAmount = coupon.discountValue;
+          }
+          finalTotal = Math.max(0, baseTotal - discountAmount);
+          
+          await prisma.coupon.update({
+             where: { id: coupon.id },
+             data: { usageCount: { increment: 1 } }
+          });
+       }
+    }
+
     // Create the order and items in a transaction
     const order = await prisma.$transaction(async (tx) => {
       const newOrder = await tx.order.create({
         data: {
           userId: user.id,
-          totalAmount: data.totalAmount,
+          totalAmount: finalTotal,
+          discountAmount: discountAmount,
+          couponId: couponId,
           status: "PENDING",
           paymentMethod: data.paymentMethod,
           shippingAddress: data.shippingAddress as any,
-          billingAddress: data.shippingAddress as any, // Simple case: billing = shipping
+          billingAddress: data.shippingAddress as any,
           items: {
             create: data.items.map(item => ({
               artifactId: item.artifactId,

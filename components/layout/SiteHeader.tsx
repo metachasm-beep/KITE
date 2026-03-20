@@ -69,8 +69,12 @@ export function SiteHeader() {
                     <Shield size={16} />
                   </Link>
                 )}
-                <Link href="/account" className="p-2 text-zinc-400 hover:text-foreground transition-colors border border-black/5 rounded-sm">
-                  <User size={16} />
+                <Link href="/account" className="p-0.5 text-zinc-400 hover:text-foreground transition-colors border border-black/5 rounded-full overflow-hidden w-8 h-8 flex items-center justify-center bg-muted">
+                  {session.user.image ? (
+                    <img src={session.user.image} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <User size={16} />
+                  )}
                 </Link>
                 <button 
                   onClick={() => signOut({ callbackUrl: '/' })}
