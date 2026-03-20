@@ -3,19 +3,6 @@
 import Link from "next/link";
 import { MoveLeft, ShoppingBag, Trash2, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
-
-export default function CartPage() {
-  // Mock cart items for UI demonstration
-  const cartItems = [
-    { id: "1", title: "UNIT_01 // VOID FIGURE", price: "₹1,999", qty: 1, series: "SERIES_01" },
-  ];
-
-  return (
-"use client";
-
-import Link from "next/link";
-import { MoveLeft, ShoppingBag, Trash2, ShieldCheck } from "lucide-react";
-import { motion } from "framer-motion";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 
 export default function CartPage() {
@@ -142,7 +129,5 @@ export default function CartPage() {
         ${isCyberpunk ? "brightness-100" : "invert opacity-[0.05]"}`} 
            style={{ backgroundImage: 'repeating-linear-gradient(0deg, #fff, #fff 1px, transparent 1px, transparent 10px)' }} />
     </main>
-  );
-}
   );
 }
