@@ -1,6 +1,8 @@
 "use client";
 
 import { useTheme } from "@/lib/contexts/ThemeContext";
+import { motion } from "framer-motion";
+import { Box, Layers, Maximize } from "lucide-react";
 import SplitText from "@/components/reactbits/SplitText";
 import TrueFocus from "@/components/reactbits/TrueFocus";
 import DecryptedText from "@/components/reactbits/DecryptedText";
@@ -76,10 +78,10 @@ export function PhilosophySection() {
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="text-4xl md:text-6xl font-semibold leading-tight tracking-tight text-foreground"
+                  className="text-4xl md:text-7xl font-bold leading-tight tracking-tight text-foreground font-heading"
                 >
                   Studies in <br className="hidden md:block" />
-                  <span className="text-zinc-400">Form & Beauty</span>
+                  <span className="text-stone-400">Form & Beauty</span>
                 </motion.h3>
               )}
             </div>
