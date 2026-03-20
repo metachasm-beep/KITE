@@ -4,6 +4,9 @@ import Link from "next/link";
 import { MoveLeft, ShoppingBag, Trash2, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/lib/contexts/ThemeContext";
+import { SpringButton } from "@/components/ruixen/spring-button";
+import TrueFocus from "@/components/reactbits/TrueFocus";
+import DecryptedText from "@/components/reactbits/DecryptedText";
 
 export default function CartPage() {
   const { isCyberpunk } = useTheme();
@@ -105,13 +108,29 @@ export default function CartPage() {
                       
                       <div className={`pt-8 border-t flex justify-between items-end ${isCyberpunk ? "border-white/10" : "border-black/5"}`}>
                          <span className={`text-[12px] font-bold uppercase tracking-widest ${isCyberpunk ? "text-white" : "text-foreground"}`}>TOTAL_ALLOCATION</span>
-                         <span className="text-[22px] font-mono text-accent leading-none">₹2,509</span>
+                         {isCyberpunk ? (
+                           <span className="text-[22px] font-mono text-[#00f5d4] leading-none cyber-glow uppercase">₹2,509</span>
+                         ) : (
+                           <TrueFocus 
+                             sentence="₹2,509" 
+                             className="text-[22px] font-mono text-accent leading-none" 
+                             focusRadius={50}
+                           />
+                         )}
                       </div>
                    </div>
 
-                   <button className="btn-hud w-full py-5 text-[12px]">
-                     INIT_CHECKOUT_DECRYPTION
-                   </button>
+                   <SpringButton 
+                     onClick={() => console.log('Checkout')}
+                     className="w-full py-5 text-[12px]"
+                     variant="primary"
+                   >
+                     {isCyberpunk ? (
+                       <DecryptedText text="INIT_CHECKOUT_DECRYPTION" animateOn="hover" />
+                     ) : (
+                       "Initialize Secured Checkout"
+                     )}
+                   </SpringButton>
                    
                    <div className="flex items-center justify-center gap-2 opacity-30 pt-4">
                       <ShieldCheck size={14} className="text-zinc-600" />

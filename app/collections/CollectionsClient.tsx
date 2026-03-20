@@ -14,7 +14,8 @@ import BlurText from "@/components/reactbits/BlurText";
 import TrueFocus from "@/components/reactbits/TrueFocus";
 import VariableWeight from "@/components/reactbits/VariableWeight";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/ThreeDCard";
-import { SystemButton } from "@/components/common/SystemButton";
+import { SpringButton } from "@/components/ruixen/spring-button";
+import { GooeyPagination } from "@/components/ruixen/gooey-pagination";
 
 interface CollectionsClientProps {
   initialArtifacts: Artifact[];
@@ -189,7 +190,7 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                             {artifact.status === 'AVAILABLE' ? (isCyberpunk ? 'IN_STOCK' : 'In Stock') : (isCyberpunk ? 'SOLD_OUT' : 'Sold Out')}
                           </span>
                        </CardItem>
-
+ 
                        {/* Center Image */}
                        <CardItem translateZ="100" className="w-full h-2/3 relative flex items-center justify-center mt-12">
                           {artifact.media.src ? (
@@ -212,9 +213,21 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                   {/* Bottom Content Area */}
                   <div className="pt-6 flex justify-between items-start">
                      <div className="space-y-1">
-                        <CardItem translateZ="40" as="h3" className={`text-lg font-bold tracking-tight
-                          ${isCyberpunk ? "text-[#00f5d4] font-mono" : "text-foreground"}`}>
-                          {isCyberpunk ? artifact.title.toUpperCase() : artifact.title}
+                        <CardItem translateZ="40" as="div" className="min-h-[28px]">
+                          {isCyberpunk ? (
+                            <DecryptedText
+                              text={artifact.title.toUpperCase()}
+                              className="text-lg font-bold font-mono text-[#00f5d4] leading-tight"
+                              animateOn="hover"
+                            />
+                          ) : (
+                            <VariableWeight
+                              text={artifact.title}
+                              className="text-lg font-bold tracking-tight text-foreground"
+                              initialWeight={600}
+                              hoverWeight={900}
+                            />
+                          )}
                         </CardItem>
                         <CardItem translateZ="30" as="p" className={`font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono text-sm" : "text-zinc-500"}`}>
                           {isCyberpunk ? `VAL: ${artifact.price}` : `₹${artifact.price}`}
@@ -223,38 +236,38 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                      
                      <div className="flex gap-2">
                         <CardItem translateZ="60">
-                          <SystemButton 
-                            variant="secondary"
-                            onClick={() => addItem({
-                              id: artifact.id, 
-                              slug: artifact.slug,
-                              title: artifact.title,
-                              price: artifact.price,
-                              quantity: 1,
-                              media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
-                            })}
-                            className="!p-3 !rounded-full"
-                          >
-                            <Plus size={18} />
-                          </SystemButton>
+                           <SpringButton 
+                             variant="secondary"
+                             onClick={() => addItem({
+                               id: artifact.id, 
+                               slug: artifact.slug,
+                               title: artifact.title,
+                               price: artifact.price,
+                               quantity: 1,
+                               media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                             })}
+                             className="!p-3 !rounded-full"
+                           >
+                             <Plus size={18} />
+                           </SpringButton>
                         </CardItem>
                         <CardItem translateZ="60">
-                          <SystemButton 
-                            onClick={() => {
-                              addItem({
-                                id: artifact.id, 
-                                slug: artifact.slug,
-                                title: artifact.title,
-                                price: artifact.price,
-                                quantity: 1,
-                                media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
-                              });
-                              router.push("/checkout?method=PHONEPE");
-                            }}
-                            className="!px-6 !py-2.5"
-                          >
-                            {isCyberpunk ? "PURCHASE" : "Buy Now"}
-                          </SystemButton>
+                           <SpringButton 
+                             onClick={() => {
+                               addItem({
+                                 id: artifact.id, 
+                                 slug: artifact.slug,
+                                 title: artifact.title,
+                                 price: artifact.price,
+                                 quantity: 1,
+                                 media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                               });
+                               router.push("/checkout?method=PHONEPE");
+                             }}
+                             className="!px-6 !py-2.5"
+                           >
+                             {isCyberpunk ? "PURCHASE" : "Buy Now"}
+                           </SpringButton>
                         </CardItem>
                      </div>
                   </div>
@@ -262,6 +275,14 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
               </CardBody>
             </CardContainer>
           ))}
+        </div>
+
+        {/* Pagination Section */}
+        <div className="mt-40 flex justify-center">
+           <GooeyPagination 
+             totalPages={5} 
+             onChange={(p) => console.log('Page:', p)} 
+           />
         </div>
       </div>
     </main>

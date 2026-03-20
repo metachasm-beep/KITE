@@ -8,6 +8,8 @@ import Aurora from "@/components/reactbits/Aurora";
 import GridScan from "@/components/reactbits/GridScan";
 import SplitText from "@/components/reactbits/SplitText";
 import DecryptedText from "@/components/reactbits/DecryptedText";
+import BlurText from "@/components/reactbits/BlurText";
+import { SpringButton } from "@/components/ruixen/spring-button";
 
 export function HeroSection() {
   const { isCyberpunk } = useTheme();
@@ -68,21 +70,31 @@ export function HeroSection() {
 
         {/* Huge Title */}
         <div className="relative mb-8 w-full max-w-5xl mx-auto flex flex-col items-center">
-          <SplitText
-            text="Refined Essentials"
-            className={`text-6xl md:text-8xl lg:text-9xl font-semibold leading-[0.9] tracking-tight
-              ${isCyberpunk ? "text-[#00f5d4] font-mono cyber-glow" : "text-foreground"}`}
-            delay={40}
-            duration={0.8}
-            textAlign="center"
-          />
+          {isCyberpunk ? (
+            <SplitText
+              text="Refined essentials"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1] tracking-tight text-[#00f5d4] font-mono cyber-glow uppercase"
+              delay={40}
+              duration={0.8}
+              textAlign="center"
+            />
+          ) : (
+            <BlurText
+              text="Refined Essentials"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1] tracking-tight text-foreground"
+              delay={80}
+              animateBy="words"
+              direction="bottom"
+              textAlign="center"
+            />
+          )}
         </div>
 
         {/* Subtitle */}
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 1 }}
+          transition={{ delay: 0.8, duration: 1 }}
           className="max-w-2xl mx-auto mb-12"
         >
           {isCyberpunk ? (
@@ -103,27 +115,24 @@ export function HeroSection() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="flex flex-col sm:flex-row items-center gap-4"
+          transition={{ delay: 1.4, duration: 0.8 }}
+          className="flex flex-col sm:flex-row items-center gap-6"
         >
-          <Link 
-            href="/collections" 
-            className={`px-10 py-4 rounded-full font-medium transition-all w-full sm:w-auto shadow-sm
-              ${isCyberpunk 
-                ? "bg-[#00f5d4] text-black hover:bg-white hover:scale-105 rounded-none font-mono" 
-                : "bg-foreground text-white hover:bg-black"}`}
+          <SpringButton 
+            onClick={() => window.location.href = '/collections'}
+            variant="primary"
+            className="w-full sm:w-auto min-w-[220px]"
           >
             {isCyberpunk ? "> ENTER_CATALOG" : "Explore the Shop"}
-          </Link>
-          <Link 
-            href="/system" 
-            className={`px-10 py-4 rounded-full font-medium transition-all w-full sm:w-auto border
-              ${isCyberpunk 
-                ? "border-[#00f5d4]/50 text-[#00f5d4] hover:bg-[#00f5d4]/10 rounded-none font-mono" 
-                : "bg-muted text-foreground border-black/5 hover:bg-black/5"}`}
+          </SpringButton>
+          
+          <SpringButton 
+            onClick={() => window.location.href = '/system'}
+            variant="secondary"
+            className="w-full sm:w-auto min-w-[220px]"
           >
-            {isCyberpunk ? "// SYSTEM_INTEL" : "Our Story"}
-          </Link>
+            {isCyberpunk ? "// SYSTEM_INTEL" : "Technical Specs"}
+          </SpringButton>
         </motion.div>
 
         {/* Minimal Hero Graphic / Product Hint */}

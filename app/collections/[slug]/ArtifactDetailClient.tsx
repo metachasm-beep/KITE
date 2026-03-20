@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { MoveLeft } from "lucide-react";
+import { useState } from "react";
 import { useCart } from "@/lib/contexts/CartContext";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 import { Artifact } from "@/lib/cms";
 import { SpringAccordion, type AccordionItem } from "@/components/ruixen/spring-accordion";
+import { SpringButton } from "@/components/ruixen/spring-button";
+import { MagneticTabs, type MagneticTabItem } from "@/components/ruixen/magnetic-tabs";
 import DecryptedText from "@/components/reactbits/DecryptedText";
+import TrueFocus from "@/components/reactbits/TrueFocus";
 
 interface ArtifactDetailClientProps {
   artifact: Artifact;
@@ -216,47 +220,93 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
 
           <div className={`h-px w-full ${isCyberpunk ? "bg-[#00f5d4]/10" : "bg-black/5"}`} />
 
-          {/* Specifications */}
+          {/* Tabbed Content Area */}
           <div className="space-y-6">
-             <h3 className={`text-sm font-semibold uppercase tracking-wide ${isCyberpunk ? "text-[#00f5d4] font-mono" : "text-foreground"}`}>
-               {isCyberpunk ? "UNIT_SPECIFICATIONS" : "Specifications"}
-             </h3>
-             
-             <div className="space-y-3">
-                {artifact.specs.map((spec) => (
-                  <div key={spec.label} className={`flex justify-between items-center py-3 border-b ${isCyberpunk ? "border-[#00f5d4]/10" : "border-black/5"}`}>
-                    <span className={`text-sm font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono tracking-wider uppercase text-xs" : "text-zinc-500"}`}>
-                      {isCyberpunk ? (
-                        <DecryptedText text={spec.label.toUpperCase()} animateOn="hover" speed={50} />
-                      ) : (
-                        spec.label
-                      )}
-                    </span>
-                    <span className={`text-sm font-semibold text-right ${isCyberpunk ? "text-[#e8f4f8] font-mono" : "text-foreground"}`}>
-                      {isCyberpunk ? spec.value.toUpperCase() : spec.value}
-                    </span>
-                  </div>
-                ))}
-             </div>
+            <MagneticTabs 
+              className="w-full"
+              items={[
+                { 
+                  value: "specs", 
+                  label: isCyberpunk ? "UNIT_SPECS" : "Specifications",
+                  content: (
+                    <div className="space-y-3 pt-4">
+                       {artifact.specs.map((spec) => (
+                         <div key={spec.label} className={`flex justify-between items-center py-3 border-b ${isCyberpunk ? "border-[#00f5d4]/10" : "border-black/5"}`}>
+                           <span className={`text-sm font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono tracking-wider uppercase text-[10px]" : "text-zinc-500"}`}>
+                             {isCyberpunk ? spec.label.toUpperCase() : spec.label}
+                           </span>
+                           <span className={`text-sm font-semibold text-right ${isCyberpunk ? "text-[#e8f4f8] font-mono" : "text-foreground"}`}>
+                             {isCyberpunk ? spec.value.toUpperCase() : spec.value}
+                           </span>
+                         </div>
+                       ))}
+                    </div>
+                  )
+                },
+                { 
+                  value: "material", 
+                  label: isCyberpunk ? "SUBSTRATE_LOGIC" : "Material Science",
+                  content: (
+                    <div className="space-y-6 pt-4">
+                      <p className={`text-sm leading-relaxed font-medium ${isCyberpunk ? "text-[#00f5d4]/70 font-mono" : "text-zinc-500"}`}>
+                        {materialCopy.intro}
+                      </p>
+                      <div className="space-y-4">
+                        {materialCopy.sections.map((section, i) => (
+                          <div key={i} className={`p-4 rounded-xl border ${isCyberpunk ? "bg-[#0d1117]/50 border-[#00f5d4]/10" : "bg-white/50 border-black/5 shadow-sm"}`}>
+                             <h4 className={`text-xs font-bold mb-2 uppercase tracking-widest ${isCyberpunk ? "text-[#00f5d4] font-mono" : "text-foreground"}`}>
+                               {section.title}
+                             </h4>
+                             <p className={`text-xs leading-relaxed ${isCyberpunk ? "text-[#00f5d4]/40 font-mono uppercase" : "text-zinc-500"}`}>
+                               {section.body}
+                             </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                },
+                {
+                  value: "faq",
+                  label: isCyberpunk ? "QUERY_RELAY" : "Questions",
+                  content: (
+                    <div className="pt-4">
+                       <SpringAccordion items={toAccordionItems(faqItems)} />
+                    </div>
+                  )
+                }
+              ]}
+            />
           </div>
 
+          <div className={`h-px w-full ${isCyberpunk ? "bg-[#00f5d4]/10" : "bg-black/5"}`} />
+
           {/* Price & Add to Cart */}
-          <div className={`p-6 rounded-3xl ${isCyberpunk ? "bg-[#0d1117] border border-[#00f5d4]/20" : "bg-muted/20 border border-black/5"}`}>
-            <div className="flex items-end justify-between mb-6">
+          <div className={`p-8 rounded-[2rem] border transition-all duration-700
+            ${isCyberpunk ? "bg-[#0d1117] border-[#00f5d4]/20 shadow-[0_0_30px_rgba(0,245,212,0.05)]" : "bg-muted/10 border-black/5 shadow-sm"}`}>
+            <div className="flex items-end justify-between mb-8">
               <div className="flex flex-col gap-1">
-                 <span className={`text-sm font-medium ${isCyberpunk ? "text-[#00f5d4]/50 font-mono uppercase tracking-wider" : "text-zinc-400"}`}>
+                 <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isCyberpunk ? "text-[#00f5d4]/50 font-mono" : "text-zinc-400"}`}>
                    {isCyberpunk ? "ACQUISITION_COST" : "Price"}
                  </span>
-                 <span className={`text-3xl font-semibold tracking-tight ${isCyberpunk ? "text-[#00f5d4] cyber-glow font-mono" : "text-foreground"}`}>
-                   {artifact.price}
-                 </span>
+                 {isCyberpunk ? (
+                   <span className="text-3xl font-bold tracking-tight text-[#00f5d4] cyber-glow font-mono">
+                     {artifact.price}
+                   </span>
+                 ) : (
+                   <TrueFocus
+                     sentence={`₹${artifact.price}`}
+                     className="text-3xl font-bold tracking-tight text-foreground"
+                     focusRadius={60}
+                   />
+                 )}
               </div>
               
               <div className="text-right flex flex-col gap-1">
-                 <span className={`text-sm font-medium ${isCyberpunk ? "text-[#00f5d4]/50 font-mono uppercase tracking-wider" : "text-zinc-400"}`}>
+                 <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isCyberpunk ? "text-[#00f5d4]/50 font-mono" : "text-zinc-400"}`}>
                    {isCyberpunk ? "STOCK_STATUS" : "Status"}
                  </span>
-                 <span className={`text-sm font-semibold ${artifact.status === 'AVAILABLE' ? (isCyberpunk ? "text-[#00f5d4]" : "text-accent") : "text-red-500"}`}>
+                 <span className={`text-sm font-semibold uppercase tracking-widest ${artifact.status === 'AVAILABLE' ? (isCyberpunk ? "text-[#00f5d4]" : "text-accent") : "text-red-500"}`}>
                    {artifact.status === 'AVAILABLE' 
                      ? (isCyberpunk ? "READY_TO_DEPLOY" : "In Stock") 
                      : (isCyberpunk ? "UNIT_DEPLETED" : "Sold Out")}
@@ -264,7 +314,7 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
               </div>
             </div>
 
-            <button 
+            <SpringButton 
               onClick={() => addItem({
                 id: artifact.id,
                 slug: artifact.slug,
@@ -273,49 +323,14 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
                 quantity: 1,
                 media: artifact.media
               })}
-              className={`w-full py-4 font-medium text-center transition-all flex items-center justify-center gap-2 text-base
-                ${artifact.status === "SOLD_OUT" 
-                  ? "opacity-50 cursor-not-allowed bg-muted text-zinc-400 rounded-full" 
-                  : isCyberpunk
-                    ? "border border-[#00f5d4] text-[#00f5d4] hover:bg-[#00f5d4]/10 font-mono tracking-widest uppercase text-sm shadow-[0_0_10px_rgba(0,245,212,0.3)] hover:shadow-[0_0_20px_rgba(0,245,212,0.5)]"
-                    : "bg-foreground text-white hover:bg-black shadow-sm rounded-full"}`}
+              className="w-full py-5 text-base"
               disabled={artifact.status === "SOLD_OUT"}
+              variant="primary"
             >
               {artifact.status === "SOLD_OUT" 
                 ? (isCyberpunk ? "UNIT_UNAVAILABLE" : "Currently Unavailable") 
                 : (isCyberpunk ? "ADD_TO_CART.EXE" : "Add to Cart")}
-            </button>
-          </div>
-
-          <div className={`h-px w-full ${isCyberpunk ? "bg-[#00f5d4]/10" : "bg-black/5"}`} />
-
-          {/* PLA Material Section */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <h3 className={`text-xl font-semibold tracking-tight ${isCyberpunk ? "text-[#e8f4f8] font-mono uppercase" : "text-foreground"}`}>
-                {materialCopy.heading}
-              </h3>
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isCyberpunk ? "border border-[#00f5d4]/40 text-[#00f5d4] font-mono" : "bg-accent/10 text-accent"}`}>
-                {materialCopy.badge}
-              </span>
-            </div>
-            
-            <p className={`text-sm leading-relaxed font-medium ${isCyberpunk ? "text-[#00f5d4]/70 font-mono" : "text-zinc-500"}`}>
-              {materialCopy.intro}
-            </p>
-
-            <div className="space-y-5">
-              {materialCopy.sections.map((section, i) => (
-                <div key={i} className={`p-5 rounded-2xl border ${isCyberpunk ? "bg-[#0d1117] border-[#00f5d4]/10" : "bg-muted/20 border-black/5"}`}>
-                  <h4 className={`text-sm font-bold mb-3 ${isCyberpunk ? "text-[#00f5d4] font-mono tracking-wider" : "text-foreground"}`}>
-                    {section.title}
-                  </h4>
-                  <p className={`text-sm leading-relaxed ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
-                    {section.body}
-                  </p>
-                </div>
-              ))}
-            </div>
+            </SpringButton>
           </div>
 
           <div className={`h-px w-full ${isCyberpunk ? "bg-[#00f5d4]/10" : "bg-black/5"}`} />
