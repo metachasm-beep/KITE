@@ -5,8 +5,9 @@ import { getShiprocketTracking } from "@/lib/shiprocket";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session || (session.user as any).role !== "admin") {
     return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 });
@@ -16,7 +17,7 @@ export async function GET(
   const type = searchParams.get("type") || "awb"; // "awb" or "order"
 
   try {
-    const tracking = await getShiprocketTracking(params.id, type === "awb");
+    const tracking = await getShiprocketTracking(id, type === "awb");
     return NextResponse.json(tracking);
   } catch (error: any) {
     console.error("[Admin Shiprocket Tracking] Error:", error);
