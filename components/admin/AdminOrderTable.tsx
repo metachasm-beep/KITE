@@ -30,7 +30,10 @@ type Order = {
   }[];
 };
 
+import { useTheme } from "@/lib/contexts/ThemeContext";
+
 export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
+  const { isCyberpunk } = useTheme();
   const [orders, setOrders] = useState(initialOrders);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
@@ -58,9 +61,9 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
 
   return (
     <div className="space-y-6">
-      <div className="border border-white/10 bg-[#050505] overflow-hidden">
+      <div className={`border overflow-hidden ${isCyberpunk ? "border-white/10 bg-[#050505]" : "border-black/5 bg-white shadow-sm"}`}>
         <table className="w-full text-left font-mono text-[10px]">
-          <thead className="bg-[#111] text-zinc-500 uppercase tracking-widest border-b border-white/10">
+          <thead className={`uppercase tracking-widest border-b ${isCyberpunk ? "bg-[#111] text-zinc-500 border-white/10" : "bg-muted text-zinc-400 border-black/5"}`}>
             <tr>
               <th className="p-6 font-normal">LOCK_ID / DATE</th>
               <th className="p-6 font-normal">CITIZEN_ID / EMAIL</th>
@@ -69,25 +72,25 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
               <th className="p-6 font-normal text-right">OPERATIONS</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody className={`divide-y ${isCyberpunk ? "divide-white/5" : "divide-black/5"}`}>
             {orders.map((order) => (
-              <tr key={order.id} className="hover:bg-white/[0.02] transition-colors group">
+              <tr key={order.id} className={`transition-colors group ${isCyberpunk ? "hover:bg-white/[0.02]" : "hover:bg-black/[0.01]"}`}>
                 <td className="p-6">
                   <div className="space-y-1">
-                    <span className="text-white font-bold block">{order.id.toUpperCase()}</span>
+                    <span className={`font-bold block ${isCyberpunk ? "text-white" : "text-foreground"}`}>{order.id.toUpperCase()}</span>
                     <span className="text-zinc-600 block">{new Date(order.createdAt).toLocaleString()}</span>
                   </div>
                 </td>
                 <td className="p-6">
                   <div className="space-y-1">
-                    <span className="text-zinc-300 block">{order.user.name || "UNNAMED"}</span>
-                    <span className="text-zinc-600 block">{order.user.email}</span>
+                    <span className={`block ${isCyberpunk ? "text-zinc-300" : "text-zinc-700"}`}>{order.user.name || "UNNAMED"}</span>
+                    <span className="text-zinc-500 block">{order.user.email}</span>
                   </div>
                 </td>
                 <td className="p-6">
                   <div className="space-y-1">
-                    <span className="text-white block font-bold">₹{order.totalAmount.toLocaleString()}</span>
-                    <span className="text-zinc-600 block">[{order.items.length} UNITS]</span>
+                    <span className={`block font-bold ${isCyberpunk ? "text-white" : "text-foreground"}`}>₹{order.totalAmount.toLocaleString()}</span>
+                    <span className="text-zinc-500 block">[{order.items.length} UNITS]</span>
                   </div>
                 </td>
                 <td className="p-6">
@@ -96,7 +99,7 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
                       [{order.status}]
                     </span>
                     {order.awbCode && (
-                      <div className="flex flex-col gap-1 mt-1 border-t border-white/5 pt-1">
+                      <div className={`flex flex-col gap-1 mt-1 border-t pt-1 ${isCyberpunk ? "border-white/5" : "border-black/5"}`}>
                         <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">
                           AWB: <span className="text-accent">{order.awbCode}</span>
                         </span>
@@ -113,7 +116,7 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
                       disabled={updatingId === order.id}
                       value={order.status}
                       onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
-                      className="bg-[#111] border border-white/10 text-[9px] p-2 hover:border-accent transition-colors focus:outline-none uppercase"
+                      className={`text-[9px] p-2 hover:border-accent transition-colors focus:outline-none uppercase border ${isCyberpunk ? "bg-[#111] border-white/10 text-white" : "bg-white border-black/10 text-foreground"}`}
                     >
                       <option value="PENDING">PENDING</option>
                       <option value="PROCESSING">PROCESSING</option>
@@ -125,7 +128,7 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
                     {order.awbCode && (
                       <SystemButton 
                         href={`/admin/logistics?track=${order.awbCode}`} 
-                        className="p-2 text-accent border-accent/20 hover:bg-accent/10"
+                        className={`p-2 text-accent border hover:bg-accent/10 transition-colors ${isCyberpunk ? "border-accent/20" : "border-accent/40"}`}
                         title="TRACK_IN_MISSION_CONTROL"
                       >
                         <Search size={12} />
@@ -148,8 +151,8 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
       </div>
 
       {orders.length === 0 && (
-        <div className="p-24 border border-dashed border-white/5 flex flex-col items-center justify-center space-y-4 opacity-30">
-          <Package size={48} className="text-zinc-900" />
+        <div className={`p-24 border border-dashed flex flex-col items-center justify-center space-y-4 opacity-30 ${isCyberpunk ? "border-white/5" : "border-black/5"}`}>
+          <Package size={48} className={isCyberpunk ? "text-zinc-800" : "text-zinc-200"} />
           <TechnicalLabel label="BUFFER_EMPTY" value="NO_TRANSACTIONS_IN_QUEUE" />
         </div>
       )}

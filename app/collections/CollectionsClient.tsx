@@ -11,6 +11,8 @@ import { useState } from "react";
 import { Artifact } from "@/lib/cms";
 import GlitchText from "@/components/reactbits/GlitchText";
 import DecryptedText from "@/components/reactbits/DecryptedText";
+import { CardContainer, CardBody, CardItem } from "@/components/ui/ThreeDCard";
+import { SystemButton } from "@/components/common/SystemButton";
 
 interface CollectionsClientProps {
   initialArtifacts: Artifact[];
@@ -23,10 +25,10 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
   const [filterSeries, setFilterSeries] = useState<string>("ALL");
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
 
-  const uniqueSeries = ["ALL", ...Array.from(new Set(initialArtifacts.map(a => a.series)))];
+  const uniqueSeries = ["ALL", ...Array.from(new Set(initialArtifacts.map((a: Artifact) => a.series)))];
   const statuses = ["ALL", "AVAILABLE", "SOLD_OUT"];
 
-  const filteredArtifacts = initialArtifacts.filter(a => {
+  const filteredArtifacts = initialArtifacts.filter((a: Artifact) => {
     const seriesMatch = filterSeries === "ALL" || a.series === filterSeries;
     const statusMatch = filterStatus === "ALL" || a.status === filterStatus;
     return seriesMatch && statusMatch;
@@ -89,10 +91,10 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                 {isCyberpunk ? "// FILTER_BY_SERIES" : "Filter by Series"}
               </p>
               <div className="flex flex-wrap gap-3">
-                 {uniqueSeries.map(s => (
+                 {uniqueSeries.map((s: any) => (
                     <button 
-                      key={s} 
-                      onClick={() => setFilterSeries(s)}
+                      key={s as string} 
+                      onClick={() => setFilterSeries(s as string)}
                       className={`text-sm font-medium px-5 py-2 transition-all duration-300
                         ${isCyberpunk 
                           ? filterSeries === s 
@@ -133,116 +135,113 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
            </div>
         </div>
 
-        {/* The Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredArtifacts.map((artifact) => (
-            <Link 
-              key={artifact.slug}
-              href={`/collections/${artifact.slug}`}
-              className="group flex flex-col"
-            >
-              <div className={`aspect-[4/5] p-6 relative flex flex-col items-center justify-center overflow-hidden transition-all duration-500
+        {/* The Grid with 3D Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-20 gap-x-8">
+          {filteredArtifacts.map((artifact: Artifact) => (
+            <CardContainer key={artifact.slug} containerClassName="py-0">
+              <CardBody className={`relative group/card w-full h-auto rounded-3xl p-6 border transition-all duration-500
                 ${isCyberpunk 
-                  ? "bg-black border border-[#00f5d4]/10 group-hover:border-[#00f5d4]/40 group-hover:shadow-[0_0_30px_rgba(0,245,212,0.1)]" 
-                  : "bg-muted/30 rounded-3xl group-hover:bg-muted/60 border border-black/5"}`}>
-                 
-                 {/* Top Tags */}
-                 <div className="absolute top-6 left-6 flex items-center gap-2">
-                    <span className={`text-xs font-semibold tracking-wide uppercase ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
-                      {isCyberpunk ? `// ${artifact.series?.toUpperCase() || "SERIES_01"}` : (artifact.series || "Series 01")}
-                    </span>
-                 </div>
-                 
-                 {/* Status Tag */}
-                 <div className="absolute top-6 right-6">
-                    <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 transition-all
-                      ${isCyberpunk 
-                        ? artifact.status === 'AVAILABLE' 
-                          ? "bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/40" 
-                          : "bg-red-500/10 text-red-500 border border-red-500/40"
-                        : artifact.status === 'AVAILABLE' 
-                          ? "bg-accent/10 text-accent rounded-full" 
-                          : "bg-red-500/10 text-red-500 rounded-full"}`}>
-                      {artifact.status === 'AVAILABLE' ? (isCyberpunk ? 'IN_STOCK' : 'In Stock') : (isCyberpunk ? 'SOLD_OUT' : 'Sold Out')}
-                    </span>
-                 </div>
+                  ? "bg-black border-[#00f5d4]/10 group-hover/card:border-[#00f5d4]/40 shadow-[0_0_30px_rgba(0,245,212,0.05)]" 
+                  : "bg-white border-black/5 shadow-[0_4px_24px_rgba(0,0,0,0.04)]"}`}>
+                
+                <CardItem translateZ="50" className="w-full flex flex-col">
+                  {/* Card Media Wrapper */}
+                  <Link href={`/collections/${artifact.slug}`} className="block">
+                    <div className={`aspect-[4/5] p-6 relative flex flex-col items-center justify-center overflow-hidden rounded-2xl
+                      ${isCyberpunk ? "bg-zinc-950/50" : "bg-muted/30"}`}>
+                       
+                       {/* Top Tags */}
+                       <CardItem translateZ="60" className="absolute top-6 left-6 flex items-center gap-2">
+                          <span className={`text-[10px] font-bold tracking-widest uppercase ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
+                            {isCyberpunk ? `// ${artifact.series?.toUpperCase() || "SERIES_01"}` : (artifact.series || "Series 01")}
+                          </span>
+                       </CardItem>
+                       
+                       {/* Status Tag */}
+                       <CardItem translateZ="60" className="absolute top-6 right-6">
+                          <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1.5
+                            ${isCyberpunk 
+                              ? artifact.status === 'AVAILABLE' 
+                                ? "bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/40" 
+                                : "bg-red-500/10 text-red-500 border border-red-500/40"
+                              : artifact.status === 'AVAILABLE' 
+                                ? "bg-accent/10 text-accent rounded-full" 
+                                : "bg-red-500/10 text-red-500 rounded-full"}`}>
+                            {artifact.status === 'AVAILABLE' ? (isCyberpunk ? 'IN_STOCK' : 'In Stock') : (isCyberpunk ? 'SOLD_OUT' : 'Sold Out')}
+                          </span>
+                       </CardItem>
 
-                 {/* Center Image */}
-                 <div className="w-full h-2/3 relative flex items-center justify-center mt-12">
-                    {artifact.media.src ? (
-                       <img 
-                         src={artifact.media.src} 
-                         alt={artifact.title} 
-                         className={`w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-700
-                           ${isCyberpunk ? "invert brightness-200" : ""}`} 
-                       />
-                    ) : (
-                      <div className={`w-20 h-20 flex items-center justify-center transition-colors
-                        ${isCyberpunk ? "bg-black border border-[#00f5d4]/40 shadow-[0_0_15px_rgba(0,245,212,0.2)]" : "bg-white border border-black/5 rounded-2xl shadow-sm"}`}>
-                         <div className={`w-2 h-2 rounded-full ${isCyberpunk ? "bg-[#00f5d4]" : "bg-zinc-300"}`} />
-                      </div>
-                    )}
-                 </div>
-              </div>
-              
-              {/* Bottom Content Area outside the card */}
-              <div className="pt-6 px-2 flex justify-between items-start">
-                 <div className="space-y-1">
-                    <h3 className={`text-lg font-semibold tracking-tight transition-colors
-                      ${isCyberpunk ? "text-[#00f5d4] font-mono group-hover:text-white" : "text-foreground group-hover:text-accent"}`}>
-                      {isCyberpunk ? artifact.title.toUpperCase() : artifact.title}
-                    </h3>
-                    <p className={`font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono text-sm" : "text-zinc-500"}`}>
-                      {isCyberpunk ? `VAL: ${artifact.price}` : artifact.price}
-                    </p>
-                 </div>
-                 
-                 <div className="flex gap-2">
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addItem({
-                          id: artifact.id, 
-                          slug: artifact.slug,
-                          title: artifact.title,
-                          price: artifact.price,
-                          quantity: 1,
-                          media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
-                        });
-                      }}
-                      className={`w-10 h-10 flex items-center justify-center transition-all
-                        ${isCyberpunk 
-                          ? "bg-black border border-[#00f5d4]/40 text-[#00f5d4] hover:bg-[#00f5d4] hover:text-black" 
-                          : "bg-muted rounded-full text-zinc-600 hover:bg-foreground hover:text-white"}`}
-                      title="Add to Cart"
-                    >
-                      <Plus size={18} />
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addItem({
-                          id: artifact.id,
-                          slug: artifact.slug,
-                          title: artifact.title,
-                          price: artifact.price,
-                          quantity: 1,
-                          media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
-                        });
-                        router.push("/checkout?method=PHONEPE");
-                      }}
-                      className={`px-5 h-10 font-medium text-sm transition-all
-                        ${isCyberpunk 
-                          ? "bg-[#00f5d4]/10 border border-[#00f5d4] text-[#00f5d4] hover:bg-[#00f5d4] hover:text-black font-mono" 
-                          : "bg-accent/10 text-accent rounded-full hover:bg-accent hover:text-white"}`}
-                    >
-                      {isCyberpunk ? "PURCHASE" : "Buy Now"}
-                    </button>
-                 </div>
-              </div>
-            </Link>
+                       {/* Center Image */}
+                       <CardItem translateZ="100" className="w-full h-2/3 relative flex items-center justify-center mt-12">
+                          {artifact.media.src ? (
+                             <img 
+                               src={artifact.media.src} 
+                               alt={artifact.title} 
+                               className={`w-full h-full object-contain mix-blend-multiply transition-transform duration-700
+                                 ${isCyberpunk ? "invert brightness-200" : ""}`} 
+                             />
+                          ) : (
+                            <div className={`w-20 h-20 flex items-center justify-center
+                              ${isCyberpunk ? "bg-black border border-[#00f5d4]/40 shadow-[0_0_15px_rgba(0,245,212,0.2)]" : "bg-white border border-black/5 rounded-2xl shadow-sm"}`}>
+                               <div className={`w-2 h-2 rounded-full ${isCyberpunk ? "bg-[#00f5d4]" : "bg-zinc-300"}`} />
+                            </div>
+                          )}
+                       </CardItem>
+                    </div>
+                  </Link>
+                  
+                  {/* Bottom Content Area */}
+                  <div className="pt-6 flex justify-between items-start">
+                     <div className="space-y-1">
+                        <CardItem translateZ="40" as="h3" className={`text-lg font-bold tracking-tight
+                          ${isCyberpunk ? "text-[#00f5d4] font-mono" : "text-foreground"}`}>
+                          {isCyberpunk ? artifact.title.toUpperCase() : artifact.title}
+                        </CardItem>
+                        <CardItem translateZ="30" as="p" className={`font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono text-sm" : "text-zinc-500"}`}>
+                          {isCyberpunk ? `VAL: ${artifact.price}` : `₹${artifact.price}`}
+                        </CardItem>
+                     </div>
+                     
+                     <div className="flex gap-2">
+                        <CardItem translateZ="60">
+                          <SystemButton 
+                            variant="secondary"
+                            onClick={() => addItem({
+                              id: artifact.id, 
+                              slug: artifact.slug,
+                              title: artifact.title,
+                              price: artifact.price,
+                              quantity: 1,
+                              media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                            })}
+                            className="!p-3 !rounded-full"
+                          >
+                            <Plus size={18} />
+                          </SystemButton>
+                        </CardItem>
+                        <CardItem translateZ="60">
+                          <SystemButton 
+                            onClick={() => {
+                              addItem({
+                                id: artifact.id, 
+                                slug: artifact.slug,
+                                title: artifact.title,
+                                price: artifact.price,
+                                quantity: 1,
+                                media: { src: artifact.media.src || "", placeholderLabel: artifact.series }
+                              });
+                              router.push("/checkout?method=PHONEPE");
+                            }}
+                            className="!px-6 !py-2.5"
+                          >
+                            {isCyberpunk ? "PURCHASE" : "Buy Now"}
+                          </SystemButton>
+                        </CardItem>
+                     </div>
+                  </div>
+                </CardItem>
+              </CardBody>
+            </CardContainer>
           ))}
         </div>
       </div>

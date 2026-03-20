@@ -7,6 +7,8 @@ interface SystemButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   variant?: 'primary' | 'secondary' | 'outline';
 }
 
+import { motion } from 'framer-motion';
+
 export const SystemButton = ({ 
   children, 
   href, 
@@ -16,17 +18,36 @@ export const SystemButton = ({
 }: SystemButtonProps) => {
   const baseClasses = variant === 'secondary' ? "baselab-button-secondary group" : "baselab-button group";
   
+  const springTransition = {
+    type: "spring",
+    stiffness: 400,
+    damping: 10
+  };
+
   if (href) {
     return (
-      <Link href={href} className={cn(baseClasses, className)}>
-        {children}
-      </Link>
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.98 }}
+        transition={springTransition}
+        className="inline-block"
+      >
+        <Link href={href} className={cn(baseClasses, className)}>
+          {children}
+        </Link>
+      </motion.div>
     );
   }
 
   return (
-    <button className={cn(baseClasses, className)} {...props}>
+    <motion.button 
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
+      transition={springTransition}
+      className={cn(baseClasses, className)} 
+      {...(props as any)}
+    >
       {children}
-    </button>
+    </motion.button>
   );
 };
