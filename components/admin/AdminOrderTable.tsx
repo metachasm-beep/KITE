@@ -5,7 +5,7 @@ import { HudContainer } from "@/components/common/HudContainer";
 import { TechnicalLabel } from "@/components/common/TechnicalLabel";
 import { SystemButton } from "@/components/common/SystemButton";
 import { updateOrderStatus } from "@/app/actions/orders";
-import { ChevronDown, ExternalLink, Package, Truck, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { ChevronDown, ExternalLink, Package, Truck, CheckCircle, Search, XCircle, Loader2 } from "lucide-react";
 
 type Order = {
   id: string;
@@ -13,6 +13,11 @@ type Order = {
   totalAmount: number;
   status: string;
   createdAt: Date | string;
+  shiprocketOrderId?: string | null;
+  shipmentId?: string | null;
+  awbCode?: string | null;
+  courierName?: string | null;
+  trackingStatus?: string | null;
   user: {
     name: string | null;
     email: string | null;
@@ -86,9 +91,21 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
                   </div>
                 </td>
                 <td className="p-6">
-                  <span className={`font-bold tracking-widest px-2 py-1 border border-current bg-current/5 ${getStatusColor(order.status)}`}>
-                    [{order.status}]
-                  </span>
+                  <div className="flex flex-col gap-2">
+                    <span className={`font-bold tracking-widest px-2 py-1 border border-current bg-current/5 w-fit ${getStatusColor(order.status)}`}>
+                      [{order.status}]
+                    </span>
+                    {order.awbCode && (
+                      <div className="flex flex-col gap-1 mt-1 border-t border-white/5 pt-1">
+                        <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">
+                          AWB: <span className="text-accent">{order.awbCode}</span>
+                        </span>
+                        <span className="text-[8px] text-zinc-500 uppercase tracking-widest">
+                          {order.courierName || "ASSIGNED"} // {order.trackingStatus || "SYNCING"}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </td>
                 <td className="p-6 text-right">
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -105,10 +122,20 @@ export function AdminOrderTable({ initialOrders }: { initialOrders: Order[] }) {
                       <option value="CANCELLED">CANCELLED</option>
                     </select>
                     
+                    {order.awbCode && (
+                      <SystemButton 
+                        href={`/admin/logistics?track=${order.awbCode}`} 
+                        className="p-2 text-accent border-accent/20 hover:bg-accent/10"
+                        title="TRACK_IN_MISSION_CONTROL"
+                      >
+                        <Search size={12} />
+                      </SystemButton>
+                    )}
+                    
                     {updatingId === order.id ? (
                       <Loader2 size={14} className="animate-spin text-accent" />
                     ) : (
-                      <SystemButton href={`/account/orders/${order.id}`} className="p-2">
+                      <SystemButton href={`/account/orders/${order.id}`} className="p-2" title="VIEW_DETAILS">
                         <ExternalLink size={12} />
                       </SystemButton>
                     )}

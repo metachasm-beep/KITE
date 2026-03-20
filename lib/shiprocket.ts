@@ -103,3 +103,58 @@ export async function requestShiprocketPickup(shipmentId: string) {
 
   return data;
 }
+
+/**
+ * Gets the current account balance.
+ */
+export async function getShiprocketBalance() {
+  const data = await shiprocketFetch("/settings/get_balance");
+  return data.data; // { balance_amount: "..." }
+}
+
+/**
+ * Lists orders from Shiprocket.
+ * Supports filtering and pagination.
+ */
+export async function getShiprocketOrders(params: { page?: number; per_page?: number; status?: string } = {}) {
+  const query = new URLSearchParams(params as any).toString();
+  const data = await shiprocketFetch(`/orders?${query}`);
+  return data; // { data: [...], meta: {...} }
+}
+
+/**
+ * Tracks a shipment using AWB or Order ID.
+ */
+export async function getShiprocketTracking(id: string, isAwb = true) {
+  const endpoint = isAwb 
+    ? `/courier/track/awb/${id}` 
+    : `/courier/track/order/${id}`;
+  
+  const data = await shiprocketFetch(endpoint);
+  return data;
+}
+
+/**
+ * Cancels a Shiprocket order.
+ */
+export async function cancelShiprocketOrder(orderIds: string[]) {
+  const data = await shiprocketFetch("/orders/cancel", {
+    method: "POST",
+    body: JSON.stringify({ ids: orderIds }),
+  });
+  return data;
+}
+
+/**
+ * Calculates shipping rates and checks serviceability.
+ */
+export async function calculateShiprocketRates(payload: {
+  pickup_postcode: string;
+  delivery_postcode: string;
+  weight: number;
+  cod: 0 | 1;
+}) {
+  const query = new URLSearchParams(payload as any).toString();
+  const data = await shiprocketFetch(`/courier/serviceability?${query}`);
+  return data;
+}

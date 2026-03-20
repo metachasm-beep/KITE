@@ -6,6 +6,7 @@ import { useCart } from "@/lib/contexts/CartContext";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 import { Artifact } from "@/lib/cms";
 import { SpringAccordion, type AccordionItem } from "@/components/ruixen/spring-accordion";
+import DecryptedText from "@/components/reactbits/DecryptedText";
 
 interface ArtifactDetailClientProps {
   artifact: Artifact;
@@ -200,9 +201,17 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
           </div>
           
           <div>
-             <p className={`text-lg font-medium leading-relaxed ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
-                {artifact.description}
-             </p>
+             <div className={`text-lg font-medium leading-relaxed ${isCyberpunk ? "text-[#00f5d4]/60 font-mono" : "text-zinc-500"}`}>
+                {isCyberpunk ? (
+                  <DecryptedText 
+                    text={artifact.description.toUpperCase()} 
+                    animateOn="view" 
+                    speed={40}
+                  />
+                ) : (
+                  artifact.description
+                )}
+             </div>
           </div>
 
           <div className={`h-px w-full ${isCyberpunk ? "bg-[#00f5d4]/10" : "bg-black/5"}`} />
@@ -216,9 +225,15 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
              <div className="space-y-3">
                 {artifact.specs.map((spec) => (
                   <div key={spec.label} className={`flex justify-between items-center py-3 border-b ${isCyberpunk ? "border-[#00f5d4]/10" : "border-black/5"}`}>
-                    <span className={`text-sm font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono tracking-wider uppercase text-xs" : "text-zinc-500"}`}>{spec.label}</span>
+                    <span className={`text-sm font-medium ${isCyberpunk ? "text-[#00f5d4]/60 font-mono tracking-wider uppercase text-xs" : "text-zinc-500"}`}>
+                      {isCyberpunk ? (
+                        <DecryptedText text={spec.label.toUpperCase()} animateOn="hover" speed={50} />
+                      ) : (
+                        spec.label
+                      )}
+                    </span>
                     <span className={`text-sm font-semibold text-right ${isCyberpunk ? "text-[#e8f4f8] font-mono" : "text-foreground"}`}>
-                      {spec.value}
+                      {isCyberpunk ? spec.value.toUpperCase() : spec.value}
                     </span>
                   </div>
                 ))}
