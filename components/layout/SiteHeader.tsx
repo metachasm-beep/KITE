@@ -27,11 +27,6 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        {/* CENTER: Theme Toggle */}
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <ThemeToggle />
-        </div>
-
         {/* NAVIGATION (hidden on mobile) */}
         <nav className="hidden lg:flex items-center gap-8 mr-8">
           {[
@@ -54,6 +49,8 @@ export function SiteHeader() {
 
         {/* ACTIONS */}
         <div className="flex items-center gap-4 flex-shrink-0">
+          <ThemeToggle />
+          
           {session ? (
             <div className="flex items-center gap-4">
               {(session.user as any)?.role === "admin" && (
