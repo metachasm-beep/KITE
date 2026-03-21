@@ -37,3 +37,15 @@ next-env.d.ts
 # prisma
 /prisma/dev.db
 /prisma/dev.db-journal
+
+# internal skills (huge)
+/antigravity-awesome-skills-main
+/antigravity-skills-main
+/antigravity-awesome-skills
+
+# ai
+/.gemini
+/.agent
+/.agents
+/_agent
+/_agents

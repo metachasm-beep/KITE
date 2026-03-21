@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Jost } from "next/font/google";
+import { Bodoni_Moda, Jost, Geist } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/Providers";
@@ -9,6 +9,9 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CartDrawer } from "@/components/layout/CartDrawer";
 import { FloatingNavbar } from "@/components/ruixen/floating-navbar";
 import { CyberpunkExtras } from "@/components/common/CyberpunkExtras";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const bodoni = Bodoni_Moda({
   subsets: ["latin"],
@@ -33,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={cn("scroll-smooth", "font-sans", geist.variable)}>
       <body className={`${bodoni.variable} ${jost.variable} font-jost antialiased bg-background text-foreground selection:bg-accent selection:text-white`}>
         <ThemeProvider>
           <Providers>
