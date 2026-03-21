@@ -51,6 +51,14 @@ const config: Config = {
         bodoni: ["var(--font-bodoni)", "serif"],
       },
       keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
         glitch: {
           "0%": { "clip-path": "inset(20% 0 50% 0)" },
           "5%": { "clip-path": "inset(10% 0 60% 0)" },
@@ -76,6 +84,8 @@ const config: Config = {
         },
       },
       animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
         "glitch-after": "glitch var(--after-duration) infinite linear alternate-reverse",
         "glitch-before": "glitch var(--before-duration) infinite linear alternate-reverse",
       },
