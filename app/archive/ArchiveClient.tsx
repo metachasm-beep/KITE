@@ -9,6 +9,9 @@ import { UNIVERSE, ERAS, FACTIONS } from "@/lib/data/lore";
 import { Artifact } from "@/lib/cms";
 import Link from "next/link";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/ThreeDCard";
+import NeuralMap from "@/components/archive/NeuralMap";
+import ArchiveLink from "@/components/archive/ArchiveLink";
+import { motion } from "framer-motion";
 
 interface ArchiveClientProps {
   artifacts: Artifact[];
@@ -28,7 +31,19 @@ export default function ArchiveClient({ artifacts }: ArchiveClientProps) {
     <main className="min-h-screen bg-[#080808] text-[#00f5d4] pt-32 pb-40 font-mono relative cyber-scanlines">
       {/* Background Ambience */}
       <div className="absolute inset-0 cyber-grid opacity-20 pointer-events-none" />
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#00f5d4]/5 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[800px] bg-gradient-to-b from-[#00f5d4]/10 to-transparent pointer-events-none" />
+      
+      {/* Hero Visual */}
+      <div className="absolute top-0 right-0 w-full lg:w-1/2 h-[600px] pointer-events-none">
+         <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#080808] z-10" />
+         <div className="absolute inset-0 bg-gradient-to-t from-[#080808] to-transparent z-10" />
+         <motion.img 
+           initial={{ opacity: 0 }}
+           animate={{ opacity: 0.2 }}
+           src="/images/lore/the_fold_nebula.png" 
+           className="w-full h-full object-cover grayscale brightness-50"
+         />
+      </div>
 
       <div className="container mx-auto px-6 relative z-10">
         
@@ -56,13 +71,21 @@ export default function ArchiveClient({ artifacts }: ArchiveClientProps) {
             direction="bottom"
           />
 
-          <p className="text-sm text-[#00f5d4]/60 leading-relaxed uppercase tracking-wider max-w-2xl mt-4 bg-[#00f5d4]/5 p-6 border-l-2 border-[#00f5d4]/40">
-            {UNIVERSE.summary}
+          <p className="text-sm text-[#00f5d4]/60 leading-relaxed uppercase tracking-wider max-w-2xl mt-4 bg-[#00f5d4]/5 p-6 border-l-2 border-[#00f5d4]/40 backdrop-blur-sm relative z-10">
+            <ArchiveLink>{UNIVERSE.summary}</ArchiveLink>
           </p>
-          <p className="text-xs text-[#00f5d4]/40 leading-relaxed uppercase tracking-wider max-w-2xl mt-2 italic">
-            ROLE // {UNIVERSE.baselab_role}
+          <p className="text-xs text-[#00f5d4]/40 leading-relaxed uppercase tracking-wider max-w-2xl mt-2 italic relative z-10">
+            ROLE // <ArchiveLink>{UNIVERSE.baselab_role}</ArchiveLink>
           </p>
         </header>
+
+        {/* Neural Map Sector */}
+        <section className="mb-32 relative z-10">
+           <div className="flex items-center gap-3 mb-10 text-[#00f5d4]/80 border-b border-[#00f5d4]/20 pb-4">
+            <span className="text-[10px] font-bold tracking-[0.3em] uppercase opacity-50">// DATA_VISUALIZATION_MODULE</span>
+          </div>
+          <NeuralMap />
+        </section>
 
         {/* Timeline Sector */}
         <section className="mb-32">
@@ -79,7 +102,9 @@ export default function ArchiveClient({ artifacts }: ArchiveClientProps) {
                   <h3 className="text-lg font-bold cyber-glow mt-1">{evt.event}</h3>
                 </div>
                 <div className="md:w-3/4 flex items-center">
-                  <p className="text-sm text-[#00f5d4]/70 leading-relaxed uppercase">{evt.description}</p>
+                  <p className="text-sm text-[#00f5d4]/70 leading-relaxed uppercase">
+                    <ArchiveLink>{evt.description}</ArchiveLink>
+                  </p>
                 </div>
               </div>
             ))}
@@ -108,6 +133,14 @@ export default function ArchiveClient({ artifacts }: ArchiveClientProps) {
                   </CardItem>
                   <CardItem translateZ="10" className="text-xs text-[#00f5d4]/60 leading-relaxed mb-8 uppercase flex-grow">
                     {era.description}
+                  </CardItem>
+                  <CardItem translateZ="60">
+                    <Link 
+                      href={`/archive/eras/${era.id}`}
+                      className="text-[10px] font-bold text-[#00f5d4] hover:text-white transition-colors border border-[#00f5d4]/20 px-4 py-2 uppercase tracking-widest bg-black/40"
+                    >
+                      Access_Records &gt;&gt;
+                    </Link>
                   </CardItem>
                   <CardItem translateZ="50" className="flex flex-wrap gap-2 text-[10px] text-[#00f5d4]">
                     {era.toneHints.map((hint, i) => (
@@ -139,7 +172,13 @@ export default function ArchiveClient({ artifacts }: ArchiveClientProps) {
                    </span>
                  </div>
                  <p className="text-sm text-[#00f5d4]/80 italic">"{faction.motto}"</p>
-                 <p className="text-xs text-[#00f5d4]/60 leading-relaxed uppercase">{faction.description}</p>
+                 <p className="text-xs text-[#00f5d4]/60 leading-relaxed uppercase border-b border-[#00f5d4]/10 pb-4 mb-4">{faction.description}</p>
+                 <Link 
+                   href={`/archive/factions/${faction.id}`}
+                   className="text-[10px] font-bold text-[#00f5d4] hover:text-white transition-colors uppercase tracking-widest inline-flex items-center gap-2 group"
+                 >
+                   Dossier_Link <span className="group-hover:translate-x-1 transition-transform">&gt;&gt;</span>
+                 </Link>
                </div>
              ))}
           </div>
