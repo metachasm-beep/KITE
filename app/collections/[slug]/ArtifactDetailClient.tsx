@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useCart } from "@/lib/contexts/CartContext";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 import { Artifact } from "@/lib/cms";
+import { getProductLore } from "@/lib/data/lore";
 import { SpringAccordion, type AccordionItem } from "@/components/ruixen/spring-accordion";
 import { SpringButton } from "@/components/ruixen/spring-button";
 import { MagneticTabs, type MagneticTabItem } from "@/components/ruixen/magnetic-tabs";
@@ -137,6 +138,8 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
   const { addItem } = useCart();
   const { isCyberpunk } = useTheme();
 
+  const lore = getProductLore(artifact.series || "Series 01");
+
   const materialCopy = isCyberpunk ? PLA_MATERIAL_COPY.cyberpunk : PLA_MATERIAL_COPY.baselab;
   const faqItems = isCyberpunk ? FAQ_DATA.cyberpunk : FAQ_DATA.baselab;
 
@@ -225,6 +228,49 @@ export default function ArtifactDetailClient({ artifact }: ArtifactDetailClientP
             <MagneticTabs 
               className="w-full"
               items={[
+                ...(isCyberpunk ? [{
+                  value: "lore",
+                  label: "HISTORICAL_LOG",
+                  content: (
+                    <div className="space-y-6 pt-4">
+                      <div className="p-6 rounded-xl border bg-[#0d1117]/50 border-[#00f5d4]/10 space-y-6 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-[#00f5d4]/5 rounded-bl-full translate-x-12 -translate-y-12 transition-transform group-hover:scale-110" />
+                        
+                        <div className="flex justify-between items-start border-b border-[#00f5d4]/10 pb-4 relative z-10">
+                           <div>
+                             <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#00f5d4]/50 mb-1">
+                               ERA_CLASSIFICATION
+                             </h4>
+                             <p className="text-sm font-bold text-[#e8f4f8] cyber-glow tracking-widest uppercase font-mono">
+                               {lore.era.name}
+                             </p>
+                           </div>
+                           <div className="text-right">
+                             <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#00f5d4]/50 mb-1">
+                               ORIGIN_FACTION
+                             </h4>
+                             <p className="text-sm font-bold text-[#e8f4f8] cyber-glow tracking-widest uppercase font-mono">
+                               {lore.faction.name}
+                             </p>
+                           </div>
+                        </div>
+                        
+                        <div className="space-y-2 relative z-10">
+                           <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#00f5d4]/50">
+                             ARCHIVIST_NOTES
+                           </h4>
+                           <p className="text-xs leading-relaxed text-[#00f5d4]/70 font-mono uppercase">
+                             "This vessel exhibits classic hallmarks of {lore.era.name}. {lore.faction.description} Evidence suggests alignment with the motto parameters: '{lore.faction.motto}'."
+                           </p>
+                        </div>
+                        
+                        <Link href="/archive" className="inline-block mt-2 text-[10px] font-bold uppercase tracking-widest text-[#00f5d4] hover:text-white transition-colors border-b border-[#00f5d4]/30 pb-0.5 relative z-10">
+                          View Initial Fold Data &gt;&gt;
+                        </Link>
+                      </div>
+                    </div>
+                  )
+                }] : []),
                 { 
                   value: "specs", 
                   label: isCyberpunk ? "UNIT_SPECS" : "Specifications",

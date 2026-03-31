@@ -29,7 +29,7 @@ export function SiteFooter() {
             <p className={`text-sm leading-relaxed font-jost
               ${isCyberpunk ? "text-[#00f5d4]/60 font-mono uppercase text-xs tracking-wider" : "text-stone-500"}`}>
               {isCyberpunk 
-                ? "ADVANCED HARDWARE REPOSITORY. ENGINEERED BY TURTLE LABS."
+                ? "UNIT_01 :: ARCHIVAL RECONSTRUCTION LAB. PROBING THE FOLD FOR SPATIAL ECHOES."
                 : "Premium hardware essentials designed by Turtle Labs. Bridging architectural form with everyday utility."}
             </p>
 
@@ -57,9 +57,9 @@ export function SiteFooter() {
                 ${isCyberpunk ? "text-[#00f5d4]/30" : "text-stone-400"}`}>Catalog</span>
               <nav className="flex flex-col gap-4">
                 {[
-                  { label: "Active Units", href: "/collections" },
-                  { label: "Fragments", href: "/collections" },
-                  { label: "Prototypes", href: "/collections" }
+                  { label: isCyberpunk ? "ACTIVE_HULLS" : "Active Units", href: "/collections" },
+                  { label: isCyberpunk ? "NEURAL_FRAGMENTS" : "Fragments", href: "/archive" },
+                  { label: isCyberpunk ? "BREADCRUMBS" : "Prototypes", href: "/collections" }
                 ].map((item) => (
                   <Link key={item.label} href={item.href} className={`text-sm transition-colors font-jost
                     ${isCyberpunk ? "text-[#00f5d4]/60 hover:text-[#00f5d4] font-mono uppercase text-xs" : "text-stone-500 hover:text-foreground"}`}>

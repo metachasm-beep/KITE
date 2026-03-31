@@ -31,7 +31,7 @@ export function SiteHeader() {
         <nav className="hidden lg:flex items-center gap-8 mr-8">
           {[
             { label: isCyberpunk ? "STORE" : "Shop", href: "/collections" },
-            { label: isCyberpunk ? "INTEL" : "About", href: "/system" },
+            { label: isCyberpunk ? "INTEL ARCHIVE" : "About", href: isCyberpunk ? "/archive" : "/system" },
             { label: isCyberpunk ? "SPECS" : "Details", href: "/telemetry" },
             { label: isCyberpunk ? "COMMS" : "Support", href: "/comms" }
           ].map((item) => (

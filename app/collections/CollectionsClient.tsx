@@ -16,6 +16,7 @@ import VariableWeight from "@/components/reactbits/VariableWeight";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/ThreeDCard";
 import { SpringButton } from "@/components/ruixen/spring-button";
 import { GooeyPagination } from "@/components/ruixen/gooey-pagination";
+import { getProductLore } from "@/lib/data/lore";
 
 interface CollectionsClientProps {
   initialArtifacts: Artifact[];
@@ -190,6 +191,18 @@ export default function CollectionsClient({ initialArtifacts }: CollectionsClien
                             {artifact.status === 'AVAILABLE' ? (isCyberpunk ? 'IN_STOCK' : 'In Stock') : (isCyberpunk ? 'SOLD_OUT' : 'Sold Out')}
                           </span>
                        </CardItem>
+
+                       {/* Lore Era Badge (Cyberpunk only) */}
+                       {isCyberpunk && (
+                         <CardItem translateZ="40" className="absolute bottom-6 left-6">
+                            <div className="flex flex-col gap-0.5">
+                               <span className="text-[8px] font-bold text-[#00f5d4]/40 uppercase tracking-widest">Era classification</span>
+                               <span className="text-[10px] font-bold text-[#00f5d4] cyber-glow uppercase font-mono">
+                                 {getProductLore(artifact.series || "").era.id}_reconstructed
+                               </span>
+                            </div>
+                         </CardItem>
+                       )}
  
                        {/* Center Image */}
                        <CardItem translateZ="100" className="w-full h-2/3 relative flex items-center justify-center mt-12">

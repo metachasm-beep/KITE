@@ -89,7 +89,7 @@ export function PhilosophySection() {
             <div className="max-w-xl">
               {isCyberpunk ? (
                 <DecryptedText
-                  text="DESIGN IS A DIALOGUE BETWEEN MATERIAL AND PROPORTION. WE MINIMIZE THE NOISE TO FIND THE ESSENTIAL LINE. EVERY CURVE IS DELIBERATE, EVERY TEXTURE IS INTENTIONAL."
+                  text="UNIT_01 (BASELAB) IS A RESEARCH HUB ORBITING THE VERTEX SHARD. WE RECONSTRUCT LOST SHIP DESIGNS FROM DIGITAL ECHOES IN THE FOLD. EVERY CURVE IS A RECOVERED MEMORY, EVERY TEXTURE A FRAGMENT OF HISTORY."
                   className="text-sm font-mono text-[#00f5d4]/60 leading-relaxed uppercase tracking-widest"
                   speed={40}
                   animateOn="view"
