@@ -6,6 +6,7 @@ export type Era = {
   description: string;
   toneHints: string[];
   tagline: string;
+  imagePath?: string;
 };
 
 export type Faction = {
@@ -79,7 +80,8 @@ export const ERAS: Era[] = [
     aesthetic: "Pristine, Geometric, High-Energy",
     description: "The peak of Architect civilization. Ships are masterworks of spatial symmetry, characterized by smooth, high-index surfaces and integrated energy manifolds.",
     tagline: "Symmetry in the Eternal Light.",
-    toneHints: ["pristine", "elegant", "advanced"]
+    toneHints: ["pristine", "elegant", "advanced"],
+    imagePath: "/images/lore/zenith_era_ship.png"
   },
   {
     id: "fracture",
@@ -88,7 +90,8 @@ export const ERAS: Era[] = [
     aesthetic: "Jagged, Experimental, Unstable",
     description: "A period of desperation and rapid adaptation. Ships from this era are often experimental, featuring exposed conduits and asymmetric hulls.",
     tagline: "The Beauty of Broken Things.",
-    toneHints: ["agile", "aggressive", "experimental"]
+    toneHints: ["agile", "aggressive", "experimental"],
+    imagePath: "/images/lore/great_fracture.png"
   },
   {
     id: "drift",
@@ -97,7 +100,8 @@ export const ERAS: Era[] = [
     aesthetic: "Industrial, Salvaged, Heavy",
     description: "The current age of survival. Known as the 'Scavenger Age', ships are kitbashed from multiple eras, prioritizing utility and durability over aesthetics.",
     tagline: "Survival Across the Shards.",
-    toneHints: ["industrial", "rugged", "utilitarian"]
+    toneHints: ["industrial", "rugged", "utilitarian"],
+    imagePath: "/images/lore/drift_era_station.png"
   }
 ];
 
@@ -127,7 +131,7 @@ export const FACTIONS: Faction[] = [
     description: "Traders and nomadic fleets who wander the Shards during the peak of the instability.",
     longDescription: "The Shard Crawlers were the first to master the art of 'Shard-Hopping'—the dangerous procedure of jumping between isolated pockets of reality. Their vessels are jagged and asymmetric, designed to 'cut' through the spatial static that defines the Fracture Era. They are nomads by necessity, constantly moving to stay ahead of the drifting static clouds.",
     motto: "Fracture or Thrive.",
-    imagePath: "/images/lore/the_fracture.png"
+    imagePath: "/images/lore/great_fracture.png"
   }
 ];
 
@@ -164,7 +168,7 @@ export const EVENTS: LoreEntry[] = [
     name: "The First Reconstruction",
     description: "The founding moment of Baselab and the dawn of the Archival Age.",
     longDescription: "Fourteen years after the Fracture, a rogue engineer named Silas Vane discovered a stable neural bridge in the Vertex Shard. Using a prototype Neural Link, he successfully materialized a small 'Zenith' scout hull. This was the first time an object from the pre-fracture world had been reconstructed. This moment marked the end of the Desperation Era and the beginning of the Archival Age.",
-    imagePath: "/images/lore/baselab_founding.png",
+    imagePath: "/images/lore/neural_link_interface.png",
     relatedIds: ["neural-link", "zenith"]
   }
 ];

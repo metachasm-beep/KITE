@@ -38,10 +38,11 @@ export default function ArchiveClient({ artifacts }: ArchiveClientProps) {
          <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#080808] z-10" />
          <div className="absolute inset-0 bg-gradient-to-t from-[#080808] to-transparent z-10" />
          <motion.img 
-           initial={{ opacity: 0 }}
-           animate={{ opacity: 0.2 }}
+           initial={{ opacity: 0, scale: 1.1 }}
+           animate={{ opacity: 0.8, scale: 1 }}
+           transition={{ duration: 1.5 }}
            src="/images/lore/the_fold_nebula.png" 
-           className="w-full h-full object-cover grayscale brightness-50"
+           className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 transition-all duration-1000"
          />
       </div>
 
@@ -121,34 +122,41 @@ export default function ArchiveClient({ artifacts }: ArchiveClientProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {ERAS.map((era) => (
               <CardContainer key={era.id} containerClassName="py-0">
-                <CardBody className="bg-[#00f5d4]/5 border border-[#00f5d4]/20 rounded-2xl p-8 relative group hover:border-[#00f5d4] transition-all h-full flex flex-col">
-                  <CardItem translateZ="20" className="text-xs text-[#00f5d4]/50 mb-4 tracking-widest uppercase">
-                    ERA :: {era.years}
-                  </CardItem>
-                  <CardItem translateZ="40" className="text-2xl font-bold mb-2 text-[#00f5d4] cyber-glow">
-                    {era.name.toUpperCase()}
-                  </CardItem>
-                  <CardItem translateZ="30" className="text-sm text-[#00f5d4]/70 italic mb-6">
-                    "{era.tagline}"
-                  </CardItem>
-                  <CardItem translateZ="10" className="text-xs text-[#00f5d4]/60 leading-relaxed mb-8 uppercase flex-grow">
-                    {era.description}
-                  </CardItem>
-                  <CardItem translateZ="60">
-                    <Link 
-                      href={`/archive/eras/${era.id}`}
-                      className="text-[10px] font-bold text-[#00f5d4] hover:text-white transition-colors border border-[#00f5d4]/20 px-4 py-2 uppercase tracking-widest bg-black/40"
-                    >
-                      Access_Records &gt;&gt;
-                    </Link>
-                  </CardItem>
-                  <CardItem translateZ="50" className="flex flex-wrap gap-2 text-[10px] text-[#00f5d4]">
-                    {era.toneHints.map((hint, i) => (
-                      <span key={i} className="px-2 py-1 border border-[#00f5d4]/30 bg-[#00f5d4]/10 rounded-sm">
-                        {hint.toUpperCase()}
-                      </span>
-                    ))}
-                  </CardItem>
+                <CardBody className="bg-[#00f5d4]/5 border border-[#00f5d4]/20 rounded-2xl p-8 relative group hover:border-[#00f5d4] transition-all h-full flex flex-col overflow-hidden">
+                  {era.imagePath && (
+                    <div className="absolute inset-0 z-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <img src={era.imagePath} alt={era.name} className="w-full h-full object-cover grayscale" />
+                    </div>
+                  )}
+                  <div className="relative z-10 flex flex-col h-full">
+                    <CardItem translateZ="20" className="text-xs text-[#00f5d4]/50 mb-4 tracking-widest uppercase">
+                      ERA :: {era.years}
+                    </CardItem>
+                    <CardItem translateZ="40" className="text-2xl font-bold mb-2 text-[#00f5d4] cyber-glow">
+                      {era.name.toUpperCase()}
+                    </CardItem>
+                    <CardItem translateZ="30" className="text-sm text-[#00f5d4]/70 italic mb-6">
+                      "{era.tagline}"
+                    </CardItem>
+                    <CardItem translateZ="10" className="text-xs text-[#00f5d4]/60 leading-relaxed mb-8 uppercase flex-grow">
+                      {era.description}
+                    </CardItem>
+                    <CardItem translateZ="60">
+                      <Link 
+                        href={`/archive/eras/${era.id}`}
+                        className="text-[10px] font-bold text-[#00f5d4] hover:text-white transition-colors border border-[#00f5d4]/20 px-4 py-2 uppercase tracking-widest bg-black/40"
+                      >
+                        Access_Records &gt;&gt;
+                      </Link>
+                    </CardItem>
+                    <CardItem translateZ="50" className="flex flex-wrap gap-2 text-[10px] text-[#00f5d4] mt-4">
+                      {era.toneHints.map((hint, i) => (
+                        <span key={i} className="px-2 py-1 border border-[#00f5d4]/30 bg-[#00f5d4]/10 rounded-sm">
+                          {hint.toUpperCase()}
+                        </span>
+                      ))}
+                    </CardItem>
+                  </div>
                 </CardBody>
               </CardContainer>
             ))}

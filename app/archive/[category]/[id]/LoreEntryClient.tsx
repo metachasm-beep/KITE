@@ -38,11 +38,11 @@ export default function LoreEntryClient({ entry, category }: LoreEntryClientProp
            <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent z-10" />
            <motion.img 
              initial={{ opacity: 0, scale: 1.1 }}
-             animate={{ opacity: 0.4, scale: 1 }}
+             animate={{ opacity: 0.8, scale: 1 }}
              transition={{ duration: 1.5 }}
              src={entry.imagePath} 
              alt={entry.name}
-             className="w-full h-full object-cover grayscale opacity-40 hover:grayscale-0 transition-all duration-1000"
+             className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 transition-all duration-1000"
            />
         </div>
       )}
