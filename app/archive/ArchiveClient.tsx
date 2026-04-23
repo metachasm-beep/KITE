@@ -12,6 +12,7 @@ import { CardContainer, CardBody, CardItem } from "@/components/ui/ThreeDCard";
 import NeuralMap from "@/components/archive/NeuralMap";
 import ArchiveLink from "@/components/archive/ArchiveLink";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface ArchiveClientProps {
   artifacts: Artifact[];

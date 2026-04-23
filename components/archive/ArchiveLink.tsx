@@ -5,12 +5,13 @@ import { UNIVERSE, ERAS, FACTIONS, TECH, EVENTS } from "@/lib/data/lore";
 
 interface ArchiveLinkProps {
   children: string;
+  className?: string;
 }
 
 /**
  * A utility component that scans text for lore keywords and turns them into interactive CTAs.
  */
-export default function ArchiveLink({ children }: ArchiveLinkProps) {
+export default function ArchiveLink({ children, className }: ArchiveLinkProps) {
   // Combine all keywords from various categories
   const keywordsArr = [
     { text: "The Fold", category: "universe", id: "fold" },
@@ -29,14 +30,14 @@ export default function ArchiveLink({ children }: ArchiveLinkProps) {
   const parts = splitWithKeywords(children, keywordsArr);
 
   return (
-    <>
+    <span className={className}>
       {parts.map((part, i) => {
         if (part.isKeyword) {
           return (
             <Link 
               key={i} 
               href={`/archive/${part.category}/${part.id}`}
-              className="text-[#00f5d4] hover:text-white transition-colors underline underline-offset-4 decoration-dotted decoration-[#00f5d4]/40 hover:decoration-white font-bold"
+              className="text-accent hover:text-white transition-all underline underline-offset-4 decoration-dotted decoration-accent/40 hover:decoration-white font-bold"
             >
               {part.text}
             </Link>
@@ -44,7 +45,7 @@ export default function ArchiveLink({ children }: ArchiveLinkProps) {
         }
         return <span key={i}>{part.text}</span>;
       })}
-    </>
+    </span>
   );
 }
 
