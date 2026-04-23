@@ -43,10 +43,9 @@ export default function RootLayout({
             <CartDrawer />
             <FloatingNavbar />
             <CyberpunkExtras />
-            <div className="pt-20">
+            <main className="relative">
               {children}
-            </div>
-            <SiteFooter />
+            </main>
           </Providers>
         </ThemeProvider>
       </body>

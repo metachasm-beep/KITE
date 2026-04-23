@@ -3,33 +3,29 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { PhilosophySection } from "@/components/home/PhilosophySection";
 import { ThreeDImageSlider } from "@/components/home/ThreeDImageSlider";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Terminal, MoveUpRight, Zap, ArrowDown } from "lucide-react";
 import { SystemButton } from "@/components/common/SystemButton";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 import { BackgroundParallax } from "@/components/home/BackgroundParallax";
 import { useRef } from "react";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 
 export default function Home() {
   const { isCyberpunk } = useTheme();
-  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <main 
-      ref={containerRef}
-      className={`h-screen overflow-y-scroll snap-y snap-mandatory transition-colors duration-1000 ease-out-expo scroll-smooth
-        ${isCyberpunk ? "bg-background text-accent" : "bg-white text-foreground"}`}
-    >
+    <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
       
       {/* SECTION 1: HERO */}
-      <section className="h-screen w-full snap-start relative overflow-hidden">
+      <section className="h-screen w-full snap-start relative overflow-hidden pt-20">
         <BackgroundParallax>
           <HeroSection />
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 3 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce"
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce z-20"
           >
             <ArrowDown size={20} className={isCyberpunk ? "text-accent/30" : "text-stone-300"} />
           </motion.div>
@@ -112,22 +108,17 @@ export default function Home() {
                 ${isCyberpunk ? "bg-accent text-black hover:bg-accent/80 shadow-[0_0_50px_oklch(var(--accent-values)/0.3)]" : "bg-foreground text-white hover:bg-black rounded-full"}`}>
                  {isCyberpunk ? "INITIALIZE_ACQUISITION" : "Enter Lab"}
               </SystemButton>
-              
-              <div className="pt-8">
-                {isCyberpunk ? (
-                  <div className="text-[9px] md:text-[10px] font-mono text-accent/20 tracking-[0.5em] uppercase">
-                    // SYSTEM_ID: BL-001 // STATUS: SECURE // CONNECTED_AS: ADMIN
-                  </div>
-                ) : (
-                  <div className="text-[10px] font-jost text-stone-300 tracking-[0.3em] uppercase">
-                    © 2026 Turtle Labs Industries // All Rights Reserved
-                  </div>
-                )}
-              </div>
            </div>
          </BackgroundParallax>
       </section>
 
-    </main>
+      {/* SECTION 5: FOOTER */}
+      <section className="h-screen w-full snap-start relative overflow-hidden flex flex-col">
+        <div className="flex-1 overflow-y-auto">
+          <SiteFooter />
+        </div>
+      </section>
+
+    </div>
   );
 }
