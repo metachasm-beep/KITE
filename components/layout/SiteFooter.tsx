@@ -4,8 +4,42 @@ import Link from "next/link";
 import { Terminal, ShieldCheck, MapPin, Send, Zap } from "lucide-react";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  minimal?: boolean;
+}
+
+export function SiteFooter({ minimal = false }: SiteFooterProps) {
   const { isCyberpunk } = useTheme();
+
+  if (minimal) {
+    return (
+      <footer className={`w-full py-6 px-6 border-t transition-colors duration-700 backdrop-blur-sm z-30
+        ${isCyberpunk ? "bg-black/40 border-accent/10" : "bg-white/40 border-stone-100"}`}>
+        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-6">
+             <Link href="/" className={`text-sm font-bold tracking-tighter transition-colors ${isCyberpunk ? "text-accent cyber-glow" : "text-foreground"}`}>
+               BASELAB
+             </Link>
+             <div className={`hidden md:flex gap-4 text-[9px] font-mono uppercase tracking-[0.2em] ${isCyberpunk ? "text-accent/30" : "text-stone-400"}`}>
+               <Link href="/collections" className="hover:text-accent transition-colors">Catalog</Link>
+               <Link href="/comms" className="hover:text-accent transition-colors">Comms</Link>
+               <Link href="/archive" className="hover:text-accent transition-colors">Archive</Link>
+             </div>
+          </div>
+          
+          <div className="flex items-center gap-6">
+            <div className={`flex items-center gap-2 text-[9px] tracking-[0.2em] font-mono uppercase ${isCyberpunk ? "text-accent/20" : "text-stone-300"}`}>
+               {isCyberpunk ? <Terminal size={10} /> : <MapPin size={10} />}
+               <span>BL-2026</span>
+            </div>
+            <span className={`text-[9px] font-mono tracking-[0.2em] uppercase ${isCyberpunk ? "text-accent/20" : "text-stone-300"}`}>
+              © 2026 TURTLE LABS
+            </span>
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className={`py-24 px-6 relative overflow-hidden transition-colors duration-700 border-t
@@ -43,10 +77,6 @@ export function SiteFooter() {
                     ${isCyberpunk ? "text-[#00f5d4]/40 hover:text-[#00f5d4]" : "text-stone-400 hover:text-foreground"}`}>
                     <span className="opacity-50">//</span> +91 8600391678
                   </a>
-                  <a href="https://www.turtlelabs.co.in" target="_blank" className={`text-xs font-mono transition-colors flex items-center gap-2
-                    ${isCyberpunk ? "text-[#00f5d4]/40 hover:text-[#00f5d4]" : "text-stone-400 hover:text-foreground"}`}>
-                    <span className="opacity-50">//</span> www.turtlelabs.co.in
-                  </a>
                </div>
             </div>
           </div>
@@ -58,8 +88,7 @@ export function SiteFooter() {
               <nav className="flex flex-col gap-4">
                 {[
                   { label: isCyberpunk ? "ACTIVE_HULLS" : "Active Units", href: "/collections" },
-                  { label: isCyberpunk ? "NEURAL_FRAGMENTS" : "Fragments", href: "/archive" },
-                  { label: isCyberpunk ? "BREADCRUMBS" : "Prototypes", href: "/collections" }
+                  { label: isCyberpunk ? "NEURAL_FRAGMENTS" : "Fragments", href: "/archive" }
                 ].map((item) => (
                   <Link key={item.label} href={item.href} className={`text-sm transition-colors font-jost
                     ${isCyberpunk ? "text-[#00f5d4]/60 hover:text-[#00f5d4] font-mono uppercase text-xs" : "text-stone-500 hover:text-foreground"}`}>
@@ -75,8 +104,7 @@ export function SiteFooter() {
               <nav className="flex flex-col gap-4">
                 {[
                   { label: "Logistics", href: "/comms" },
-                  { label: "Returns", href: "/comms" },
-                  { label: "Legal", href: "/comms" }
+                  { label: "Returns", href: "/comms" }
                 ].map((item) => (
                   <Link key={item.label} href={item.href} className={`text-sm transition-colors font-jost
                     ${isCyberpunk ? "text-[#00f5d4]/60 hover:text-[#00f5d4] font-mono uppercase text-xs" : "text-stone-500 hover:text-foreground"}`}>
@@ -91,7 +119,7 @@ export function SiteFooter() {
                 ${isCyberpunk ? "text-[#00f5d4]/30" : "text-stone-400"}`}>Intel</span>
               <p className={`text-sm font-jost leading-relaxed
                 ${isCyberpunk ? "text-[#00f5d4]/40 font-mono text-xs uppercase" : "text-stone-500"}`}>
-                Subscribe for status updates on new production cycles.
+                Subscribe for status updates.
               </p>
               <div className="relative group mt-6">
                 <input 
@@ -110,7 +138,6 @@ export function SiteFooter() {
 
         </div>
 
-        {/* BOTTOM METRICS */}
         <div className={`mt-32 pt-10 border-t flex flex-col md:flex-row justify-between items-center gap-8
           ${isCyberpunk ? "border-[#00f5d4]/10" : "border-stone-100"}`}>
           
@@ -118,12 +145,7 @@ export function SiteFooter() {
             <div className={`flex items-center gap-2 text-[9px] tracking-[0.25em] font-mono uppercase
               ${isCyberpunk ? "text-[#00f5d4]/30" : "text-stone-400"}`}>
                {isCyberpunk ? <Terminal size={12} /> : <MapPin size={12} />}
-               <span>Designed in Bangalore // 2026 // v2.0.4</span>
-            </div>
-            <div className={`flex items-center gap-2 text-[9px] tracking-[0.25em] font-mono uppercase
-              ${isCyberpunk ? "text-[#00f5d4]/30" : "text-stone-400"}`}>
-               {isCyberpunk ? <Zap size={12} /> : <ShieldCheck size={12} />}
-               <span>Secure Transaction Protocol // ENCRYPTED</span>
+               <span>Designed in Bangalore // 2026</span>
             </div>
           </div>
 

@@ -80,7 +80,7 @@ export function PhilosophySection() {
                 <div className="space-y-3 md:space-y-4">
                   <SplitText
                     text="UNIT_PROTOCOL"
-                    className="text-4xl sm:text-5xl md:text-8xl font-michroma text-accent leading-[0.9] cyber-glow uppercase"
+                    className="text-[clamp(2rem,8vw,8rem)] font-michroma text-accent leading-[0.9] cyber-glow uppercase"
                     delay={40}
                   />
                   <div className="h-0.5 md:h-1 w-20 md:w-32 bg-accent/40" />
@@ -90,7 +90,7 @@ export function PhilosophySection() {
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="text-4xl sm:text-5xl md:text-8xl font-bold leading-[0.9] tracking-tighter text-foreground font-heading"
+                  className="text-[clamp(2.5rem,10vw,8rem)] font-bold leading-[0.9] tracking-tighter text-foreground font-heading"
                 >
                   Studies in <br className="hidden md:block" />
                   <span className="text-stone-300">Form & Beauty</span>

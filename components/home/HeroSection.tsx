@@ -51,12 +51,12 @@ export function HeroSection() {
         </motion.div>
 
         {/* Huge Title */}
-        <div className="relative mb-8 md:mb-12 w-full max-w-6xl mx-auto flex flex-col items-center">
+        <div className="relative mb-6 md:mb-12 w-full max-w-6xl mx-auto flex flex-col items-center px-2">
           {isCyberpunk ? (
             <div className="space-y-4 md:space-y-6">
               <DecryptedText
                 text="BASELAB_VOID"
-                className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[11rem] font-bold leading-[1] tracking-tighter text-accent font-michroma cyber-glow uppercase"
+                className="text-[clamp(2.5rem,12vw,11rem)] font-bold leading-[1] tracking-tighter text-accent font-michroma cyber-glow uppercase"
                 animateOn="view"
                 speed={40}
               />
@@ -65,7 +65,7 @@ export function HeroSection() {
             <div className="space-y-2 md:space-y-4">
               <BlurText
                 text="Refined"
-                className="text-5xl sm:text-6xl md:text-9xl font-bold leading-[0.8] tracking-tighter text-foreground font-heading"
+                className="text-[clamp(3rem,15vw,9rem)] font-bold leading-[0.8] tracking-tighter text-foreground font-heading"
                 delay={80}
                 animateBy="letters"
                 direction="bottom"
@@ -73,7 +73,7 @@ export function HeroSection() {
               />
               <BlurText
                 text="Essentials"
-                className="text-5xl sm:text-6xl md:text-9xl font-bold leading-[0.8] tracking-tighter text-stone-300 font-heading"
+                className="text-[clamp(3rem,15vw,9rem)] font-bold leading-[0.8] tracking-tighter text-stone-300 font-heading"
                 delay={160}
                 animateBy="letters"
                 direction="bottom"
