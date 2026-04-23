@@ -11,44 +11,27 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
-        },
-        popover: {
-          DEFAULT: "var(--popover)",
-          foreground: "var(--popover-foreground)",
-        },
         primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
-        },
-        secondary: {
-          DEFAULT: "var(--secondary)",
-          foreground: "var(--secondary-foreground)",
-        },
-        muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
+          DEFAULT: "var(--accent)",
+          foreground: "var(--background)",
         },
         accent: {
           DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
-          hover: "var(--accent)",
+          foreground: "var(--background)",
+          glow: "var(--accent-glow)",
         },
-        destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "oklch(var(--foreground) / 0.6)",
         },
-        border: "var(--border)",
-        input: "var(--input)",
-        ring: "var(--ring)",
+        border: "oklch(var(--accent) / 0.1)",
+        input: "oklch(var(--accent) / 0.1)",
+        ring: "var(--accent)",
       },
       fontFamily: {
-        heading: ["var(--font-bodoni)", "serif"],
-        body: ["var(--font-jost)", "sans-serif"],
-        jost: ["var(--font-jost)", "sans-serif"],
-        bodoni: ["var(--font-bodoni)", "serif"],
+        michroma: ["var(--font-michroma)", "sans-serif"],
+        jetbrains: ["var(--font-jetbrains)", "monospace"],
+        mono: ["var(--font-jetbrains)", "monospace"],
       },
       keyframes: {
         "accordion-down": {

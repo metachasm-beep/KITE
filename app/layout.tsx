@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Jost, Geist } from "next/font/google";
+import { Michroma, JetBrains_Mono as JetBrainsMono } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/Providers";
@@ -11,17 +11,16 @@ import { FloatingNavbar } from "@/components/ruixen/floating-navbar";
 import { CyberpunkExtras } from "@/components/common/CyberpunkExtras";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const bodoni = Bodoni_Moda({
+const michroma = Michroma({
+  weight: "400",
   subsets: ["latin"],
-  variable: "--font-bodoni",
+  variable: "--font-michroma",
   display: "swap",
 });
 
-const jost = Jost({
+const jetbrains = JetBrainsMono({
   subsets: ["latin"],
-  variable: "--font-jost",
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -36,8 +35,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("scroll-smooth", "font-sans", geist.variable)}>
-      <body className={`${bodoni.variable} ${jost.variable} font-jost antialiased bg-background text-foreground selection:bg-accent selection:text-white`}>
+    <html lang="en" className={cn("scroll-smooth", "font-jetbrains")}>
+      <body className={`${michroma.variable} ${jetbrains.variable} font-jetbrains antialiased bg-background text-foreground selection:bg-accent selection:text-white`}>
         <ThemeProvider>
           <Providers>
             <SiteHeader />

@@ -4,136 +4,108 @@
 
 /* ─── BaseLab Default Theme (Stone + Gold) ─── */
 :root {
-  --accent: #CA8A04;
-  --muted: #F5F5F4;
+  --accent: oklch(64.82% 0.16 85.34); /* Gold */
+  --muted: oklch(97% 0.01 85);
 }
 
-/* ─── Cyberpunk / Transformers Theme ─── */
+/* ─── Impeccable Hard Sci-Fi Theme (Unit_01) ─── */
 [data-theme="cyberpunk"] {
-  --background: #080808;
-  --foreground: #e8f4f8;
-  --accent: #00f5d4;
-  --muted: #0f1117;
+  /* Enhancement #1: Tinted Deep Void */
+  --background: oklch(12% 0.015 255); 
+  --foreground: oklch(92% 0.01 255);
+  
+  /* Enhancement #4: Perceptually Uniform Cyan */
+  --accent: oklch(88% 0.18 174);
+  --accent-glow: oklch(88% 0.18 174 / 0.4);
+  --muted: oklch(18% 0.02 255);
 
   color-scheme: dark;
 }
 
 [data-theme="cyberpunk"] body {
-  background-color: #080808;
-  color: #e8f4f8;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
-/* Cyberpunk card override */
-[data-theme="cyberpunk"] .hud-container,
-[data-theme="cyberpunk"] .baselab-card {
-  background: #0d1117;
-  border: 1px solid rgba(0, 245, 212, 0.2);
-  box-shadow: 0 0 20px rgba(0, 245, 212, 0.05), inset 0 1px 0 rgba(0,245,212,0.08);
-  border-radius: 0.5rem;
+/* Enhancement #8: HUD Depth & Overlays */
+.hud-depth {
+  position: relative;
+  overflow: hidden;
 }
 
-[data-theme="cyberpunk"] .hud-container:hover,
-[data-theme="cyberpunk"] .baselab-card:hover {
-  border-color: rgba(0, 245, 212, 0.4);
-  box-shadow: 0 0 30px rgba(0, 245, 212, 0.12);
-}
-
-/* Cyberpunk neon button */
-[data-theme="cyberpunk"] .btn-hud,
-[data-theme="cyberpunk"] .baselab-button {
-  background: transparent;
-  color: #00f5d4;
-  border: 1px solid #00f5d4;
-  border-radius: 2px;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  box-shadow: 0 0 10px rgba(0, 245, 212, 0.3);
-}
-
-[data-theme="cyberpunk"] .btn-hud:hover,
-[data-theme="cyberpunk"] .baselab-button:hover {
-  background: rgba(0, 245, 212, 0.1);
-  box-shadow: 0 0 20px rgba(0, 245, 212, 0.5);
-}
-
-/* Cyberpunk neon scrollbar */
-[data-theme="cyberpunk"] ::-webkit-scrollbar-thumb {
-  background: rgba(0, 245, 212, 0.3);
-}
-
-/* Cyberpunk scanline texture on images/screens */
-[data-theme="cyberpunk"] .cyber-scanlines::after {
+.hud-depth::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 245, 212, 0.02) 2px,
-    rgba(0, 245, 212, 0.02) 4px
-  );
+  background: radial-gradient(circle at 50% 0%, oklch(var(--accent) / 0.05), transparent 70%);
   pointer-events: none;
   z-index: 1;
 }
 
-/* Cyberpunk neon text glow */
-[data-theme="cyberpunk"] .cyber-glow {
-  text-shadow: 0 0 10px rgba(0, 245, 212, 0.8), 0 0 20px rgba(0, 245, 212, 0.4);
+/* Enhancement #10: Neural Flicker */
+@keyframes neural-flicker {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  92% { opacity: 1; filter: brightness(1); }
+  93% { opacity: 0.8; filter: brightness(1.2) contrast(1.1); }
+  94% { opacity: 1; filter: brightness(1); }
+  95% { opacity: 0.9; filter: brightness(0.8); }
+  96% { opacity: 1; filter: brightness(1); }
 }
 
-/* Cyberpunk grid lines */
-[data-theme="cyberpunk"] .cyber-grid {
-  background-image:
-    linear-gradient(rgba(0, 245, 212, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 245, 212, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+.neural-flicker:hover {
+  animation: neural-flicker 0.4s ease-out;
 }
 
+/* Enhancement #3: Mechanical Brackets */
+.mechanical-bracket {
+  position: relative;
+}
+
+.mechanical-bracket::before,
+.mechanical-bracket::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--accent);
+  opacity: 0.4;
+  transition: all 0.3s ease-out;
+}
+
+.mechanical-bracket::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.mechanical-bracket::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.mechanical-bracket:hover::before,
+.mechanical-bracket:hover::after {
+  opacity: 1;
+  width: 12px;
+  height: 12px;
+}
+
+/* Enhancement #9: Typographic Scale (1.5x Modular) */
 @layer base {
-  body {
-    @apply antialiased selection:bg-accent selection:text-white bg-background text-foreground;
-  }
-
-  h1, h2, h3, h4, .font-heading {
-    @apply font-sans;
-  }
-  
   :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
     --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
-    --sidebar-background: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --accent: oklch(0.648 0.16 85.34);
+    --radius: 0rem; /* Industrial sharpness */
   }
+
+  h1 { font-size: clamp(2.25rem, 5vw, 3.375rem); line-height: 1.1; }
+  h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); line-height: 1.2; }
+  h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); line-height: 1.3; }
 
   .dark {
     --background: oklch(0.145 0 0);
@@ -169,61 +141,78 @@
     --sidebar-ring: oklch(0.556 0 0);
   }
 
-  * {
-    @apply border-border outline-ring;
-    outline-color: oklch(var(--ring) / 0.5);
+  h4 { font-size: 1.125rem; line-height: 1.4; }
+  
+  body {
+    @apply antialiased selection:bg-accent selection:text-white bg-background text-foreground;
+    font-feature-settings: "ss01", "ss02", "cv01";
   }
 }
 
 @layer components {
+  /* Enhancement #3 & #8: Industrial HUD Card */
   .hud-container, .baselab-card {
-    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border border-white/20 p-6 overflow-hidden transition-all duration-500 ease-out;
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 p-8 overflow-hidden transition-all duration-500 ease-out mechanical-bracket hud-depth;
+    box-shadow: 0 0 40px oklch(0% 0 0 / 0.5);
   }
 
   .hud-container:hover, .baselab-card:hover {
-    @apply shadow-[0_12px_48px_rgba(0,0,0,0.08)] -translate-y-1 border-white/40;
+    @apply border-accent/30 -translate-y-1;
+    box-shadow: 0 0 60px oklch(var(--accent) / 0.1);
   }
 
-  /* Liquid Glass Effect */
-  .liquid-glass {
-    @apply bg-white/40 backdrop-blur-2xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.02)] relative overflow-hidden;
-  }
-
-  .liquid-glass::before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50 pointer-events-none;
-  }
-
+  /* Enhancement #4: Interactive Accents */
   .btn-hud, .baselab-button {
-    @apply relative px-8 py-4 bg-foreground text-background rounded-full font-medium tracking-wide hover:opacity-90 active:scale-95 transition-all duration-300 overflow-hidden text-sm flex items-center justify-center gap-2;
+    @apply relative px-10 py-4 bg-transparent text-accent border border-accent/40 font-mono tracking-[0.2em] uppercase hover:bg-accent/5 hover:border-accent hover:shadow-[0_0_20px_var(--accent-glow)] active:scale-95 transition-all duration-300 text-xs flex items-center justify-center gap-3 overflow-hidden;
   }
 
-  .btn-hud-primary {
-    @apply bg-accent text-white shadow-[0_4px_20px_rgba(202,138,4,0.3)] hover:shadow-[0_8px_30px_rgba(202,138,4,0.5)];
+  .btn-hud::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-accent/10 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite];
   }
 
-  .baselab-button-secondary {
-    @apply relative px-8 py-4 bg-muted text-foreground rounded-full font-medium tracking-wide hover:bg-stone-200 active:scale-95 transition-all duration-300 overflow-hidden text-sm flex items-center justify-center gap-2;
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
   }
 
   .text-telemetry {
-    @apply text-[10px] font-bold text-stone-400 uppercase tracking-[0.2em] font-jost;
+    @apply text-[9px] font-mono font-bold text-accent/50 uppercase tracking-[0.3em];
   }
 
   .glass-header {
-    @apply bg-background/80 backdrop-blur-xl border-b border-foreground/5 sticky top-0 z-50;
+    @apply bg-background/90 backdrop-blur-2xl border-b border-accent/10 sticky top-0 z-50;
   }
 
-  .text-outline {
-    text-shadow: 
-      -1px -1px 0 var(--background),  
-       1px -1px 0 var(--background),
-      -1px  1px 0 var(--background),
-       1px  1px 0 var(--background);
+  /* Enhancement #5: Grid Height Trick */
+  .grid-reveal {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s ease-out-expo;
+  }
+
+  .grid-reveal.open {
+    grid-template-rows: 1fr;
+  }
+
+  .grid-reveal-content {
+    overflow: hidden;
   }
 }
 
-/* BaseLab refined scrollbar */
-:root ::-webkit-scrollbar-thumb {
-  @apply bg-stone-300 hover:bg-stone-400;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(var(--accent) / 0.2);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
