@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/ThreeDCard";
-import { ChevronLeft, ChevronRight, Terminal } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 
 interface Product {
@@ -29,39 +29,39 @@ export function ThreeDImageSlider() {
   const prev = () => setCurrentIndex((prev) => (prev - 1 + products.length) % products.length);
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto px-4 py-10">
-      <div className="flex items-center justify-between mb-8">
-        <div className="space-y-1">
-          <h3 className={`text-2xl font-michroma font-bold ${isCyberpunk ? "text-accent cyber-glow" : "text-foreground"}`}>
-            {isCyberpunk ? "// FEATURED_ARTIFACTS" : "Featured Artifacts"}
+    <div className="relative w-full max-w-6xl mx-auto px-4 py-4 md:py-10">
+      <div className="flex items-center justify-between mb-4 md:mb-8">
+        <div className="space-y-0.5 md:space-y-1">
+          <h3 className={`text-xl md:text-2xl font-michroma font-bold ${isCyberpunk ? "text-accent cyber-glow" : "text-foreground"}`}>
+            {isCyberpunk ? "// ARTIFACTS" : "Featured Artifacts"}
           </h3>
-          <p className={`text-[9px] font-mono uppercase tracking-[0.4em] ${isCyberpunk ? "text-accent/40" : "text-stone-500"}`}>
-            {isCyberpunk ? "VERSION // 2026.03.R4" : "Series // 2026.03"}
+          <p className={`text-[8px] md:text-[9px] font-mono uppercase tracking-[0.4em] ${isCyberpunk ? "text-accent/40" : "text-stone-500"}`}>
+            {isCyberpunk ? "VER // 2026.03.R4" : "Series // 2026.03"}
           </p>
         </div>
-        <div className="flex gap-6">
+        <div className="flex gap-3 md:gap-6">
           <button 
             onClick={prev}
-            className={`p-4 transition-all duration-500 mechanical-bracket
+            className={`p-2 md:p-4 transition-all duration-500 mechanical-bracket
               ${isCyberpunk 
                 ? "bg-accent/5 border-accent/20 text-accent hover:bg-accent/20" 
                 : "bg-white border-black/5 text-foreground hover:bg-stone-50"}`}
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={16} className="md:w-5 md:h-5" />
           </button>
           <button 
             onClick={next}
-            className={`p-4 transition-all duration-500 mechanical-bracket
+            className={`p-2 md:p-4 transition-all duration-500 mechanical-bracket
               ${isCyberpunk 
                 ? "bg-accent/5 border-accent/20 text-accent hover:bg-accent/20" 
                 : "bg-white border-black/5 text-foreground hover:bg-stone-50"}`}
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={16} className="md:w-5 md:h-5" />
           </button>
         </div>
       </div>
 
-      <div className="relative h-[500px] flex items-center justify-center perspective-1000">
+      <div className="relative h-[300px] sm:h-[400px] md:h-[500px] flex items-center justify-center perspective-1000 overflow-visible">
         <AnimatePresence mode="popLayout">
           {products.map((product, index) => {
             const isCenter = index === currentIndex;
@@ -70,73 +70,75 @@ export function ThreeDImageSlider() {
 
             if (!isCenter && !isLeft && !isRight) return null;
 
-            let positionClass = "z-20 scale-100 opacity-100";
             let xOffset = "0%";
             let rotateY = 0;
-            let blur = "blur-0";
+            let scale = 1;
+            let opacity = 1;
+            let zIndex = 30;
 
             if (isLeft) {
-              positionClass = "z-10 scale-75 opacity-40";
-              xOffset = "-60%";
-              rotateY = 35;
-              blur = "blur-sm";
+              xOffset = "-50%";
+              rotateY = 30;
+              scale = 0.6;
+              opacity = 0.2;
+              zIndex = 10;
             }
             if (isRight) {
-              positionClass = "z-10 scale-75 opacity-40";
-              xOffset = "60%";
-              rotateY = -35;
-              blur = "blur-sm";
+              xOffset = "50%";
+              rotateY = -30;
+              scale = 0.6;
+              opacity = 0.2;
+              zIndex = 10;
             }
 
             return (
               <motion.div
                 key={product.id}
-                initial={{ opacity: 0, x: isRight ? "100%" : isLeft ? "-100%" : "0%" }}
+                initial={{ opacity: 0, x: isRight ? "50%" : isLeft ? "-50%" : "0%" }}
                 animate={{ 
-                  opacity: isCenter ? 1 : 0.3, 
+                  opacity, 
                   x: xOffset,
-                  scale: isCenter ? 1 : 0.7,
-                  rotateY: rotateY,
-                  zIndex: isCenter ? 30 : 10
+                  scale,
+                  rotateY,
+                  zIndex
                 }}
                 exit={{ opacity: 0, scale: 0.5 }}
-                transition={{ duration: 1, ease: "easeOutExpo" }}
-                className={`absolute w-full max-w-sm ${positionClass} ${blur}`}
+                transition={{ duration: 0.8, ease: "easeOutExpo" }}
+                className={`absolute w-full max-w-[240px] sm:max-w-sm`}
               >
                 <CardContainer className="py-0">
-                  <CardBody className={`border transition-all duration-700 p-8 mechanical-bracket
+                  <CardBody className={`border transition-all duration-700 p-4 md:p-8 mechanical-bracket
                     ${isCyberpunk 
                       ? "bg-background/80 backdrop-blur-xl border-accent/10 shadow-[0_0_40px_rgba(0,245,212,0.05)]" 
-                      : "bg-white border-black/5 shadow-2xl rounded-[40px]"}`}>
+                      : "bg-white border-black/5 shadow-2xl rounded-[24px] md:rounded-[40px]"}`}>
                     
-                    <CardItem translateZ="100" className={`w-full aspect-[4/5] relative flex items-center justify-center mb-8 overflow-hidden transition-all duration-700
-                      ${isCyberpunk ? "bg-accent/5 border border-accent/10" : "bg-stone-100/50 rounded-3xl"}`}>
+                    <CardItem translateZ="50" className={`w-full aspect-[4/5] relative flex items-center justify-center mb-4 md:mb-8 overflow-hidden transition-all duration-700
+                      ${isCyberpunk ? "bg-accent/5 border border-accent/10" : "bg-stone-100/50 rounded-2xl md:rounded-3xl"}`}>
                        <img 
                          src={product.image} 
                          alt={product.title} 
-                         className={`w-4/5 h-4/5 object-contain transition-all duration-700 ${isCyberpunk ? "brightness-125 saturate-0 group-hover:saturate-100" : "mix-blend-multiply"}`}
+                         className={`w-3/4 h-3/4 object-contain transition-all duration-700 ${isCyberpunk ? "brightness-125 saturate-0" : "mix-blend-multiply"}`}
                        />
-                       <div className={`absolute top-6 left-6 text-[10px] font-mono tracking-widest uppercase
+                       <div className={`absolute top-4 left-4 text-[8px] font-mono tracking-widest uppercase
                          ${isCyberpunk ? "text-accent/30" : "text-stone-400"}`}>
-                         {product.category}
+                         {product.id}
                        </div>
-                       {isCyberpunk && <div className="absolute inset-0 scanline opacity-20" />}
                     </CardItem>
                     
-                    <div className="space-y-6">
+                    <div className="space-y-4 md:space-y-6">
                       <div className="flex justify-between items-end">
-                        <CardItem translateZ="50" className="space-y-1">
-                          <h4 className={`text-2xl font-bold tracking-tight ${isCyberpunk ? "text-accent font-michroma uppercase" : "text-foreground font-heading"}`}>
+                        <CardItem translateZ="30" className="space-y-0.5 md:space-y-1">
+                          <h4 className={`text-lg md:text-2xl font-bold tracking-tight ${isCyberpunk ? "text-accent font-michroma uppercase" : "text-foreground font-heading"}`}>
                             {product.title}
                           </h4>
-                          <p className={`text-sm font-medium tracking-widest ${isCyberpunk ? "text-accent/40 font-mono" : "text-stone-500 font-jost"}`}>
-                            {isCyberpunk ? `CRED_VALUE // ${product.price.toLocaleString()}` : `₹${product.price.toLocaleString()}`}
+                          <p className={`text-[10px] md:text-sm font-medium tracking-widest ${isCyberpunk ? "text-accent/40 font-mono" : "text-stone-500 font-jost"}`}>
+                            {isCyberpunk ? `CRD // ${product.price}` : `₹${product.price}`}
                           </p>
                         </CardItem>
-                        <CardItem translateZ="80">
-                           <button className={`w-12 h-12 flex items-center justify-center transition-all duration-500 mechanical-bracket
+                        <CardItem translateZ="40">
+                           <button className={`w-8 h-8 md:w-12 md:h-12 flex items-center justify-center transition-all duration-500 mechanical-bracket
                              ${isCyberpunk ? "bg-accent text-black hover:scale-110" : "bg-foreground text-white hover:bg-black rounded-full"}`}>
-                             <ChevronRight size={20} />
+                             <ChevronRight size={16} className="md:w-5 md:h-5" />
                            </button>
                         </CardItem>
                       </div>
