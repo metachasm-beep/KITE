@@ -22,8 +22,8 @@ export function HeroSection() {
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {isCyberpunk ? (
           <GridScan 
-            linesColor="oklch(var(--accent) / 0.1)" 
-            scanColor="oklch(var(--accent) / 0.2)" 
+            linesColor="oklch(var(--accent-values) / 0.1)" 
+            scanColor="oklch(var(--accent-values) / 0.2)" 
             scanOpacity={0.1} 
             gridScale={0.6}
           />
@@ -115,7 +115,7 @@ export function HeroSection() {
           className="flex flex-col sm:flex-row items-center gap-12"
         >
           <ElectricBorder 
-            color={isCyberpunk ? "oklch(var(--accent))" : "#CA8A04"}
+            color={isCyberpunk ? "oklch(var(--accent-values))" : "#CA8A04"}
             borderRadius={0}
             speed={1.5}
             chaos={0.1}
@@ -163,6 +163,6 @@ export function HeroSection() {
         </motion.div>
 
       </div>
-    </main>
+    </section>
   );
 }

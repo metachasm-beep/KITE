@@ -9,15 +9,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "oklch(var(--background-values) / <alpha-value>)",
+        foreground: "oklch(var(--foreground-values) / <alpha-value>)",
         primary: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--background)",
+          DEFAULT: "oklch(var(--accent-values) / <alpha-value>)",
+          foreground: "oklch(var(--background-values) / <alpha-value>)",
         },
         accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--background)",
+          DEFAULT: "oklch(var(--accent-values) / <alpha-value>)",
+          foreground: "oklch(var(--background-values) / <alpha-value>)",
           glow: "var(--accent-glow)",
         },
         muted: {

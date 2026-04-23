@@ -4,19 +4,27 @@
 
 /* ─── BaseLab Default Theme (Stone + Gold) ─── */
 :root {
-  --accent: oklch(64.82% 0.16 85.34); /* Gold */
+  --background-values: 98% 0.005 60;
+  --background: oklch(var(--background-values));
+  --foreground-values: 15% 0.01 60;
+  --foreground: oklch(var(--foreground-values));
+  --accent-values: 64.82% 0.16 85.34; /* Gold */
+  --accent: oklch(var(--accent-values));
   --muted: oklch(97% 0.01 85);
 }
 
 /* ─── Impeccable Hard Sci-Fi Theme (Unit_01) ─── */
 [data-theme="cyberpunk"] {
   /* Enhancement #1: Tinted Deep Void */
-  --background: oklch(12% 0.015 255); 
-  --foreground: oklch(92% 0.01 255);
+  --background-values: 12% 0.015 255;
+  --background: oklch(var(--background-values));
+  --foreground-values: 92% 0.01 255;
+  --foreground: oklch(var(--foreground-values));
   
   /* Enhancement #4: Perceptually Uniform Cyan */
-  --accent: oklch(88% 0.18 174);
-  --accent-glow: oklch(88% 0.18 174 / 0.4);
+  --accent-values: 88% 0.18 174;
+  --accent: oklch(var(--accent-values));
+  --accent-glow: oklch(var(--accent-values) / 0.4);
   --muted: oklch(18% 0.02 255);
 
   color-scheme: dark;
@@ -37,7 +45,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, oklch(var(--accent) / 0.05), transparent 70%);
+  background: radial-gradient(circle at 50% 0%, oklch(var(--accent-values) / 0.05), transparent 70%);
   pointer-events: none;
   z-index: 1;
 }
@@ -158,7 +166,7 @@
 
   .hud-container:hover, .baselab-card:hover {
     @apply border-accent/30 -translate-y-1;
-    box-shadow: 0 0 60px oklch(var(--accent) / 0.1);
+    box-shadow: 0 0 60px oklch(var(--accent-values) / 0.1);
   }
 
   /* Enhancement #4: Interactive Accents */
@@ -209,7 +217,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(var(--accent) / 0.2);
+  background: oklch(var(--accent-values) / 0.2);
   border-radius: 0;
 }
 
