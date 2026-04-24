@@ -79,39 +79,39 @@ export default function Home() {
       </section>
 
       {/* SECTION 4: CTA + INTEGRATED FOOTER */}
-      <section className={`h-screen w-full snap-start relative overflow-hidden flex flex-col transition-colors duration-1000
+      <section className={`h-screen h-[100svh] w-full snap-start relative overflow-hidden flex flex-col items-center justify-center transition-colors duration-1000
         ${isCyberpunk ? "bg-background border-t border-accent/10" : "bg-[#FAFAF9] border-t border-stone-100"}`}>
          
-         <div className="flex-1 flex flex-col items-center justify-center relative z-10 px-6">
-           <BackgroundParallax>
-             <div className="container mx-auto flex flex-col items-center justify-center text-center space-y-8 md:space-y-16">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1 }}
-                  className="space-y-4 md:space-y-8"
-                >
-                  <h2 className={`text-[clamp(2rem,10vw,8rem)] font-bold tracking-tighter font-michroma max-w-5xl mx-auto leading-[0.9]
-                    ${isCyberpunk ? "text-accent cyber-glow" : "text-foreground"}`}>
-                     {isCyberpunk ? "RECLAIM_THE_VOID" : "The Future is Material."}
-                  </h2>
-                  <p className={`text-xs md:text-xl max-w-2xl mx-auto leading-relaxed tracking-wider px-4
-                    ${isCyberpunk ? "text-accent/50 uppercase font-mono" : "text-stone-500 font-jost"}`}>
-                     {isCyberpunk 
-                       ? "RESEARCH LOG // RECONSTRUCTED DESIGNS. INDIVIDUALLY CALIBRATED AND VERIFIED AT UNIT_01."
-                       : "Explore the latest series of premium hardware designed for architectural utility."}
-                  </p>
-                </motion.div>
+         <BackgroundParallax>
+           <div className="container mx-auto h-full flex flex-col items-center justify-center text-center space-y-4 md:space-y-12 px-6 pb-24">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+                className="space-y-2 md:space-y-6"
+              >
+                <h2 className={`text-[clamp(1.5rem,8vw,6rem)] font-bold tracking-tighter font-michroma max-w-4xl mx-auto leading-[0.9]
+                  ${isCyberpunk ? "text-accent cyber-glow" : "text-foreground"}`}>
+                   {isCyberpunk ? "RECLAIM_THE_VOID" : "The Future is Material."}
+                </h2>
+                <p className={`text-[9px] md:text-lg max-w-xl mx-auto leading-relaxed tracking-wider px-4
+                  ${isCyberpunk ? "text-accent/40 uppercase font-mono" : "text-stone-500 font-jost"}`}>
+                   {isCyberpunk 
+                     ? "RESEARCH LOG // RECONSTRUCTED DESIGNS. INDIVIDUALLY CALIBRATED AT UNIT_01."
+                     : "Explore the latest series of premium hardware designed for architectural utility."}
+                </p>
+              </motion.div>
 
-                <SystemButton href="/collections" className={`!px-12 md:!px-20 !py-5 md:!py-8 text-lg md:text-xl mechanical-bracket
-                  ${isCyberpunk ? "bg-accent text-black hover:bg-accent/80 shadow-[0_0_50px_oklch(var(--accent-values)/0.3)]" : "bg-foreground text-white hover:bg-black rounded-full"}`}>
-                   {isCyberpunk ? "INITIALIZE" : "View Lab"}
-                </SystemButton>
-             </div>
-           </BackgroundParallax>
+              <SystemButton href="/collections" className={`!px-8 md:!px-16 !py-3.5 md:!py-6 text-sm md:text-xl mechanical-bracket
+                ${isCyberpunk ? "bg-accent text-black hover:bg-accent/80 shadow-[0_0_50px_oklch(var(--accent-values)/0.3)]" : "bg-foreground text-white hover:bg-black rounded-full"}`}>
+                 {isCyberpunk ? "INITIALIZE" : "View Lab"}
+              </SystemButton>
+           </div>
+         </BackgroundParallax>
+
+         <div className="absolute bottom-0 left-0 w-full z-20">
+           <SiteFooter minimal />
          </div>
-
-         <SiteFooter minimal />
       </section>
 
     </div>
