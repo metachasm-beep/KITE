@@ -14,7 +14,7 @@ export function PhilosophySection() {
     <section className={`h-full w-full flex flex-col justify-center px-6 relative transition-colors duration-1000 overflow-hidden
       ${isCyberpunk ? "bg-background" : "bg-white"}`}>
       
-      <div className="container mx-auto relative z-10 py-10 md:py-20">
+      <div className="container mx-auto relative z-10 py-6 md:py-20">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 md:gap-20 items-center">
           
           {/* Visualization Module */}

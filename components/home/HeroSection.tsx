@@ -51,12 +51,12 @@ export function HeroSection() {
         </motion.div>
 
         {/* Huge Title */}
-        <div className="relative mb-6 md:mb-12 w-full max-w-6xl mx-auto flex flex-col items-center px-2">
+        <div className="relative mb-4 md:mb-12 w-full max-w-6xl mx-auto flex flex-col items-center px-4">
           {isCyberpunk ? (
-            <div className="space-y-4 md:space-y-6">
+            <div className="space-y-3 md:space-y-6">
               <DecryptedText
                 text="BASELAB_VOID"
-                className="text-[clamp(2.5rem,12vw,11rem)] font-bold leading-[1] tracking-tighter text-accent font-michroma cyber-glow uppercase"
+                className="text-[clamp(2.2rem,10vw,11rem)] font-bold leading-[1] tracking-tighter text-accent font-michroma cyber-glow uppercase"
                 animateOn="view"
                 speed={40}
               />
@@ -65,7 +65,7 @@ export function HeroSection() {
             <div className="space-y-2 md:space-y-4">
               <BlurText
                 text="Refined"
-                className="text-[clamp(3rem,15vw,9rem)] font-bold leading-[0.8] tracking-tighter text-foreground font-heading"
+                className="text-[clamp(2.5rem,12vw,9rem)] font-bold leading-[0.8] tracking-tighter text-foreground font-heading"
                 delay={80}
                 animateBy="letters"
                 direction="bottom"
@@ -73,7 +73,7 @@ export function HeroSection() {
               />
               <BlurText
                 text="Essentials"
-                className="text-[clamp(3rem,15vw,9rem)] font-bold leading-[0.8] tracking-tighter text-stone-300 font-heading"
+                className="text-[clamp(2.5rem,12vw,9rem)] font-bold leading-[0.8] tracking-tighter text-stone-300 font-heading"
                 delay={160}
                 animateBy="letters"
                 direction="bottom"
@@ -88,17 +88,17 @@ export function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 1.2 }}
-          className="max-w-2xl mx-auto mb-10 md:mb-20 px-4"
+          className="max-w-2xl mx-auto mb-8 md:mb-20 px-4"
         >
           {isCyberpunk ? (
             <DecryptedText 
               text="ADVANCED HARDWARE REPOSITORY. BRIDGING THE GAP BETWEEN ARCHITECTURAL FORM AND NUMERICAL UTILITY."
               animateOn="view" 
               speed={30}
-              className="text-[10px] md:text-sm font-mono text-accent/50 leading-relaxed uppercase tracking-[0.2em] font-jetbrains"
+              className="text-[9px] md:text-sm font-mono text-accent/40 leading-relaxed uppercase tracking-[0.15em] md:tracking-[0.2em] font-jetbrains"
             />
           ) : (
-            <p className="text-lg md:text-2xl font-medium text-stone-500 leading-relaxed font-jost text-balance">
+            <p className="text-base md:text-2xl font-medium text-stone-500 leading-relaxed font-jost text-balance">
               Premium minimalist hardware engineered by Turtle Labs. Bridging architectural form with everyday utility.
             </p>
           )}
